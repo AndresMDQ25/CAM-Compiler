@@ -57,6 +57,7 @@ public class MainView extends javax.swing.JFrame {
         jSplitPane1.setName(""); // NOI18N
         jSplitPane1.setRightComponent(mainEditor);
 
+        counterPane.setDisabledTextColor(new java.awt.Color(102, 102, 0));
         counterPane.setMinimumSize(new java.awt.Dimension(30, 20));
         counterPane.setName(""); // NOI18N
         jSplitPane1.setLeftComponent(counterPane);
