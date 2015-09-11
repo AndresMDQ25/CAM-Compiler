@@ -6,9 +6,11 @@
 package view.cam;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +59,9 @@ public class MainView extends javax.swing.JFrame {
         jSplitPane1.setName(""); // NOI18N
         jSplitPane1.setRightComponent(mainEditor);
 
+        counterPane.setEditable(false);
+        counterPane.setForeground(new java.awt.Color(102, 102, 102));
+        counterPane.setDisabledTextColor(new java.awt.Color(102, 102, 0));
         counterPane.setMinimumSize(new java.awt.Dimension(30, 20));
         counterPane.setName(""); // NOI18N
         jSplitPane1.setLeftComponent(counterPane);
@@ -166,7 +171,21 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_openMenuItemActionPerformed
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
-        // TODO add your handling code here:
+        JFileChooser fileChooser;
+        fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save");
+	fileChooser.setApproveButtonText("Save");        
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                File selectedFile;
+                FileWriter fw = new FileWriter(fileChooser.getSelectedFile()+".txt");
+                BufferedWriter bw = new BufferedWriter( fw );
+                mainEditor.write(bw);
+            } catch (IOException ex) {
+                Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+		}
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
