@@ -7,8 +7,14 @@ package camcompiler;
 
 /**
  *
- * @author Andres
+ * @author Mariano
  */
-public abstract class SemanticAction {
-    public abstract Token run(Token t);
+public class AS0 extends SemanticAction{
+    //AGREGA UN CARACTER AL FINAL DEL TOKEN
+    public AS0(){} 
+    public Token run(Token t, char c){
+        t.addAtEnd(c);
+        return t;
+    }
+    
 }

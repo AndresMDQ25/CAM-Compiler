@@ -15,18 +15,19 @@ import java.io.IOException;
  * @author angus
  */
 public class Reader {
+    
     private int col;
-    int line;
-    BufferedReader br;   
-    String currentLine;
-    String previousLine;
+    private int line;
+    private BufferedReader br;   
+    private String currentLine;
+    private String previousLine;
+    
     public Reader(String fileName) throws FileNotFoundException, IOException{        
         this.br = new BufferedReader(new FileReader(fileName));                
         this.col  =  0;
         this.currentLine= br.readLine();
-        this.previousLine = "";
-        this.line = 1;
-        
+        this.previousLine ="";
+        this.line=1;        
     }
     public String getChar() throws IOException
     {
@@ -46,9 +47,10 @@ public class Reader {
             else 
             {                   
                 col=0;
-                previousLine = currentLine;
                 currentLine= br.readLine();
+                previousLine = currentLine;            
                 line++;
+       
                 if (currentLine==null)
                     result ="/eof";
                 else
@@ -62,7 +64,8 @@ public class Reader {
         if (currentLine==null)
             result ="/eof";        
         return result;
-    }
+    }                                                          
+            
     public void goToPrevChar(){
         if (col-1 < 0)
         {

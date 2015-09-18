@@ -7,8 +7,11 @@ package camcompiler;
 
 /**
  *
- * @author Andres
+ * @author Mariano
  */
-public abstract class SemanticAction {
-    public abstract Token run(Token t);
+public class AS8 extends SemanticAction{
+    //NO HACE NADA
+    public AS8(){} 
+    public Token run(){return null;}
+    
 }

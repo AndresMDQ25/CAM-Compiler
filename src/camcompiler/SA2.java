@@ -9,30 +9,28 @@ package camcompiler;
  *
  * @author Andres
  */
-public class SA3 extends SemanticAction{
-    @Override
-    public SA3(){}
-    //Check  constant range  -> 0<n< 2^32 -1 and removes _ul
+public class SA2 extends {
+    //Check  constant range  -> -2^15 -1<n< 2^15 -1 and removes _i
+    public SA2(){}
     public Token run (Token t, Error e){
         String s = t.getValue();
-        //REMOVES _ul
-        char[] dst = new char[s.length()-3];                
-        s.getChars(0, s.length()-3, dst, 0);
+        //REMOVES _i
+        char[] dst = new char[s.length()-2];                
+        s.getChars(0, s.length()-2, dst, 0);
         s= "";
         for (char ch: dst){
             s+=ch;
         }
-        int value= Integer.valueOf(s);                       
-        long maxUnsigned = 4294967295L;
-        //2^32 -1   4294967295
-       if ((value > 0) &&(!(value < maxUnsigned)))
+        int value= Integer.valueOf(s);                
+        short maxShort = Short.MAX_VALUE;
+        short minShort = Short.MIN_VALUE;        
+        if ((value >= minShort) &&(value <= maxShort))
             t.setValue(Integer.toString(value));
-       else
-       {
+        else
+        {
             e.addLog("Constant out of range", line);
             t.setValue("");                        
-       }     
-//0<token< 2^32 - 1       
+        }                
     return t;
     }
 }

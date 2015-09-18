@@ -7,8 +7,11 @@ package camcompiler;
 
 /**
  *
- * @author Andres
+ * @author Mariano
  */
-public abstract class SemanticAction {
-    public abstract Token run(Token t);
+public class Error extends Logger {
+    public Error(){
+        super();
+        code="ERROR";
+    }
 }
