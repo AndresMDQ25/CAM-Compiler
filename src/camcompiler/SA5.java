@@ -12,7 +12,9 @@ package camcompiler;
 public class SA5 extends SemanticAction{
     //VERIFICA PALABRAS RESERVADAS
     public SA5(){} 
-    public Token run(Token t, Error e, int line){
+    public Token run(Token t,LexicAnalyzer lA){
+        Error e = lA.getError();
+        int line = lA.getLine();
         String word=t.getValue();
         if(word.equals("IF")||word.equals("LOOP")||word.equals("BY")||word.equals("MY")||
            word.equals("THEN")||word.equals("ELSE")||word.equals("ENDIF")||word.equals("PRINT")||
