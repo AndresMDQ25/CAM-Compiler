@@ -10,5 +10,5 @@ package camcompiler;
  * @author Andres
  */
 public abstract class SemanticAction {
-    public  Token run(Token t);
+    public abstract Token run(Token t,LexicAnalyzer lA);
 }

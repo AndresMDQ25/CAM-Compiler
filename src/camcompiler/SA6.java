@@ -12,7 +12,7 @@ package camcompiler;
 public class SA6 extends SemanticAction{
     //AUMENTA EN 1 LA CANTIDAD DE LINEAS QUE GUARDA EL ANALIZADOR LEXICO
     public SA6(){} 
-    public Token run(LexicAnalyzer l){
+    public Token run(Token t,LexicAnalyzer l){
         l.increaseLines();
         return null;
     }

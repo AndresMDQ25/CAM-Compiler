@@ -12,6 +12,6 @@ package camcompiler;
 public class SA8 extends SemanticAction{
     //NO HACE NADA
     public SA8(){} 
-    public Token run(){return null;}
+    public Token run(Token t, LexicAnalyzer lA){return null;}
     
 }
