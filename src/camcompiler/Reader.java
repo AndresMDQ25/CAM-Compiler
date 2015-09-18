@@ -14,14 +14,18 @@ import java.io.IOException;
  *
  * @author angus
  */
-public class Consumer {
+public class Reader {
     private int col;
+    int line;
     BufferedReader br;   
     String currentLine;
-    public Consumer(String fileName) throws FileNotFoundException, IOException{        
+    String previousLine;
+    public Reader(String fileName) throws FileNotFoundException, IOException{        
         this.br = new BufferedReader(new FileReader(fileName));                
         this.col  =  0;
         this.currentLine= br.readLine();
+        this.previousLine = "";
+        this.line = 1;
         
     }
     public String getChar() throws IOException
@@ -42,7 +46,9 @@ public class Consumer {
             else 
             {                   
                 col=0;
+                previousLine = currentLine;
                 currentLine= br.readLine();
+                line++;
                 if (currentLine==null)
                     result ="/eof";
                 else
@@ -57,4 +63,16 @@ public class Consumer {
             result ="/eof";        
         return result;
     }
+    public void goToPrevChar(){
+        if (col-1 < 0)
+        {
+                col = 0;
+                line --;                
+                currentLine = previousLine;
+        }
+        else 
+        {
+            col--;        
+        }
+    }     
 }
