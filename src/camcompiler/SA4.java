@@ -9,9 +9,9 @@ package camcompiler;
  *
  * @author Mariano
  */
-public class AS4 extends SemanticAction{
+public class SA4 extends SemanticAction{
     //BORRA EL ULTIMO CARACTER DEL TOKEN Y RETROCEDE EL READER
-    public AS4(){} 
+    public SA4(){} 
     public Token run(Reader r, Token t){
         String newValue=t.getValue();
         newValue=newValue.substring(0, newValue.length()-2);

@@ -9,11 +9,12 @@ package camcompiler;
  *
  * @author Mariano
  */
-public class AS7 extends SemanticAction{
-    //ERROR DE CARACTER INVALIDO
-    public AS7(){} 
-    public Token run(Error e, int line){
-        e.addLog("invalid character or expression", line);
-        return null;
+public class SA0 extends SemanticAction{
+    //AGREGA UN CARACTER AL FINAL DEL TOKEN
+    public SA0(){} 
+    public Token run(Token t, char c){
+        t.addAtEnd(c);
+        return t;
     }
+    
 }
