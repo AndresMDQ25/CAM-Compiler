@@ -5,56 +5,33 @@
  */
 package camcompiler;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.Vector;
 
 /**
  *
- * @author angus
+ * @author Mariano
  */
 public class Consumer {
-    private int col;
-    BufferedReader br;   
-    String currentLine;
-    public Consumer(String fileName) throws FileNotFoundException, IOException{        
-        this.br = new BufferedReader(new FileReader(fileName));                
-        this.col  =  0;
-        this.currentLine= br.readLine();
-        
+    
+    private LexicAnalyzer l;
+    private const Token _TOKENFIN=new FinalToken();
+    private Vector<Token> v;
+
+    public Consumer (LexicAnalyzer newL){
+        this.l=newL;
+        v=new Vector();
     }
-    public String getChar() throws IOException
-    {
-        String result="";        
-        if (currentLine!=null)
-        {
-            if (col < currentLine.length())
-            {            
-                result =""+currentLine.charAt(col);
-                col++;
-            }
-            else  if (col == currentLine.length())
-            {                                               
-                result="/n";
-                col++;
-            }
-            else 
-            {                   
-                col=0;
-                currentLine= br.readLine();
-                if (currentLine==null)
-                    result ="/eof";
-                else
-                {                    
-                    result =""+currentLine.charAt(col);
-                    col++;
-                }
-                    
-            }         
+    
+    public void consume(){
+        Token aux=l.getToken();
+        v.add(aux);
+        while (!aux.equals(_TOKENFIN))
+            v.add(aux);
+    }
+    
+    public void showConsumed(){
+        for (Token v1 : v) {
+            System.out.println(v1.getCode()+"  "+v1.getValue());
         }
-        if (currentLine==null)
-            result ="/eof";        
-        return result;
     }
 }
