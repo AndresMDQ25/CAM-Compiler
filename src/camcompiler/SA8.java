@@ -9,9 +9,9 @@ package camcompiler;
  *
  * @author Mariano
  */
-public class AS8 extends SemanticAction{
+public class SA8 extends SemanticAction{
     //NO HACE NADA
-    public AS8(){} 
+    public SA8(){} 
     public Token run(){return null;}
     
 }

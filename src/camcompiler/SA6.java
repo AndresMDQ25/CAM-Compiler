@@ -9,12 +9,11 @@ package camcompiler;
  *
  * @author Mariano
  */
-public class AS0 extends SemanticAction{
-    //AGREGA UN CARACTER AL FINAL DEL TOKEN
-    public AS0(){} 
-    public Token run(Token t, char c){
-        t.addAtEnd(c);
-        return t;
+public class SA6 extends SemanticAction{
+    //AUMENTA EN 1 LA CANTIDAD DE LINEAS QUE GUARDA EL ANALIZADOR LEXICO
+    public SA6(){} 
+    public Token run(LexicAnalyzer l){
+        l.increaseLines();
+        return null;
     }
-    
 }

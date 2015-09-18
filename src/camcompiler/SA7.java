@@ -9,11 +9,11 @@ package camcompiler;
  *
  * @author Mariano
  */
-public class AS6 extends SemanticAction{
-    //AUMENTA EN 1 LA CANTIDAD DE LINEAS QUE GUARDA EL ANALIZADOR LEXICO
-    public AS6(){} 
-    public Token run(LexicAnalyzer l){
-        l.increaseLines();
+public class SA7 extends SemanticAction{
+    //ERROR DE CARACTER INVALIDO
+    public SA7(){} 
+    public Token run(Error e, int line){
+        e.addLog("invalid character or expression", line);
         return null;
     }
 }
