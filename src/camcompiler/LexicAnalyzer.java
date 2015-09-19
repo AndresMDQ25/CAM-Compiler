@@ -5,22 +5,31 @@
  */
 package camcompiler;
 
+import java.io.IOException;
+
 /**
  *
  * @author Andres
  */
 public class LexicAnalyzer {
     
-    private final int[][] next_state = {{2,2,2,2,3,1,-1,-1,-1,10,7,6,6,-2,12,-1,-1,8,-1,-1,-2,0,0,0,-1},
-		 {2,2,2,2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-1},
+    Logger errors = new Error();
+    Logger warnings = new Warning();
+    Reader reader;
+    int currentLine = 0;
+    Token currentToken;
+    char currentChar;
+    
+    private final int[][] next_state = {{2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
+		 {2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
 		 {2,2,2,2,2,2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-                 {-2,-2,-2,-2,3,-2,-2,-2,-2,-2,-2,-2,-2,4,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-1},
-                 {-2,-2,5,-1,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-1},
-                 {-2,-1,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-1},
+                 {0,0,0,0,3,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,-1},
+                 {0,0,5,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
+                 {0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
                  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
                  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
                  {8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,-1,8,8,8,8,9,8,-1},
-                 {-2,-2,-2,-2,-2,-2,-2,-2,-2,8,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-1},
+                 {0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
                  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
                  {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,0,11,-1},
                  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
@@ -48,6 +57,37 @@ public class LexicAnalyzer {
                 {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},
                 {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa4},
                 {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4}};
+    
+    public LexicAnalyzer(String fileName) throws IOException {
+        this.reader = new Reader(fileName);
+        
+    }
+    
+    public Token getToken() throws IOException {
+        }
+
+    public Error getError() {
+        return (Error)this.errors;
+    }
+    public Warning getWarning() {
+        return (Warning)this.warnings;
+    }
+    public int getLine() {
+        return this.currentLine;
+    }
+    
+    public void increaseLines() {
+        this.currentLine++;
+    }
+    
+    public Reader getReader() {
+        return this.reader;
+    }
+    public char getChar() {
+        return this.currentChar;
+    }        
+
+    
 }
     
 

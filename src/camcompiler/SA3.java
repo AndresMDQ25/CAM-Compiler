@@ -11,7 +11,7 @@ import javafx.util.Pair;
  *
  * @author Andres
  */
-public class SA3 extends SemanticAction{  
+public class SA3 extends SemanticAction{
     public SA3(){}
     //CHECKEA RANGO UNSIGNED LONG -> 0<n< 2^32 -1 and removes _ul
     public Pair<Token, Integer> run (Token t,LexicAnalyzer lA){
