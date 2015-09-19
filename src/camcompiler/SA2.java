@@ -15,6 +15,7 @@ public class SA2 extends SemanticAction{
     public Token run (Token t, LexicAnalyzer lA ){
         Error e = lA.getError();
         String s = t.getValue();
+        int line = lA.getLine();
         //REMOVES _i
         char[] dst = new char[s.length()-2];                
         s.getChars(0, s.length()-2, dst, 0);

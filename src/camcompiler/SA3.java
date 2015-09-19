@@ -10,12 +10,12 @@ package camcompiler;
  * @author Andres
  */
 public class SA3 extends SemanticAction{
-    @Override
     public SA3(){}
     //Check  constant range  -> 0<n< 2^32 -1 and removes _ul
     public Token run (Token t,LexicAnalyzer lA){
         Error e = lA.getError();
         String s = t.getValue();
+        int line = lA.getLine();
         //REMOVES _ul
         char[] dst = new char[s.length()-3];                
         s.getChars(0, s.length()-3, dst, 0);

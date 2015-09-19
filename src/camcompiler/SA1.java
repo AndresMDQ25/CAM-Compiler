@@ -19,7 +19,7 @@ public class SA1 extends SemanticAction{
         Reader r = lA.getReader();
         String value=t.getValue();
         SemanticAction sa = new SA4();
-        sa.run(r, t);
+        sa.run(t, lA);
         if (value.length()>_LONG){
             value=value.substring(0, _LONG-1);
             t.setValue(value);
