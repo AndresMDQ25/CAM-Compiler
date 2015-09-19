@@ -42,3 +42,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 nbproject/private/private.properties
+build/classes/camcompiler/LexicAnalyzer.class
+*.class
