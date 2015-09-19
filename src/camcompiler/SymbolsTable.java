@@ -14,11 +14,11 @@ import java.util.Map;
  */
 public class SymbolsTable {
     
-    private Map<Token, Integer> m;
+    private final Map<Token, Integer> m;
     
     public SymbolsTable(){
-    m=new Hashtable();
-}        
+        m=new Hashtable();
+    }        
     public void addEntry(int code, Token t){
         m.put(t, code);
     }
