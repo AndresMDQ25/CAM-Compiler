@@ -11,6 +11,8 @@ import java.io.IOException;
  *
  * @author Andres
  */
+
+
 public class LexicAnalyzer {
     
     Logger errors = new Error();
@@ -18,7 +20,8 @@ public class LexicAnalyzer {
     Reader reader;
     int currentLine = 0;
     Token currentToken;
-    char currentChar;
+    String currentChar;
+    
     
     private final int[][] next_state = {{2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
 		 {2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
@@ -63,7 +66,22 @@ public class LexicAnalyzer {
         
     }
     
+    private int getColumn() {
+        //hash
+    }
+    
     public Token getToken() throws IOException {
+        String currentString = "";
+        
+        int currentState = 0;
+        while (currentState != -1) {
+            this.currentChar = reader.getChar();
+            currentState = next_state[currentState, getColumn()];
+            currentToken = Sa0.run(currentToken, this);
+            sem_action[currentState, getColumn()].run(currentToken, this);
+        }
+        
+        
         }
 
     public Error getError() {
@@ -84,7 +102,7 @@ public class LexicAnalyzer {
         return this.reader;
     }
     public char getChar() {
-        return this.currentChar;
+        return this.currentChar.charAt(0);
     }        
 
     
