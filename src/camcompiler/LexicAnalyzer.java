@@ -14,7 +14,7 @@ import java.io.IOException;
 public class LexicAnalyzer {
     
     Logger errors = new Error();
-    Logger warnings = new Warning();
+    Warning warnings = new Warning();
     Reader reader;
     int currentLine = 0;
     Token currentToken;
@@ -69,7 +69,7 @@ public class LexicAnalyzer {
     public Logger getError() {
         return this.errors;
     }
-    public Logger getWarning() {
+    public Warning getWarning() {
         return this.warnings;
     }
     public int getLine() {
