@@ -5,6 +5,8 @@
  */
 package camcompiler;
 
+import java.io.IOException;
+
 /**
  *
  * @author Andres
@@ -13,7 +15,10 @@ public class LexicAnalyzer {
     
     Logger errors = new Error();
     Logger warnings = new Warning();
-    Reader reader = new Reader();
+    Reader reader;
+    int currentLine = 0;
+    Token currentToken;
+    char currentChar;
     
     private final int[][] next_state = {{2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
 		 {2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
@@ -53,28 +58,36 @@ public class LexicAnalyzer {
                 {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa4},
                 {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4}};
     
-    public LexicAnalyzer() {
+    public LexicAnalyzer(String fileName) throws IOException {
+        this.reader = new Reader(fileName);
         
     }
     
-    public Token getToken() {
-        
-    }
+    public Token getToken() throws IOException {
+        }
+
     public Logger getError() {
         return this.errors;
     }
     public Logger getWarning() {
         return this.warnings;
     }
-    public String getLine() {
-        
+    public int getLine() {
+        return this.currentLine;
     }
-    public getReader() {
-        
+    
+    public void increaseLines() {
+        this.currentLine++;
     }
-    public getChar() {
-        
+    
+    public Reader getReader() {
+        return this.reader;
+    }
+    public char getChar() {
+        return this.currentChar;
     }        
+
+    
 }
     
 
