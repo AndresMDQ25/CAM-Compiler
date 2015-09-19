@@ -62,7 +62,7 @@ public class Reader {
             }         
         }
         if (currentLine==null)
-            result ="/eof";        
+            result ="$";        
         return result;
     }                                                          
             

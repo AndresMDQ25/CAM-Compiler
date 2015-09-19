@@ -19,7 +19,7 @@ public class LexicAnalyzer {
     Logger warnings = new Warning();
     Reader reader;
     int currentLine = 0;
-    Token currentToken;
+    Pair<Token, Integer> currentPair;
     String currentChar;
     
     
@@ -67,7 +67,35 @@ public class LexicAnalyzer {
     }
     
     private int getColumn() {
-        //hash
+        switch (currentChar) {
+            case "a":  return 0; case "b":  return 0; case "c":  return 0; case "d":  return 0;
+            case "e":  return 0; case "f":  return 0; case "g":  return 0; case "h":  return 0;
+            case "i":  return 3; case "j":  return 0; case "k":  return 0; case "l":  return 1;
+            case "m":  return 0; case "n":  return 0; case "o":  return 0; case "p":  return 0;
+            case "q":  return 0; case "r":  return 0; case "s":  return 0; case "t":  return 0;
+            case "u":  return 2; case "v":  return 0; case "w":  return 0; case "x":  return 0;
+            case "y":  return 0; case "z":  return 0;
+                
+            case "A": return 14; case "B": return 14; case "C": return 14; case "D": return 14;
+            case "E": return 14; case "F": return 14; case "G": return 14; case "H": return 14;
+            case "I": return 14; case "J": return 14; case "K": return 14; case "L": return 14;
+            case "M": return 14; case "N": return 14; case "O": return 14; case "P": return 14;
+            case "Q": return 14; case "R": return 14; case "S": return 14; case "T": return 14;
+            case "U": return 14; case "V": return 14; case "W": return 14; case "X": return 14;
+            case "Y": return 14; case "Z": return 14; 
+            
+            case "0": return 4;  case "1": return 4;  case "2": return 4;  case "3": return 4;
+            case "4": return 4;  case "5": return 4;  case "6": return 4;  case "7": return 4;
+            case "8": return 4;  case "9": return 4;  
+                
+            case "@": return 5;  case "+": return 6;  case "/": return 7;  case "*": return 8;
+            case "-": return 9;  case "<": return 10; case ">": return 11; case "=": return 12;
+            case "_": return 13; case "(": return 15; case ")": return 16; case "\"":return 17;
+            case ",": return 18; case ";": return 19; case "  ": return 21; case "/n": return 22;
+            case " ": return 23; case "$": return 24; 
+                
+            default: return 20;
+        }
     }
     
     public Token getToken() throws IOException {
@@ -76,10 +104,11 @@ public class LexicAnalyzer {
         int currentState = 0;
         while (currentState != -1) {
             this.currentChar = reader.getChar();
+            currentPair = Sa0.run(currentPair.first(), this);
+            currentPair = sem_action[currentState, getColumn()].run(currentPair.first(), this);
             currentState = next_state[currentState, getColumn()];
-            currentToken = Sa0.run(currentToken, this);
-            sem_action[currentState, getColumn()].run(currentToken, this);
         }
+        
         
         
         }
