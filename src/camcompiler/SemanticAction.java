@@ -5,10 +5,12 @@
  */
 package camcompiler;
 
+import javafx.util.Pair;
+
 /**
  *
  * @author Andres
  */
 public abstract class SemanticAction {
-    public abstract Token run(Token t,LexicAnalyzer lA);
+    public abstract Pair<Token,Integer> run(Token t,LexicAnalyzer lA);
 }

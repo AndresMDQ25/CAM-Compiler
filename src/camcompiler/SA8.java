@@ -5,6 +5,8 @@
  */
 package camcompiler;
 
+import javafx.util.Pair;
+
 /**
  *
  * @author Mariano
@@ -12,6 +14,10 @@ package camcompiler;
 public class SA8 extends SemanticAction{
     //NO HACE NADA
     public SA8(){} 
-    public Token run(Token t, LexicAnalyzer lA){return null;}
+    @Override
+    public Pair<Token,Integer> run(Token t, LexicAnalyzer lA){
+        Pair p= new Pair(null,-1);
+        return p;
+    }
     
 }
