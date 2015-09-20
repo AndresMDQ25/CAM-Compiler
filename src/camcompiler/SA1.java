@@ -5,7 +5,6 @@
  */
 package camcompiler;
 
-import javafx.util.Pair;
 
 /**
  *
@@ -15,20 +14,19 @@ public class SA1 extends SemanticAction{
     //TRUNCA MAYORES A 15
     private static final int _LONG = 15;
     public SA1(){} 
-    public Pair<Token, Integer> run(Token t,LexicAnalyzer lA ){
+    public void run(LexicAnalyzer lA ){
+        SemanticAction sa = new SA4();
+        sa.run(lA);
         Warning w = lA.getWarning();
         int line = lA.getLine();
         Reader r = lA.getReader();
-        String value=t.getValue();
-        SemanticAction sa = new SA4();
-        sa.run(t, lA);
+        String value= lA.getString();
         if (value.length()>_LONG){
             value=value.substring(0, _LONG-1);
-            t.setValue(value);
+            lA.setString(value);
             w.addLog("truncated chain",line);
         }
-        Pair p = new Pair(t,257);
-        return p;
-
+        SA5 sa5 = new SA5(); //checks for reserved words
+        sa5.run(lA);
     }
 }

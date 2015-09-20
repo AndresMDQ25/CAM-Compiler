@@ -5,8 +5,6 @@
  */
 package camcompiler;
 
-import javafx.util.Pair;
-
 /**
  *
  * @author Mariano
@@ -14,9 +12,7 @@ import javafx.util.Pair;
 public class SA6 extends SemanticAction{
     //AUMENTA EN 1 LA CANTIDAD DE LINEAS QUE GUARDA EL ANALIZADOR LEXICO
     public SA6(){} 
-    public Pair<Token, Integer> run(Token t,LexicAnalyzer l){
-        l.increaseLines();
-        Pair p= new Pair(null,-1);
-        return p;
+    public void run(LexicAnalyzer lA){
+        lA.increaseLines();
     }
 }

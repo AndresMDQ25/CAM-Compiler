@@ -5,7 +5,6 @@
  */
 package camcompiler;
 
-import javafx.util.Pair;
 
 /**
  *
@@ -14,11 +13,12 @@ import javafx.util.Pair;
 public class SA0 extends SemanticAction{
     //AGREGA UN CARACTER AL FINAL DEL TOKEN
     public SA0(){} 
-    public Pair<Token, Integer> run(Token t, LexicAnalyzer lA){
+    public void run(LexicAnalyzer lA){
         char c = lA.getChar();
-        t.addAtEnd(c);
-        Pair p = new Pair(t,-1);
-        return p;
+        String s;
+        s = lA.getString();
+        s += c;
+        lA.setString(s);
     }
     
 }

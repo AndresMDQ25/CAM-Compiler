@@ -15,13 +15,14 @@ import java.io.IOException;
 
 public class LexicAnalyzer {
     
-    Logger errors = new Error();
-    Logger warnings = new Warning();
-    Reader reader;
-    int currentLine = 0;
-    Pair<Token, Integer> currentPair;
-    String currentChar;
-    
+    private Logger errors = new Error();
+    private Logger warnings = new Warning();
+    private Reader reader;
+    private int currentLine = 0;
+    private String currentString;
+    private int currentCode;
+    private String currentChar;
+    private SymbolsTable st;
     
     private final int[][] next_state = {{2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
 		 {2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
@@ -61,8 +62,9 @@ public class LexicAnalyzer {
                 {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa4},
                 {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4}};
     
-    public LexicAnalyzer(String fileName) throws IOException {
+    public LexicAnalyzer(String fileName, SymbolsTable st) throws IOException {
         this.reader = new Reader(fileName);
+        this.st = st;
         
     }
     
@@ -99,19 +101,25 @@ public class LexicAnalyzer {
     }
     
     public Token getToken() throws IOException {
-        String currentString = "";
-        
+        this.currentString = "";        
         int currentState = 0;
         while (currentState != -1) {
             this.currentChar = reader.getChar();
-            currentPair = Sa0.run(currentPair.first(), this);
-            currentPair = sem_action[currentState, getColumn()].run(currentPair.first(), this);
-            currentState = next_state[currentState, getColumn()];
+            if (this.currentChar == "/n") 
+                Sa6.run(this);
+            Sa0.run(this);
+            int column = this.getColumn();
+            sem_action[currentState][column].run(this);
+            currentState = next_state[currentState][column];
         }
         
+        //en estado final -> ya se tiene el par<currentString, currentToken> (atributo, num de Token)
+        Token t = new Token(this.currentCode, this.currentString);
+        //agregar a tabla de simbolos 
         
-        
-        }
+        //ver que devolver (par de num de Token, referencia) ?
+        return null;
+    }
 
     public Error getError() {
         return (Error)this.errors;
@@ -132,11 +140,18 @@ public class LexicAnalyzer {
     }
     public char getChar() {
         return this.currentChar.charAt(0);
-    }        
-
+    }    
     
+    public String getString() {
+        return this.currentString;
+    }
+    public void setString (String s) {
+        this.currentString = s;
+    }
+
+    void setCode(int i) {
+        this.currentCode = i;
+    }
 }
-    
-
-    
+       
 

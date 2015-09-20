@@ -9,12 +9,13 @@ package camcompiler;
  *
  * @author Mariano
  */
-public abstract class Token {
+public class Token {
 
     String value;
     int code;
     public Token(){value=new String();}
     public Token(Token t){this.value=t.getValue();}
+    public Token(int code, String value) {this.code = code; this.value = value; }
     public int getCode(){return code;}
     public String getValue() {return value;}
     public void setValue(String value) {this.value=value;}

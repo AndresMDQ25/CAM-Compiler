@@ -5,8 +5,6 @@
  */
 package camcompiler;
 
-import javafx.util.Pair;
-
 /**
  *
  * @author Mariano
@@ -14,13 +12,11 @@ import javafx.util.Pair;
 public class SA4 extends SemanticAction{
     //BORRA EL ULTIMO CARACTER DEL TOKEN Y RETROCEDE EL READER
     public SA4(){} 
-    public Pair<Token, Integer> run(Token t,LexicAnalyzer lA){
+    public void run(LexicAnalyzer lA){
         Reader r =  lA.getReader();
-        String newValue=t.getValue();
-        newValue=newValue.substring(0, newValue.length()-2);
-        t.setValue(newValue);
-        r.goToPrevChar();        
-        Pair p= new Pair(t,-1);
-        return p;
+        String newValue = lA.getString();
+        newValue = newValue.substring(0, newValue.length()-2);
+        lA.setString(newValue);
+        r.goToPrevChar();  
     }
 }

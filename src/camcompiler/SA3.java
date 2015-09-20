@@ -5,7 +5,6 @@
  */
 package camcompiler;
 
-import javafx.util.Pair;
 
 /**
  *
@@ -14,9 +13,9 @@ import javafx.util.Pair;
 public class SA3 extends SemanticAction{
     public SA3(){}
     //CHECKEA RANGO UNSIGNED LONG -> 0<n< 2^32 -1 and removes _ul
-    public Pair<Token, Integer> run (Token t,LexicAnalyzer lA){
+    public void run (LexicAnalyzer lA){
         Error e = lA.getError();
-        String s = t.getValue();
+        String s = lA.getString();
         int line = lA.getLine();
         //REMOVES _ul
         char[] dst = new char[s.length()-3];                
@@ -29,16 +28,14 @@ public class SA3 extends SemanticAction{
         long maxUnsigned = 4294967295L;
         //2^32 -1   4294967295
         if ((value > 0) &&(!(value < maxUnsigned))){
-            t.setValue(Integer.toString(value));
-            Pair p = new Pair(t,268);
-            return p;
+            lA.setString(Integer.toString(value));
+            lA.setCode(258);
         }
        else
        {
             e.addLog("Constant out of range", line);
-            t.setValue("");                        
-            Pair p = new Pair(null,-1);
-            return p;
+            lA.setString("");  
+            lA.setCode(-1);
        }            
     }
 }

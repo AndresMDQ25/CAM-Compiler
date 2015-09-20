@@ -5,7 +5,6 @@
  */
 package camcompiler;
 
-import javafx.util.Pair;
 
 /**
  *
@@ -14,9 +13,9 @@ import javafx.util.Pair;
 public class SA2 extends SemanticAction{
     //CHEQUEA RANGO DE CTES  -> -2^15 -1<n< 2^15 -1 Y SACA _i
     public SA2(){}
-    public Pair<Token, Integer> run (Token t, LexicAnalyzer lA ){
+    public void run (LexicAnalyzer lA ){
         Error e = lA.getError();
-        String s = t.getValue();
+        String s = lA.getString();
         int line = lA.getLine();
         //REMOVES _i
         char[] dst = new char[s.length()-2];                
@@ -29,13 +28,12 @@ public class SA2 extends SemanticAction{
         short maxShort = Short.MAX_VALUE;
         short minShort = Short.MIN_VALUE;        
         if ((value >= minShort) &&(value <= maxShort))
-            t.setValue(Integer.toString(value));
+            lA.setString(Integer.toString(value));
         else
         {
             e.addLog("Constant out of range", line);
-            t.setValue("");                        
+            lA.setString("");                        
         } 
-        Pair p = new Pair(t,265);
-    return p;
+        lA.setCode(258);
     }
 }
