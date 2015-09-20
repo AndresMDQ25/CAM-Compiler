@@ -38,15 +38,15 @@ public class LexicAnalyzer {
                  {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,0,11,-1},
                  {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
     
-    SemanticAction Sa0 = new SA0();
-    SemanticAction Sa1 = new SA1();
-    SemanticAction Sa2 = new SA2();
-    SemanticAction Sa3 = new SA3();
-    SemanticAction Sa4 = new SA4();
-    SemanticAction Sa5 = new SA5();
-    SemanticAction Sa6 = new SA6(); //line++
-    SemanticAction Sa7 = new SA7();
-    SemanticAction Sa8 = new SA8();
+    SemanticAction Sa0 = new SA0(this);
+    SemanticAction Sa1 = new SA1(this);
+    SemanticAction Sa2 = new SA2(this);
+    SemanticAction Sa3 = new SA3(this);
+    SemanticAction Sa4 = new SA4(this);
+    SemanticAction Sa5 = new SA5(this);
+    SemanticAction Sa6 = new SA6(this); //line++
+    SemanticAction Sa7 = new SA7(this);
+    SemanticAction Sa8 = new SA8(this);
         
     private SemanticAction[][] sem_action = {{Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7,Sa4,Sa4,Sa4,Sa4},
                 {Sa8,Sa8,Sa8,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
@@ -106,10 +106,10 @@ public class LexicAnalyzer {
         while (currentState != -1) {
             this.currentChar = reader.getChar();
             if (this.currentChar == "/n") 
-                Sa6.run(this);
-            Sa0.run(this);
+                Sa6.run();
+            Sa0.run();
             int column = this.getColumn();
-            sem_action[currentState][column].run(this);
+            sem_action[currentState][column].run();
             currentState = next_state[currentState][column];
         }
         

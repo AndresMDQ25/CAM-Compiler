@@ -7,8 +7,10 @@ package camcompiler;
 
 public class SA8 extends SemanticAction{
     //NO HACE NADA
-    public SA8(){} 
-    public void run(LexicAnalyzer lA){
+    public SA8(LexicAnalyzer lA){
+        super(lA);
+    } 
+    public void run(){
         lA.setCode(-1);
     }
     

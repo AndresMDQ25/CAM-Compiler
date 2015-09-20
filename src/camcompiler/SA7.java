@@ -12,8 +12,10 @@ package camcompiler;
  */
 public class SA7 extends SemanticAction{
     //ERROR DE CARACTER INVALIDO
-    public SA7(){}         
-    public void run(LexicAnalyzer lA) {
+    public SA7(LexicAnalyzer lA) {
+        super(lA);
+    }         
+    public void run() {
         Error e = lA.getError(); 
         int line = lA.getLine();
         e.addLog("invalid character or expression", line);

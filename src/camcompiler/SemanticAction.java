@@ -6,5 +6,9 @@
 package camcompiler;
 
 public abstract class SemanticAction {
-    public abstract void run(LexicAnalyzer lA);
+    LexicAnalyzer lA;
+    public SemanticAction(LexicAnalyzer lA){
+        this.lA = lA;
+    }
+    public abstract void run();
 }

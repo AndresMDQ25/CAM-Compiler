@@ -11,9 +11,11 @@ package camcompiler;
  * @author Andres
  */
 public class SA3 extends SemanticAction{
-    public SA3(){}
+    public SA3(LexicAnalyzer lA) {
+        super(lA);
+    }
     //CHECKEA RANGO UNSIGNED LONG -> 0<n< 2^32 -1 and removes _ul
-    public void run (LexicAnalyzer lA){
+    public void run (){
         Error e = lA.getError();
         String s = lA.getString();
         int line = lA.getLine();

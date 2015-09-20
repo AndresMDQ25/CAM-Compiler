@@ -7,8 +7,10 @@ package camcompiler;
 
 public class SA5 extends SemanticAction{
     //VERIFICA PALABRAS RESERVADAS
-    public SA5(){} 
-    public void run(LexicAnalyzer lA){
+    public SA5(LexicAnalyzer lA) {
+        super(lA);
+    } 
+    public void run(){
         Error e = lA.getError();
         int line = lA.getLine();
         String word=lA.getString();

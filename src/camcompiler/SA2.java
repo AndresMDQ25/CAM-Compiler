@@ -12,8 +12,10 @@ package camcompiler;
  */
 public class SA2 extends SemanticAction{
     //CHEQUEA RANGO DE CTES  -> -2^15 -1<n< 2^15 -1 Y SACA _i
-    public SA2(){}
-    public void run (LexicAnalyzer lA ){
+    public SA2(LexicAnalyzer lA) {
+        super(lA);
+    }
+    public void run (){
         Error e = lA.getError();
         String s = lA.getString();
         int line = lA.getLine();

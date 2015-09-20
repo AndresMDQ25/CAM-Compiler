@@ -11,8 +11,10 @@ package camcompiler;
  */
 public class SA4 extends SemanticAction{
     //BORRA EL ULTIMO CARACTER DEL TOKEN Y RETROCEDE EL READER
-    public SA4(){} 
-    public void run(LexicAnalyzer lA){
+    public SA4(LexicAnalyzer lA) {
+        super(lA);
+    } 
+    public void run(){
         Reader r =  lA.getReader();
         String newValue = lA.getString();
         newValue = newValue.substring(0, newValue.length()-2);
