@@ -6,6 +6,7 @@
 package camcompiler;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  *
@@ -115,10 +116,10 @@ public class LexicAnalyzer {
         
         //en estado final -> ya se tiene el par<currentString, currentToken> (atributo, num de Token)
         Token t = new Token(this.currentCode, this.currentString);
-        //agregar a tabla de simbolos 
-        
+        //agregar a tabla de simbolos                 
+        t=(Token)st.request(t).getKey();
         //ver que devolver (par de num de Token, referencia) ?
-        return null;
+        return t;
     }
 
     public Error getError() {
