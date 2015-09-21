@@ -103,10 +103,12 @@ public class LexicAnalyzer {
     }
     
     public Map.Entry getToken() throws IOException {
+        System.out.println("ENtre al getToken");
         this.currentString = "";        
         int currentState = 0;
         while (currentState != -1) {
             this.currentChar = reader.getChar();
+            System.out.println("CURRENT CHAR: "+this.currentChar);
             if (this.currentChar == "/n") 
                 Sa6.run();
             else 
@@ -119,8 +121,9 @@ public class LexicAnalyzer {
         //en estado final -> ya se tiene el par<currentString, currentToken> (atributo, num de Token)
         Token t = new Token(this.currentCode, this.currentString);
         //agregar a tabla de simbolos
+        System.out.println("DESPUES DE WHILE: "+t.getValue());
         Map.Entry me = st.request(t);
-        //ver que devolver (par de num de Token, referencia) ?
+        //ver que devolver (par de num de Token, referencia) ?        
         return me;
     }
 

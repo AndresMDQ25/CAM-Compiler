@@ -15,6 +15,7 @@ public class SA6 extends SemanticAction{
         super(lA);
     } 
     public void run(){
+        System.out.println("LLEGO A LA 6");
         lA.increaseLines();
     }
 }

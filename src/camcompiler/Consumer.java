@@ -16,11 +16,15 @@ public class Consumer {
         System.out.println("Consumer created");
     }
     
-    public void consume() throws IOException{        
+    public void consume() throws IOException{         
         Map.Entry aux=l.getToken();
+        System.out.println("DESPUES DE GET TOKEN");        
         v.add(aux);
-        while (!aux.equals(_TOKENFIN))
+        while (!aux.equals(_TOKENFIN)){
+            aux=l.getToken();
             v.add(aux);
+        }
+            
     }
     
     public String showConsumed(){

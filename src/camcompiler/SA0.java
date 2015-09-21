@@ -17,6 +17,7 @@ public class SA0 extends SemanticAction{
     } 
     public void run(){
         char c = lA.getChar();
+        System.out.println("C: "+c);
         String s;
         s = lA.getString();
         s += c;        

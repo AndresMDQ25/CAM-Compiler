@@ -31,8 +31,11 @@ public class SymbolsTable {
         for (Object o: m.entrySet()) {
             Map.Entry entry;
             entry = (Map.Entry) o;
-            if(entry.getKey().equals(name))
+            //System.out.println("NAME: "+name);
+            //System.out.println("ENTRY: " + entry.getValue());
+            if((int)entry.getValue() == (int)name)
             {
+                System.out.println("ENcontre");
                 return entry;
             }
         }
@@ -42,8 +45,11 @@ public class SymbolsTable {
     public Map.Entry request(Token t){
         Integer code;
         if (!m.containsKey(t)){
+            System.out.println("MAP SIZE: "+m.size());
             this.addEntry(256+m.size()+1,t);
-             code=256+m.size()+1;
+             code=256+m.size();
+             //System.out.println("CODIGO A AGREGAR: "+code);
+             //System.out.println("VOY A AGREGAR");
         }
         else
             code=getCode(t);

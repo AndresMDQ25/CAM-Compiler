@@ -14,10 +14,11 @@ public class SA4 extends SemanticAction{
     public SA4(LexicAnalyzer lA) {
         super(lA);
     } 
-    public void run(){
+    public void run(){        
         Reader r =  lA.getReader();
         String newValue = lA.getString();
-        newValue = newValue.substring(0, newValue.length()-2);
+        newValue = newValue.substring(0, newValue.length()-1);
+        System.out.println("RESULT 4 : "+newValue);
         lA.setString(newValue);
         r.goToPrevChar();
         if (newValue == "-") {
