@@ -11,7 +11,11 @@ public class SA8 extends SemanticAction{
         super(lA);
     } 
     public void run(){
-        
+        String word=lA.getString();
+        switch(word) {
+            case "+" : lA.setCode(276);
+            case "*" : lA.setCode(276);
+            case "/" : lA.setCode(276); 
+            }
     }
-    
 }

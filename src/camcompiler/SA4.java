@@ -19,6 +19,9 @@ public class SA4 extends SemanticAction{
         String newValue = lA.getString();
         newValue = newValue.substring(0, newValue.length()-2);
         lA.setString(newValue);
-        r.goToPrevChar();  
+        r.goToPrevChar();
+        if (newValue == "-") {
+            lA.setCode(276);
+        }
     }
 }
