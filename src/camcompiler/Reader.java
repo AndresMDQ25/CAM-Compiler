@@ -52,7 +52,7 @@ public class Reader {
                 line++;
        
                 if (currentLine==null)
-                    result ="/eof";
+                    result ="$";
                 else
                 {                    
                     result =""+currentLine.charAt(col);
