@@ -5,6 +5,9 @@
  */
 package view.cam;
 
+import camcompiler.Consumer;
+import camcompiler.LexicAnalyzer;
+import camcompiler.SymbolsTable;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,10 +25,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Andres
  */
 public class MainView extends javax.swing.JFrame {
-
+    Consumer c;
+    LexicAnalyzer lexicAnalyzer;
+    SymbolsTable st;
+    
     /**
      * Creates new form MainView
-     */
+     */    
     public MainView() {
         initComponents();
     }
@@ -44,6 +50,9 @@ public class MainView extends javax.swing.JFrame {
         mainEditor = new javax.swing.JTextPane();
         counterPane = new javax.swing.JTextPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         jMenuBar2 = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -68,6 +77,33 @@ public class MainView extends javax.swing.JFrame {
         jSplitPane1.setLeftComponent(counterPane);
 
         jScrollPane3.setViewportView(jSplitPane1);
+
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
+
+        jScrollPane1.setViewportView(jTextPane1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1037, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1037, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 90, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jTabbedPane1.addTab("Output Application", jPanel2);
 
         FileMenu.setText("File");
         FileMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -106,6 +142,16 @@ public class MainView extends javax.swing.JFrame {
         jMenuBar2.add(FileMenu);
 
         jMenu5.setText("Run");
+        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu5MouseClicked(evt);
+            }
+        });
+        jMenu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu5ActionPerformed(evt);
+            }
+        });
         jMenuBar2.add(jMenu5);
 
         aboutMenu.setText("About");
@@ -120,7 +166,7 @@ public class MainView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1042, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTabbedPane1))
                 .addContainerGap())
         );
@@ -144,7 +190,7 @@ public class MainView extends javax.swing.JFrame {
         
         // Solo permitimos abrir archivos txt
         TextFilter filter = new TextFilter();
-        fileChooser.setFileFilter(filter);
+        fileChooser.setFileFilter(filter);        
         
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
@@ -152,6 +198,9 @@ public class MainView extends javax.swing.JFrame {
                 FileReader in;
                 System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
                 in = new FileReader(fileChooser.getSelectedFile().getAbsolutePath());
+                st = new SymbolsTable();
+                lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st);
+                c = new Consumer(lexicAnalyzer);                
                 BufferedReader br = new BufferedReader(in);
                 String code = new String();
                 String count = new String();
@@ -201,6 +250,24 @@ public class MainView extends javax.swing.JFrame {
         
     }//GEN-LAST:event_FileMenuActionPerformed
 
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        String logs;
+        logs = c.showConsumed();
+        jTextPane1.setText(logs);
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
+        
+    }//GEN-LAST:event_jMenu5ActionPerformed
+
+    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+        try {            
+            c.consume();
+        } catch (IOException ex) {
+            Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenu5MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -243,9 +310,12 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTextPane mainEditor;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem saveMenuItem;

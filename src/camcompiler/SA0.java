@@ -19,8 +19,11 @@ public class SA0 extends SemanticAction{
         char c = lA.getChar();
         String s;
         s = lA.getString();
-        s += c;
+        s += c;        
         lA.setString(s);
+        if (c == '$') {
+            lA.setCode(260);
+        }
     }
     
 }

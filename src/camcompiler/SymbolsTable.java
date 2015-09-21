@@ -17,6 +17,7 @@ public class SymbolsTable {
     private final Map<Token, Integer> m;
     
     public SymbolsTable(){
+        System.out.println("Symbols Table Created");
         m=new Hashtable();
     }        
     public void addEntry(int code, Token t){

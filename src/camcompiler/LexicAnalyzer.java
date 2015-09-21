@@ -64,6 +64,7 @@ public class LexicAnalyzer {
                 {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4}};
     
     public LexicAnalyzer(String fileName, SymbolsTable st) throws IOException {
+        System.out.println("Lexic Analyzer Created");
         this.reader = new Reader(fileName);
         this.st = st;
         

@@ -7,25 +7,30 @@ import java.util.Vector;
 public class Consumer {
     
     private final LexicAnalyzer l;
-    private const Token _TOKENFIN=new Token("$");
+    private  Token _TOKENFIN=new Token(260,"$");
     private final Vector<Map.Entry> v;
 
     public Consumer (LexicAnalyzer newL){
         this.l=newL;
         v=new Vector();
+        System.out.println("Consumer created");
     }
     
-    public void consume() throws IOException{
+    public void consume() throws IOException{        
         Map.Entry aux=l.getToken();
         v.add(aux);
         while (!aux.equals(_TOKENFIN))
             v.add(aux);
     }
     
-    public void showConsumed(){
+    public String showConsumed(){
+        String t = null;
         for (Map.Entry v1 : v) {
-            System.out.println(((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue());
+            //System.out.println(((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue());          
+            t+=((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue();
+            System.out.println(t);
         }
+        return t;
     }
 }       
             
