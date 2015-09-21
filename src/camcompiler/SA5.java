@@ -15,24 +15,25 @@ public class SA5 extends SemanticAction{
         int line = lA.getLine();
         String word=lA.getString();
         switch(word) {
-            case "IF" : lA.setCode(261);
-            case "THEN" : lA.setCode(262);
-            case "ELSE" : lA.setCode(263);
-            case "ENDIF" : lA.setCode(264); 
-            case "PRINT" : lA.setCode(265); 
-            case "INT" :  lA.setCode(266);
-            case "BEGIN" :  lA.setCode(267);
-            case "END" :  lA.setCode(268);
-            case "UNSIGNED" :  lA.setCode(269);
-            case "LONG" :  lA.setCode(270); 
-            case "MY" :  lA.setCode(271);
-            case "LOOP" :  lA.setCode(272); 
-            case "FROM" :  lA.setCode(273);
-            case "TO" :  lA.setCode(274); 
-            case "BY" :  lA.setCode(275); 
+            case "IF" : { lA.setCode(261); break; }
+            case "THEN" : { lA.setCode(262); break; }
+            case "ELSE" : { lA.setCode(263); break; }
+            case "ENDIF" : { lA.setCode(264); break; } 
+            case "PRINT" : { lA.setCode(265); break; } 
+            case "INT" :  { lA.setCode(266); break; }
+            case "BEGIN" :  { lA.setCode(267); break; }
+            case "END" :  { lA.setCode(268); break; }
+            case "UNSIGNED" :  { lA.setCode(269); break; }
+            case "LONG" :  { lA.setCode(270); break; }
+            case "MY" :  { lA.setCode(271); break; }
+            case "LOOP" :  { lA.setCode(272);  break; }
+            case "FROM" :  { lA.setCode(273); break; }
+            case "TO" :  { lA.setCode(274);  break; }
+            case "BY" :  { lA.setCode(275);  break; }
             default : {
                 e.addLog("not recognized reserved word", line);
                 lA.setCode(257);
+                break;
             }
         }
     }

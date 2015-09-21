@@ -20,7 +20,7 @@ public class Consumer {
         Map.Entry aux=l.getToken();
         System.out.println("DESPUES DE GET TOKEN");        
         v.add(aux);
-        while (!aux.equals(_TOKENFIN)){
+        while (!((Token)aux.getKey()).equals(_TOKENFIN)){
             aux=l.getToken();
             v.add(aux);
         }
@@ -30,9 +30,9 @@ public class Consumer {
     public String showConsumed(){
         String t = null;
         for (Map.Entry v1 : v) {
-            //System.out.println(((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue());          
-            t+=((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue();
-            System.out.println(t);
+            System.out.println(((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue());          
+            //t+=((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue();
+            //System.out.println(t);
         }
         return t;
     }

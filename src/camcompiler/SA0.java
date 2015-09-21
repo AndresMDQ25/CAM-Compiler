@@ -16,14 +16,16 @@ public class SA0 extends SemanticAction{
         super(lA);
     } 
     public void run(){
-        char c = lA.getChar();
-        System.out.println("C: "+c);
+        String c = lA.getChar();
         String s;
         s = lA.getString();
-        s += c;        
-        lA.setString(s);
-        if (c == '$') {
-            lA.setCode(260);
+        if (!c.equals("\"")) {
+            s += c;
+            lA.setString(s);
+            if (c == "$") {
+                lA.setCode(260);
+            }
         }
+        else lA.setCode(277);
     }    
 }

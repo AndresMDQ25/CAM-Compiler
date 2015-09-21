@@ -12,14 +12,20 @@ public class SA8 extends SemanticAction{
     } 
     public void run(){
         String word = lA.getString();
-        char symbol=lA.getChar();
+        String symbol=lA.getChar();
         switch(symbol) {
-            case '+' : lA.setCode(276);
-            case '*' : lA.setCode(276);
-            case '/' : lA.setCode(276);
-            case '-': {
-                    word = word.substring(0, word.length()-1);
-                    lA.setString(word);
+            case "+" : { lA.setCode(276); break;}
+            case "*" : { lA.setCode(276); break;}
+            case "/" : { lA.setCode(276); break;}
+            case "-" : {
+                    if (word.length() > 1) {
+                        word = word.substring(0, word.length()-1);
+                        lA.setString(word);
+                    }
+                    else {
+                        lA.setCode(276);
+                    }                    
+                    break;
             }
         }
     }

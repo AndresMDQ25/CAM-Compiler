@@ -7,14 +7,15 @@ package camcompiler;
 
 /**
  *
- * @author Mariano
+ * @author Andres
  */
-public class SA6 extends SemanticAction{
-    //AUMENTA EN 1 LA CANTIDAD DE LINEAS QUE GUARDA EL ANALIZADOR LEXICO
-    public SA6(LexicAnalyzer lA) {
+public class SA9 extends SemanticAction{
+    //BORRA TODO
+    public SA9(LexicAnalyzer lA) {
         super(lA);
     } 
     public void run(){
-        lA.increaseLines();
-    }
+        lA.setString("");
+    }    
 }
+

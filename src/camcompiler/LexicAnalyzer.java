@@ -25,19 +25,20 @@ public class LexicAnalyzer {
     private String currentChar;
     private SymbolsTable st;
     
-    private final int[][] next_state = {{2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
-		 {2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
-		 {2,2,2,2,2,2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-                 {0,0,0,0,3,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,-1},
-                 {0,0,5,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
-                 {0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
-                 {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-                 {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-                 {8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,-1,8,8,8,8,9,8,-1},
-                 {0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
-                 {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-                 {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,0,11,-1},
-                 {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
+    private final int[][] next_state = {
+                {2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
+		{2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
+		{2,2,2,2,2,2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+                {0,0,0,0,3,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,-1},
+                {0,0,5,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
+                {0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+                {8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,-1,8,8,8,8,9,8,-1},
+                {0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1,11,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+                {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,0,11,-1},
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
     
     SemanticAction Sa0 = new SA0(this);
     SemanticAction Sa1 = new SA1(this);
@@ -48,19 +49,21 @@ public class LexicAnalyzer {
     SemanticAction Sa6 = new SA6(this); //line++
     SemanticAction Sa7 = new SA7(this);
     SemanticAction Sa8 = new SA8(this);
+    SemanticAction Sa9 = new SA9(this);
         
-    private SemanticAction[][] sem_action = {{Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7,Sa4,Sa4,Sa4,Sa4},
+    private SemanticAction[][] sem_action = {
+                {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7,Sa4,Sa4,Sa4,Sa8},
                 {Sa8,Sa8,Sa8,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
                 {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1},
-                {Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa0,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
+                {Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
                 {Sa7,Sa7,Sa8,Sa2,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
                 {Sa7,Sa3,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
-                {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},
-                {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},    
+                {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},
+                {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},    
                 {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7},
                 {Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7},
                 {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},
-                {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa4},
+                {Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa4},
                 {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4}};
     
     public LexicAnalyzer(String fileName, SymbolsTable st) throws IOException {
@@ -103,25 +106,27 @@ public class LexicAnalyzer {
     }
     
     public Map.Entry getToken() throws IOException {
-        System.out.println("ENtre al getToken");
         this.currentString = "";        
         int currentState = 0;
         while (currentState != -1) {
             this.currentChar = reader.getChar();
             System.out.println("CURRENT CHAR: "+this.currentChar);
-            if (this.currentChar == "/n") 
+            System.out.println("CURRENT STRING: "+this.currentString);
+            if ("/n".equals(this.currentChar)) 
                 Sa6.run();
-            else 
-                Sa0.run();
             int column = this.getColumn();
-            sem_action[currentState][column].run();
+            if (!("/n".equals(this.currentChar))) {
+                Sa0.run();
+                sem_action[currentState][column].run();
+            }
+            System.out.println("Estoy en el estado "+currentState+", ejecute la SA"+sem_action[currentState][column].getClass()+" y estoy por ir a "+next_state[currentState][column]);
             currentState = next_state[currentState][column];
         }
         
         //en estado final -> ya se tiene el par<currentString, currentToken> (atributo, num de Token)
         Token t = new Token(this.currentCode, this.currentString);
         //agregar a tabla de simbolos
-        System.out.println("DESPUES DE WHILE: "+t.getValue());
+        System.out.println("TOKEN FINAL: "+t.getValue()+"-----------------------------------------------------------------------------------------------------------");
         Map.Entry me = st.request(t);
         //ver que devolver (par de num de Token, referencia) ?        
         return me;
@@ -144,8 +149,8 @@ public class LexicAnalyzer {
     public Reader getReader() {
         return this.reader;
     }
-    public char getChar() {
-        return this.currentChar.charAt(0);
+    public String getChar() {
+        return this.currentChar;
     }    
     
     public String getString() {

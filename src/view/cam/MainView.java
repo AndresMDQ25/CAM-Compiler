@@ -263,6 +263,8 @@ public class MainView extends javax.swing.JFrame {
     private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
         try {            
             c.consume();
+            c.showConsumed();
+            //System.out.println(asd);
         } catch (IOException ex) {
             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -20,16 +20,11 @@ public class SA3 extends SemanticAction{
         String s = lA.getString();
         int line = lA.getLine();
         //REMOVES _ul
-        char[] dst = new char[s.length()-3];                
-        s.getChars(0, s.length()-3, dst, 0);
-        s= "";
-        for (char ch: dst){
-            s+=ch;
-        }
-        int value= Integer.valueOf(s);                       
+        s=s.substring(0, s.length()-3);        
+        int value= Integer.valueOf(s);          
         long maxUnsigned = 4294967295L;
-        //2^32 -1   4294967295
-        if ((value > 0) &&(!(value < maxUnsigned))){
+        //2^32 -1   4294967295        
+        if ((value > 0) &&(value < maxUnsigned)){
             lA.setString(Integer.toString(value));
             lA.setCode(258);
         }

@@ -17,12 +17,13 @@ public class SA4 extends SemanticAction{
     public void run(){        
         Reader r =  lA.getReader();
         String newValue = lA.getString();
-        newValue = newValue.substring(0, newValue.length()-1);
-        System.out.println("RESULT 4 : "+newValue);
-        lA.setString(newValue);
-        r.goToPrevChar();
-        if (newValue == "-") {
-            lA.setCode(276);
+        if (!("/n".equals(newValue) || " ".equals(newValue) || "    ".equals(newValue))) {
+            r.goToPrevChar();
         }
+        newValue = newValue.substring(0, newValue.length()-1);
+        lA.setString(newValue);
+        if (newValue.equals("-")) {
+            lA.setCode(276);
+        }    
     }
 }
