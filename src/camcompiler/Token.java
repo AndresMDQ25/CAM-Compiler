@@ -5,6 +5,8 @@
  */
 package camcompiler;
 
+import java.util.Objects;
+
 /**
  *
  * @author Mariano
@@ -21,8 +23,16 @@ public class Token {
     public void setValue(String value) {this.value=value;}
     public void addAtEnd (char c) {value=value+c;}
     
-    //@override
-    public boolean equals(Token t){
-        return t.getCode()==code && t.getValue().equals(this.value);
+    @Override
+    public boolean equals(Object t){
+        return ((Token) t).getCode()==code && ((Token)t).getValue().equals(this.value);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.value);
+        hash = 23 * hash + this.code;
+        return hash;
     }
 }
