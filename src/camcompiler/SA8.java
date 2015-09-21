@@ -11,7 +11,7 @@ public class SA8 extends SemanticAction{
         super(lA);
     } 
     public void run(){
-        lA.setCode(-1);
+        
     }
     
 }
