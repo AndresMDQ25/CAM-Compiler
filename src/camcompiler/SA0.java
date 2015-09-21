@@ -24,6 +24,5 @@ public class SA0 extends SemanticAction{
         if (c == '$') {
             lA.setCode(260);
         }
-    }
-    
+    }    
 }

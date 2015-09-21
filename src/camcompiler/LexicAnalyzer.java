@@ -108,7 +108,8 @@ public class LexicAnalyzer {
             this.currentChar = reader.getChar();
             if (this.currentChar == "/n") 
                 Sa6.run();
-            Sa0.run();
+            else 
+                Sa0.run();
             int column = this.getColumn();
             sem_action[currentState][column].run();
             currentState = next_state[currentState][column];
