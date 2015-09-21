@@ -5,7 +5,7 @@ import java.util.Vector;
 public class Consumer {
     
     private LexicAnalyzer l;
-    private const Token _TOKENFIN=new FinalToken();
+    private const Token _TOKENFIN=new Token();
     private Vector<Token> v;
 
     public Consumer (LexicAnalyzer newL){

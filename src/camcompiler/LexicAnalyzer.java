@@ -101,7 +101,7 @@ public class LexicAnalyzer {
         }
     }
     
-    public Token getToken() throws IOException {
+    public Map.Entry getToken() throws IOException {
         this.currentString = "";        
         int currentState = 0;
         while (currentState != -1) {
@@ -116,10 +116,10 @@ public class LexicAnalyzer {
         
         //en estado final -> ya se tiene el par<currentString, currentToken> (atributo, num de Token)
         Token t = new Token(this.currentCode, this.currentString);
-        //agregar a tabla de simbolos                 
-        t=(Token)st.request(t).getKey();
+        //agregar a tabla de simbolos
+        Map.Entry me = st.request(t);
         //ver que devolver (par de num de Token, referencia) ?
-        return t;
+        return me;
     }
 
     public Error getError() {
