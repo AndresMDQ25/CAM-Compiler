@@ -5,14 +5,12 @@
  */
 package camcompiler;
 
-
 /**
  *
  * @author Mariano
  */
-public class SA0 extends SemanticAction{
-    //AGREGA UN CARACTER AL FINAL DEL TOKEN
-    public SA0(LexicAnalyzer lA) {
+public class SA10 extends SemanticAction {
+    public SA10(LexicAnalyzer lA) {
         super(lA);
     } 
 
@@ -20,12 +18,9 @@ public class SA0 extends SemanticAction{
      *
      */
     @Override
-    public void run(){
-        String c = lA.getChar();
-        String s;
-        s = lA.getString();
-        s+=c;
-        if (c == "$")
-                lA.setCode(260);
+    public void run(){        
+        String newValue = lA.getString();
+        newValue = newValue.substring(0, newValue.length()-1);
+        lA.setString(newValue); 
     }
 }

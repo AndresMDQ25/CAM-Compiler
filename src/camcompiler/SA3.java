@@ -15,6 +15,11 @@ public class SA3 extends SemanticAction{
         super(lA);
     }
     //CHECKEA RANGO UNSIGNED LONG -> 0<n< 2^32 -1 and removes _ul
+
+    /**
+     *
+     */
+        @Override
     public void run (){
         ErrorLex e = lA.getError();
         String s = lA.getString();
@@ -31,8 +36,9 @@ public class SA3 extends SemanticAction{
        else
        {
             e.addLog("Constant out of range", line);
-            lA.setString("");  
-            lA.setCode(-1);
+            lA.setString(new String());
+            lA.setCode(0);
+            lA.setCurrentState(0);
        }            
     }
 }

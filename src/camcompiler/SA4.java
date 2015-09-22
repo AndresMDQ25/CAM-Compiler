@@ -14,17 +14,16 @@ public class SA4 extends SemanticAction{
     public SA4(LexicAnalyzer lA) {
         super(lA);
     } 
+
+    /**
+     *
+     */
+    @Override
     public void run(){        
         Reader r =  lA.getReader();
         String newValue = lA.getString();
-        if (!("/n".equals(newValue) || " ".equals(newValue) || "    ".equals(newValue))) {
-            r.goToPrevChar();
-        }
+        r.goToPrevChar();
         newValue = newValue.substring(0, newValue.length()-1);
-        lA.setString(newValue);
-
-        if (newValue.equals("-")) {
-            lA.setCode(276);
-        }    
+        lA.setString(newValue); 
     }
 }

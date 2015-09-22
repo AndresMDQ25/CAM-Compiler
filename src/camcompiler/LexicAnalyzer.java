@@ -24,6 +24,7 @@ public class LexicAnalyzer {
     private int currentCode;
     private String currentChar;
     private SymbolsTable st;
+    private int currentState;
     
     private final int[][] next_state = {
                 {2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
@@ -112,34 +113,18 @@ public class LexicAnalyzer {
     }
     
     public int getToken() throws IOException {
-        this.currentString = "";        
-        int currentState = 0;
+        this.currentString = new String();        
+        currentState = 0;
         this.currentCode = 0;
         while (currentState != -1) {
             this.currentChar = reader.getChar();
-            System.out.println("CURRENT CHAR: "+this.currentChar);
-            System.out.println("CURRENT STRING: "+this.currentString);
-            if ("/n".equals(this.currentChar))
-                Sa6.run();
             int column = this.getColumn();
-            if (!(("/n".equals(this.currentChar)) || ("\t".equals(this.currentChar)))) {
-                Sa0.run();
-                sem_action[currentState][column].run();
-            }
-            System.out.println("Estoy en el estado "+currentState+", ejecute la SA"+sem_action[currentState][column].getClass()+" y estoy por ir a "+next_state[currentState][column]);
+            Sa0.run();
+            sem_action[currentState][column].run();
             currentState = next_state[currentState][column];
-            if (currentCode==-1){
-                this.currentString = "";        
-                currentState = 0;
-                this.currentCode = 0;            }
         }
-        
-        //en estado final -> ya se tiene el par<currentString, currentToken> (atributo, num de Token)
         Token t = new Token(this.currentCode, this.currentString);
-        //agregar a tabla de simbolos
-        System.out.println("TOKEN FINAL: "+t.getValue()+"-----------------------------------------------------------------------------------------------------------");
         int me = st.request(t);
-        //ver que devolver (par de num de Token, referencia) ?        
         return me;
     }
 
@@ -173,6 +158,10 @@ public class LexicAnalyzer {
 
     public void setCode(int i) {
         this.currentCode = i;
+    }
+    
+    public void setCurrentState(int i) {
+        this.currentState = i;
     }
     
     /**

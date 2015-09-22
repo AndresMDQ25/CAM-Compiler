@@ -16,13 +16,16 @@ public class SA1 extends SemanticAction{
     public SA1(LexicAnalyzer lA) {
         super(lA);
     } 
+
+    /**
+     *
+     */
+    @Override
     public void run(){
         SemanticAction sa = new SA4(lA);
         sa.run();
         Warning w = lA.getWarning();
         int line = lA.getLine();
-        Reader r = lA.getReader();
-        System.out.println("LA CONCHA DE TU MADRE ALL BOYS");
         String value= lA.getString();
         if (value.length()>_LONG){
             value=value.substring(0, _LONG-1);

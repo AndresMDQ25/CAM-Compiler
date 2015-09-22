@@ -10,6 +10,11 @@ public class SA5 extends SemanticAction{
     public SA5(LexicAnalyzer lA) {
         super(lA);
     } 
+
+    /**
+     *
+     */
+    @Override
     public void run(){
         ErrorLex e = lA.getError();
         SA4 sa4 = new SA4(lA);
@@ -34,8 +39,9 @@ public class SA5 extends SemanticAction{
             case "BY" :  { lA.setCode(275);  break; }
             default : {
                 e.addLog("not recognized reserved word", line);
-                SA7 sa7 = new SA7(lA);
-                sa7.run();
+                lA.setString(new String());
+                lA.setCode(0);
+                lA.setCurrentState(0);
                 break;
             }
         }

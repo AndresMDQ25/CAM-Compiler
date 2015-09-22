@@ -14,8 +14,16 @@ public class SA9 extends SemanticAction{
     public SA9(LexicAnalyzer lA) {
         super(lA);
     } 
+
+    /**
+     *
+     */
+    @Override
     public void run(){
-        lA.setString("");
+        lA.increaseLines();
+        lA.setString(new String());
+        lA.setCode(0);
+        lA.setCurrentState(0);
     }    
 }
 

@@ -15,6 +15,11 @@ public class SA2 extends SemanticAction{
     public SA2(LexicAnalyzer lA) {
         super(lA);
     }
+
+    /**
+     *
+     */
+    @Override
     public void run (){
         ErrorLex e = lA.getError();
         String s = lA.getString();
@@ -22,7 +27,7 @@ public class SA2 extends SemanticAction{
         //REMOVES _i
         char[] dst = new char[s.length()-2];                
         s.getChars(0, s.length()-2, dst, 0);
-        s= "";
+        s= new String();
         for (char ch: dst){
             s+=ch;
         }
@@ -34,7 +39,9 @@ public class SA2 extends SemanticAction{
         else
         {
             e.addLog("Constant out of range", line);
-            lA.setString("");                        
+            lA.setString(new String());
+            lA.setCode(0);
+            lA.setCurrentState(0);
         } 
         lA.setCode(258);
     }

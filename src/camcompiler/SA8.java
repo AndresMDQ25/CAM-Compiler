@@ -10,26 +10,25 @@ public class SA8 extends SemanticAction{
     public SA8(LexicAnalyzer lA){
         super(lA);
     } 
+
+    /**
+     *
+     */
+    @Override
     public void run(){
         String word = lA.getString();
-        String symbol=lA.getChar();
-        switch(symbol) {
+        switch(word) {
             case "+" : { lA.setCode(276); break;}
             case "*" : { lA.setCode(276); break;}
             case "=" : { lA.setCode(276); break;}
             case "/" : { lA.setCode(276); break;}
             case "," : { lA.setCode(276); break;}
             case ";" : { lA.setCode(276); break;}
-            case "-" : {
-                    if (word.length() > 1) {
-                        word = word.substring(0, word.length()-1);
-                        lA.setString(word);
-                    }
-                    else {
-                        lA.setCode(276);
-                    }                    
-                    break;
-            }
+            case "-" : { lA.setCode(276); break;}
+            case "(" : { lA.setCode(276); break;}
+            case ")" : { lA.setCode(276); break;}
+            case ">" : { lA.setCode(276); break;}
+            case "<" : { lA.setCode(276); break;}
         }
     }
 }

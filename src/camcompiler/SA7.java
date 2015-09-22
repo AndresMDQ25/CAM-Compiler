@@ -15,10 +15,17 @@ public class SA7 extends SemanticAction{
     public SA7(LexicAnalyzer lA) {
         super(lA);
     }         
+
+    /**
+     *
+     */
+    @Override
     public void run() {
         ErrorLex e = lA.getError(); 
         int line = lA.getLine();
         e.addLog("invalid character or expression", line);
-        lA.setCode(-1);
+        lA.setString(new String());
+        lA.setCode(0);
+        lA.setCurrentState(0);
     }
 }
