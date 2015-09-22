@@ -16,6 +16,7 @@ public class SA8 extends SemanticAction{
         switch(symbol) {
             case "+" : { lA.setCode(276); break;}
             case "*" : { lA.setCode(276); break;}
+            case "=" : { lA.setCode(276); break;}
             case "/" : { lA.setCode(276); break;}
             case "," : { lA.setCode(276); break;}
             case ";" : { lA.setCode(276); break;}

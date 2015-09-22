@@ -33,7 +33,7 @@ public class Consumer {
         String t = null;
         for (Integer i : v) {
             SymbolsTableEntry s=(l.getST().getEntry(i));
-            System.out.println(s.getCode() + " " + s.getLexema());          
+            System.out.println(s.getToken().getCode() + " " + s.getLexema());          
             //t+=((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue();
             //System.out.println(t);
         }

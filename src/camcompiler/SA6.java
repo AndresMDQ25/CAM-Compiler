@@ -16,5 +16,7 @@ public class SA6 extends SemanticAction{
     } 
     public void run(){
         lA.increaseLines();
+        SA5 sa5 = new SA5(lA);
+        sa5.run();
     }
 }

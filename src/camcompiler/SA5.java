@@ -14,6 +14,7 @@ public class SA5 extends SemanticAction{
         Error e = lA.getError();
         int line = lA.getLine();
         String word=lA.getString();
+        System.out.println("LLEGO A LA ACCION SEMANTICA 5"+word);
         switch(word) {
             case "IF" : { lA.setCode(261); break; }
             case "THEN" : { lA.setCode(262); break; }
@@ -31,8 +32,7 @@ public class SA5 extends SemanticAction{
             case "TO" :  { lA.setCode(274);  break; }
             case "BY" :  { lA.setCode(275);  break; }
             default : {
-                e.addLog("not recognized reserved word", line);
-                lA.setCode(257);
+                //e.addLog("not recognized reserved word", line);
                 break;
             }
         }

@@ -114,6 +114,7 @@ public class LexicAnalyzer {
     public int getToken() throws IOException {
         this.currentString = "";        
         int currentState = 0;
+        this.currentCode = 0;
         while (currentState != -1) {
             this.currentChar = reader.getChar();
             System.out.println("CURRENT CHAR: "+this.currentChar);

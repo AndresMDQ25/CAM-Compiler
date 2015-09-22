@@ -22,6 +22,8 @@ public class SA4 extends SemanticAction{
         }
         newValue = newValue.substring(0, newValue.length()-1);
         lA.setString(newValue);
+        SA5 sa5 = new SA5(lA);
+        sa5.run();
         if (newValue.equals("-")) {
             lA.setCode(276);
         }    

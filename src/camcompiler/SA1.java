@@ -28,7 +28,7 @@ public class SA1 extends SemanticAction{
             lA.setString(value);
             w.addLog("truncated chain",line);
         }
-        SA5 sa5 = new SA5(lA); //checks for reserved words
-        sa5.run();
+        lA.setCode(257);
+
     }
 }
