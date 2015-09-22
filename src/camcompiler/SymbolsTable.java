@@ -5,8 +5,7 @@
  */
 package camcompiler;
 
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.Vector;
 
 /**
  *
@@ -14,45 +13,28 @@ import java.util.Map;
  */
 public class SymbolsTable {
     
-    private final Map<Token, Integer> m;
+    private final Vector<SymbolsTableEntry> m;
     
     public SymbolsTable(){
-        System.out.println("Symbols Table Created");
-        m=new Hashtable();
+        m=new Vector();
     }        
-    public void addEntry(int code, Token t){
-        m.put(t, code);
-    }
-    public Integer getCode(Token t){
-        return m.get(t);
+    private void addEntry(Token t){
+        m.add(new SymbolsTableEntry(256+m.size()+1, t.getCode(), t.getValue(),1,t));
     }
     
-    private Map.Entry findValue(Integer name){
-        for (Object o: m.entrySet()) {
-            Map.Entry entry;
-            entry = (Map.Entry) o;
-            //System.out.println("NAME: "+name);
-            //System.out.println("ENTRY: " + entry.getValue());
-            if((int)entry.getValue() == (int)name)
-            {
-                System.out.println("ENcontre");
-                return entry;
-            }
-        }
+    public SymbolsTableEntry getEntry(int code){
+        for (int i=0;i<m.size();i++)
+            if(m.elementAt(i).getCode()==code)
+                return m.elementAt(i);
         return null;
     }
-    
-    public Map.Entry request(Token t){
-        Integer code;
-        if (!m.containsKey(t)){
-            System.out.println("MAP SIZE: "+m.size());
-            this.addEntry(256+m.size()+1,t);
-             code=256+m.size();
-             //System.out.println("CODIGO A AGREGAR: "+code);
-             //System.out.println("VOY A AGREGAR");
+        
+    public int request(Token t){
+        for(int i=0;i<m.size();i++){
+           if(m.elementAt(i).getToken().equals(t))
+               return m.elementAt(i).getCode();
         }
-        else
-            code=getCode(t);
-        return this.findValue(code);
+        this.addEntry(t);
+        return m.elementAt(m.size()-1).getCode();
     }
 }

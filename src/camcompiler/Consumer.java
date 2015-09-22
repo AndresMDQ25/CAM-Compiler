@@ -8,7 +8,7 @@ public class Consumer {
     
     private final LexicAnalyzer l;
     private  Token _TOKENFIN=new Token(260,"$");
-    private final Vector<Map.Entry> v;
+    private final Vector<Integer> v;
 
     public Consumer (LexicAnalyzer newL){
         this.l=newL;
@@ -17,20 +17,23 @@ public class Consumer {
     }
     
     public void consume() throws IOException{         
-        Map.Entry aux=l.getToken();
+        int aux=l.getToken();
         System.out.println("DESPUES DE GET TOKEN");        
         v.add(aux);
-        while (!((Token)aux.getKey()).equals(_TOKENFIN)){
+        SymbolsTableEntry s=(l.getST().getEntry(aux));
+        while (!((Token)s.getToken()).equals(_TOKENFIN)){
             aux=l.getToken();
             v.add(aux);
+            s=(l.getST().getEntry(aux));
         }
             
     }
     
     public String showConsumed(){
         String t = null;
-        for (Map.Entry v1 : v) {
-            System.out.println(((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue());          
+        for (Integer i : v) {
+            SymbolsTableEntry s=(l.getST().getEntry(i));
+            System.out.println(s.getCode() + " " + s.getLexema());          
             //t+=((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue();
             //System.out.println(t);
         }
