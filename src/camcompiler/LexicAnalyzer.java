@@ -27,9 +27,9 @@ public class LexicAnalyzer {
     private int currentState;
     
     private final int[][] next_state = {
-                {2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
-		{2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
-		{2,2,2,2,2,2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+                {2,2,2,2,3,1,-1,-1,-1,-1,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
+                {2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
+                {2,2,2,2,2,2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
                 {0,0,0,0,3,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,-1},
                 {0,0,5,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
                 {0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
@@ -39,7 +39,8 @@ public class LexicAnalyzer {
                 {0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1},
                 {-1,-1,-1,-1,-1,-1,-1,-1,-1,11,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
                 {11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,0,11,-1},
-                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
+                {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}    
+    };
     
     SemanticAction Sa0 = new SA0(this);
     SemanticAction Sa1 = new SA1(this);
@@ -51,21 +52,26 @@ public class LexicAnalyzer {
     SemanticAction Sa7 = new SA7(this);
     SemanticAction Sa8 = new SA8(this);
     SemanticAction Sa9 = new SA9(this);
+    SemanticAction Sa10 = new SA10(this);
+    SemanticAction Sa11 = new SA11(this);
+    SemanticAction Sa12 = new SA12(this);
+    
         
-    private SemanticAction[][] sem_action = {
-                {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7,Sa4,Sa4,Sa4,Sa8},
-                {Sa8,Sa8,Sa8,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
-                {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1,Sa1},
-                {Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
-                {Sa7,Sa7,Sa8,Sa2,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
-                {Sa7,Sa3,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7},
-                {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},
-                {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},    
-                {Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa8,Sa7},
-                {Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7},
-                {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},
-                {Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa4},
-                {Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa8,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5}};;
+        private SemanticAction[][] sem_action = {
+            //  "0    1     2    3    4   5     6    7    8    9   10   11      12    13  14   15   16   17    18  19   20   21   22   23  24"
+         /*0*/{Sa12,Sa12,Sa12,Sa12,Sa12,Sa12, Sa8, Sa8, Sa8, Sa8, Sa8, Sa8,    Sa8, Sa7,Sa12, Sa8, Sa8,Sa10, Sa8, Sa8, Sa7,Sa10, Sa6,Sa10,Sa12},
+         /*1*/{Sa12,Sa12,Sa12,Sa12, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7,    Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7},
+         /*2*/{Sa12,Sa12,Sa12,Sa12,Sa12,Sa12, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1,    Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1},
+         /*3*/{ Sa7, Sa7, Sa7, Sa7,Sa12, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7,    Sa7,Sa12, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7},
+         /*4*/{ Sa7, Sa7,Sa12, Sa2, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7,    Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7},
+         /*5*/{ Sa7, Sa3, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7,    Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7},
+         /*6*/{ Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4,   Sa12, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4},
+         /*7*/{ Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4,Sa12,   Sa12, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4, Sa4},    
+         /*8*/{Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,   Sa12,Sa12,Sa12,Sa12,Sa12,Sa10,Sa12,Sa12,Sa12,Sa12, Sa6,Sa12, Sa7},
+         /*9*/{ Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7,Sa10, Sa7, Sa7,    Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7},
+        /*10*/{Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa12,Sa11,Sa11,   Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11,Sa11},
+        /*11*/{Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,   Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12, Sa9,Sa12,Sa12},
+        /*12*/{ Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5,    Sa5, Sa5,Sa12, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5}};;
     
     public LexicAnalyzer(String fileName, SymbolsTable st) throws IOException {
         System.out.println("Lexic Analyzer Created");
