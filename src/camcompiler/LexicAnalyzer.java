@@ -74,6 +74,11 @@ public class LexicAnalyzer {
     }
     
     private int getColumn() {
+        /*if (this.currentChar.equals("   "))
+            return 21;
+        else if (this.currentChar.equals("/n"))
+            return 22;
+        else {*/ 
         switch (currentChar) {
             case "a":  return 0; case "b":  return 0; case "c":  return 0; case "d":  return 0;
             case "e":  return 0; case "f":  return 0; case "g":  return 0; case "h":  return 0;
@@ -98,11 +103,12 @@ public class LexicAnalyzer {
             case "@": return 5;  case "+": return 6;  case "/": return 7;  case "*": return 8;
             case "-": return 9;  case "<": return 10; case ">": return 11; case "=": return 12;
             case "_": return 13; case "(": return 15; case ")": return 16; case "\"":return 17;
-            case ",": return 18; case ";": return 19; case "  ": return 21; case "/n": return 22;
+            case ",": return 18; case ";": return 19; case "\t": return 21; case "/n": return 22;
             case " ": return 23; case "$": return 24; 
                 
             default: return 20;
         }
+        //}
     }
     
     public int getToken() throws IOException {
@@ -115,7 +121,7 @@ public class LexicAnalyzer {
             if ("/n".equals(this.currentChar)) 
                 Sa6.run();
             int column = this.getColumn();
-            if (!("/n".equals(this.currentChar))) {
+            if (!(("/n".equals(this.currentChar)) || ("\t".equals(this.currentChar)))) {
                 Sa0.run();
                 sem_action[currentState][column].run();
             }
