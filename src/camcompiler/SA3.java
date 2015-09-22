@@ -16,7 +16,7 @@ public class SA3 extends SemanticAction{
     }
     //CHECKEA RANGO UNSIGNED LONG -> 0<n< 2^32 -1 and removes _ul
     public void run (){
-        Error e = lA.getError();
+        ErrorLex e = lA.getError();
         String s = lA.getString();
         int line = lA.getLine();
         //REMOVES _ul

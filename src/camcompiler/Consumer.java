@@ -30,10 +30,10 @@ public class Consumer {
     }
     
     public String showConsumed(){
-        String t = null;
+        String t = new String();
         for (Integer i : v) {
             SymbolsTableEntry s=(l.getST().getEntry(i));
-            System.out.println(s.getCode() + " " + s.getLexema());          
+           t+=(s.getType() + " " + s.getLexema())+"\n";          
             //t+=((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue();
             //System.out.println(t);
         }

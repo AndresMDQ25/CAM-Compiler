@@ -16,7 +16,7 @@ public class SA7 extends SemanticAction{
         super(lA);
     }         
     public void run() {
-        Error e = lA.getError(); 
+        ErrorLex e = lA.getError(); 
         int line = lA.getLine();
         e.addLog("invalid character or expression", line);
         lA.setCode(-1);

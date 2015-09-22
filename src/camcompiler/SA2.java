@@ -16,7 +16,7 @@ public class SA2 extends SemanticAction{
         super(lA);
     }
     public void run (){
-        Error e = lA.getError();
+        ErrorLex e = lA.getError();
         String s = lA.getString();
         int line = lA.getLine();
         //REMOVES _i
