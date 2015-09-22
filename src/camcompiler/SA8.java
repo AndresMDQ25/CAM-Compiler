@@ -17,6 +17,8 @@ public class SA8 extends SemanticAction{
             case "+" : { lA.setCode(276); break;}
             case "*" : { lA.setCode(276); break;}
             case "/" : { lA.setCode(276); break;}
+            case "," : { lA.setCode(276); break;}
+            case ";" : { lA.setCode(276); break;}
             case "-" : {
                     if (word.length() > 1) {
                         word = word.substring(0, word.length()-1);
