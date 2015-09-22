@@ -64,7 +64,7 @@ public class LexicAnalyzer {
                 {Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa7,Sa8,Sa7,Sa7},
                 {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4},
                 {Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa9,Sa4},
-                {Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa8,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4,Sa4}};
+                {Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa8,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5,Sa5}};;
     
     public LexicAnalyzer(String fileName, SymbolsTable st) throws IOException {
         System.out.println("Lexic Analyzer Created");
@@ -119,7 +119,7 @@ public class LexicAnalyzer {
             this.currentChar = reader.getChar();
             System.out.println("CURRENT CHAR: "+this.currentChar);
             System.out.println("CURRENT STRING: "+this.currentString);
-            if ("/n".equals(this.currentChar)) 
+            if ("/n".equals(this.currentChar))
                 Sa6.run();
             int column = this.getColumn();
             if (!(("/n".equals(this.currentChar)) || ("\t".equals(this.currentChar)))) {
@@ -128,6 +128,10 @@ public class LexicAnalyzer {
             }
             System.out.println("Estoy en el estado "+currentState+", ejecute la SA"+sem_action[currentState][column].getClass()+" y estoy por ir a "+next_state[currentState][column]);
             currentState = next_state[currentState][column];
+            if (currentCode==-1){
+                this.currentString = "";        
+                currentState = 0;
+                this.currentCode = 0;            }
         }
         
         //en estado final -> ya se tiene el par<currentString, currentToken> (atributo, num de Token)
