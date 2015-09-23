@@ -24,6 +24,7 @@ public class SA9 extends SemanticAction{
         lA.setString(new String());
         lA.setCode(0);
         lA.setCurrentState(0);
+        lA.setCurrentChar(new String());
     }    
 }
 

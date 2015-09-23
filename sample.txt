@@ -1,0 +1,13 @@
+BEGIN
+	INT @v1 = 5_i;
+	@yosoyunawarningtruncada;
+	UNSIGNED LONG @v2 = 33_ul;
+	LOOP FROM i = 25_i TO 28_i BY 1_i
+		IF (@v2 == @v1) THEN
+			PRINT("hello") SOYUNERROR
+		ELSE
+			PRINT("bye
+-bye");
+		ENDIF;
+	MY k, l, m;
+END; --finish

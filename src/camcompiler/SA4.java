@@ -22,8 +22,9 @@ public class SA4 extends SemanticAction{
     public void run(){        
         Reader r =  lA.getReader();
         String newValue = lA.getString();
+        String lastChar = lA.getChar();
         r.goToPrevChar();
-        newValue = newValue.substring(0, newValue.length()-1);
+        newValue = newValue.substring(0, newValue.length()-lastChar.length());
         lA.setString(newValue); 
     }
 }

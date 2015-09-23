@@ -24,8 +24,11 @@ public class SA7 extends SemanticAction{
         ErrorLex e = lA.getError(); 
         int line = lA.getLine();
         e.addLog("invalid character or expression", line);
+        if(lA.getChar().equals("/n"))
+            lA.increaseLines();
         lA.setString(new String());
         lA.setCode(0);
         lA.setCurrentState(0);
+        lA.setCurrentChar(new String());
     }
 }

@@ -25,6 +25,7 @@ public class SA0 extends SemanticAction{
         String s;
         s = lA.getString();
         s+=c;
+        lA.setString(s);
         if (c == "$")
                 lA.setCode(260);
     }

@@ -26,44 +26,45 @@ public class Reader {
         this.br = new BufferedReader(new FileReader(fileName));                
         this.col  =  0;
         this.currentLine= br.readLine();
-        this.previousLine ="";
-        this.line=1;        
+        this.previousLine ="";        
     }
+        
+    private void readLine(){
+		try{
+			String newLine= this.br.readLine();			  
+			this.previousLine= this.currentLine;
+			this.currentLine = newLine;
+		} 
+		catch(IOException e) {			
+		}	
+	}
+    
+    
+    
+    
     public String getChar() throws IOException
     {
-        String result="";        
-        if (currentLine!=null)
-        {
-            if (col < currentLine.length())
-            {            
-                result =""+currentLine.charAt(col);
-                col++;
-            }
-            else  if (col == currentLine.length())
-            {                                               
-                result="/n";
-                col++;
-            }
-            else 
-            {                   
-                col=0;
-                currentLine= br.readLine();
-                previousLine = currentLine;            
-                line++;
-       
-                if (currentLine==null)
-                    result ="$";
-                else
-                {                    
-                    result =""+currentLine.charAt(col);
-                    col++;
-                }
-                    
-            }         
+        String result="";
+        if (this.col > this.currentLine.length()){
+            this.readLine();							
+            this.col=0;	
         }
-        if (currentLine==null)
-            result ="$";        
-        return result;
+        if (this.currentLine == null)
+               result= "$";                                     		
+        else{
+            if (this.col==this.currentLine.length())	          		
+                    result= "/n"; 					
+            else{
+                char aux= (this.currentLine.charAt(col));
+                result=""+aux;
+                switch (aux){
+                        //case '\t': result="/t"; break;
+                        case ' ': result=" "; break;
+                }						
+            }			
+            this.col++;
+        }					
+    return result;		                                             
     }                                                          
             
     public void goToPrevChar(){

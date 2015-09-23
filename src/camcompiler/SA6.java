@@ -22,7 +22,7 @@ public class SA6 extends SemanticAction{
     public void run(){
         lA.increaseLines();
         String newValue=lA.getString();
-        newValue= newValue.substring(0, newValue.length()-1);
-        lA.setString(newValue); 
+        newValue= newValue.substring(0, newValue.length()-2);
+        lA.setString(newValue);         
     }
 }

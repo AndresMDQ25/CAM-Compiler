@@ -9,19 +9,18 @@ package camcompiler;
  *
  * @author Mariano
  */
-public class SA10 extends SemanticAction {
-    public SA10(LexicAnalyzer lA) {
+public class SA13 extends SemanticAction {
+    public SA13(LexicAnalyzer lA) {
         super(lA);
     } 
 
     /**
-     * setea string
+     * 
      */
     @Override
     public void run(){        
         String newValue = lA.getString();
         newValue = newValue.substring(0, newValue.length()-1);
         lA.setString(newValue); 
-        lA.setCode(277);
     }
 }

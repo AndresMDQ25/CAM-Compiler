@@ -197,7 +197,6 @@ public class MainView extends javax.swing.JFrame {
             try {
                 File selectedFile;
                 FileReader in;
-                System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
                 in = new FileReader(fileChooser.getSelectedFile().getAbsolutePath());
                 st = new SymbolsTable();
                 lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st);
@@ -254,7 +253,6 @@ public class MainView extends javax.swing.JFrame {
                 aux+=(e.elementAt(i)+"\n");
             textBoxWarning.setText(aux);
 
-            //System.out.println(asd);
         } catch (IOException ex) {
             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
         }
