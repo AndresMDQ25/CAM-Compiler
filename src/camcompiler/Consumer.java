@@ -16,11 +16,11 @@ public class Consumer {
     }
     
     public void consume() throws IOException{         
-        int aux=l.getToken();
+        int aux=l.yylex();
         v.add(aux);
         SymbolsTableEntry s=(l.getST().getEntry(aux));
         while (!((Token)s.getToken()).equals(_TOKENFIN)){
-            aux=l.getToken();
+            aux=l.yylex();
             v.add(aux);
             s=(l.getST().getEntry(aux));
         }

@@ -6,7 +6,6 @@
 package camcompiler;
 
 public class SA8 extends SemanticAction{
-    //NO HACE NADA
     public SA8(LexicAnalyzer lA){
         super(lA);
     } 
@@ -29,6 +28,8 @@ public class SA8 extends SemanticAction{
             case ")" : { lA.setCode(276); break;}
             case ">" : { lA.setCode(276); break;}
             case "<" : { lA.setCode(276); break;}
+            case "{" : { lA.setCode(276); break;}
+            case "}" : { lA.setCode(276); break;}
         }
     }
 }

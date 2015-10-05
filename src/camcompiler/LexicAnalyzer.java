@@ -119,7 +119,7 @@ public class LexicAnalyzer {
         //}
     }
     
-    public int getToken() throws IOException {
+    public int yylex() throws IOException {
         this.currentString = new String();        
         currentState = 0;
         this.currentCode = 0;
