@@ -24,6 +24,7 @@ public class MainView extends javax.swing.JFrame {
     Consumer c;
     LexicAnalyzer lexicAnalyzer;
     SymbolsTable st;
+    JFileChooser fileChooser;
     
     /**
      * Creates new form MainView
@@ -184,7 +185,6 @@ public class MainView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
    
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
-        JFileChooser fileChooser;
         fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Open file");
 	fileChooser.setApproveButtonText("Open file");
@@ -199,8 +199,8 @@ public class MainView extends javax.swing.JFrame {
                 FileReader in;
                 in = new FileReader(fileChooser.getSelectedFile().getAbsolutePath());
                 st = new SymbolsTable();
-                lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st);
-                c = new Consumer(lexicAnalyzer);                
+                //lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st);
+                //c = new Consumer(lexicAnalyzer);                
                 BufferedReader br = new BufferedReader(in);
                 String code = new String();
                 String count = new String();
@@ -238,6 +238,8 @@ public class MainView extends javax.swing.JFrame {
 
     private void runMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_runMouseClicked
         try {            
+            lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st);
+            c = new Consumer(lexicAnalyzer);
             c.consume();
             textBoxLexic.setText(c.showConsumed());
             ErrorLex l=lexicAnalyzer.getError();

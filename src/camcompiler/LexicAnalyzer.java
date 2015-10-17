@@ -112,14 +112,14 @@ public class LexicAnalyzer {
             case "-": return 9;  case "<": return 10; case ">": return 11; case "=": return 12;
             case "_": return 13; case "(": return 15; case ")": return 16; case "\"":return 17;
             case ",": return 18; case ";": return 19; case "\t": return 21; case "/n": return 22;
-            case " ": return 23; case "$": return 24; 
+            case " ": return 23; case "$": return 24; case "{" : return 6; case "}": return 6;
                 
             default: return 20;
         }
         //}
     }
     
-    public int yylex() throws IOException {
+    public int getToken() throws IOException {
         this.currentString = new String();        
         currentState = 0;
         this.currentCode = 0;

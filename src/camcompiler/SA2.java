@@ -34,7 +34,7 @@ public class SA2 extends SemanticAction{
         int value= Integer.valueOf(s);                
         short maxShort = Short.MAX_VALUE;
         short minShort = Short.MIN_VALUE;
-        if ((value >= minShort) &&(value <= 100))
+        if ((value >= minShort) &&(value <= maxShort))
             lA.setString(Integer.toString(value));
         else
         {

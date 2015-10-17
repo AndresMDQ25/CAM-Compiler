@@ -26,20 +26,22 @@ public class SA3 extends SemanticAction{
         int line = lA.getLine();
         //REMOVES _ul
         s=s.substring(0, s.length()-3);        
-        int value= Integer.valueOf(s);          
-        long maxUnsigned = 4294967295L;
+            long value = 0;
+            try {
+                value = Long.valueOf(s);
+            } catch (NumberFormatException numberFormatException) {
+                e.addLog("Constant out of range", line);
+                lA.setString(new String());
+                lA.setCode(0);
+                lA.setCurrentState(0);
+                lA.setCurrentChar(new String());
+            }
+          
+        //long maxUnsigned = 4294967295L;
         //2^32 -1   4294967295        
-        if ((value > 0) &&(value < maxUnsigned)){
-            lA.setString(Integer.toString(value));
+        if ((value > 0)) {//&&(value < maxUnsigned)){
+            lA.setString(Long.toString(value));
             lA.setCode(258);
-        }
-       else
-       {
-            e.addLog("Constant out of range", line);
-            lA.setString(new String());
-            lA.setCode(0);
-            lA.setCurrentState(0);
-            lA.setCurrentChar(new String());
-       }            
+        }               
     }
 }
