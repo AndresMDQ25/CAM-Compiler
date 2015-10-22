@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class LexicAnalyzer {
     
-    private Logger errors = new ErrorLex();
+    private Logger errors = new CAMerror();
     private Logger warnings = new Warning();
     private Reader reader;
     private int currentLine = 0;
@@ -136,8 +136,8 @@ public class LexicAnalyzer {
         return me;
     }
 
-    public ErrorLex getError() {
-        return (ErrorLex)this.errors;
+    public CAMerror getError() {
+        return (CAMerror)this.errors;
     }
     public Warning getWarning() {
         return (Warning)this.warnings;

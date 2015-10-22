@@ -21,7 +21,7 @@ public class SA2 extends SemanticAction{
      */
     @Override
     public void run (){
-        ErrorLex e = lA.getError();
+        CAMerror e = lA.getError();
         String s = lA.getString();
         int line = lA.getLine();
         //REMOVES _i

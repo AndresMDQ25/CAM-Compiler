@@ -16,7 +16,7 @@ public class SA5 extends SemanticAction{
      */
     @Override
     public void run(){
-        ErrorLex e = lA.getError();
+        CAMerror e = lA.getError();
         SA4 sa4 = new SA4(lA);
         sa4.run();
         int line = lA.getLine();

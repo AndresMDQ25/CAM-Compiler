@@ -21,7 +21,7 @@ public class SA7 extends SemanticAction{
      */
     @Override
     public void run() {
-        ErrorLex e = lA.getError(); 
+        CAMerror e = lA.getError(); 
         int line = lA.getLine();
         e.addLog("invalid character or expression", line);
         if(lA.getChar().equals("/n"))

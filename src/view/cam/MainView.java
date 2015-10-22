@@ -242,7 +242,7 @@ public class MainView extends javax.swing.JFrame {
             c = new Consumer(lexicAnalyzer);
             c.consume();
             textBoxLexic.setText(c.showConsumed());
-            ErrorLex l=lexicAnalyzer.getError();
+            CAMerror l=lexicAnalyzer.getError();
             Vector<String> e=l.getLogs();
             String aux=new String();
             for(int i=0; i<e.size();i++)

@@ -9,8 +9,8 @@ package camcompiler;
  *
  * @author Mariano
  */
-public class ErrorLex extends Logger {
-    public ErrorLex(){
+public class CAMerror extends Logger {
+    public CAMerror(){
         super();
         code="ERROR";
     }
