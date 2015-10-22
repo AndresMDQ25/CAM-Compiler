@@ -3,6 +3,7 @@ package camcompiler;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Vector;
+import javafx.util.Pair;
 
 public class Consumer {
     
@@ -16,11 +17,13 @@ public class Consumer {
     }
     
     public void consume() throws IOException{         
-        int aux=l.getToken();
+        Pair getTokenResult=l.getToken();        
+        int aux= (int)getTokenResult.getKey();
         v.add(aux);
         SymbolsTableEntry s=(l.getST().getEntry(aux));
         while (!((Token)s.getToken()).equals(_TOKENFIN)){
-            aux=l.getToken();
+            getTokenResult=l.getToken();        
+            aux= (int)getTokenResult.getKey();
             v.add(aux);
             s=(l.getST().getEntry(aux));
         }

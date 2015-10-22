@@ -7,6 +7,7 @@ package camcompiler;
 
 import java.io.IOException;
 import java.util.Map;
+import javafx.util.Pair;
 
 /**
  *
@@ -119,7 +120,7 @@ public class LexicAnalyzer {
         //}
     }
     
-    public int getToken() throws IOException {
+    public Pair<Integer, Token> getToken() throws IOException {
         this.currentString = new String();        
         currentState = 0;
         this.currentCode = 0;
@@ -133,7 +134,8 @@ public class LexicAnalyzer {
         }
         Token t = new Token(this.currentCode, this.currentString);
         int me = st.request(t);
-        return me;
+        Pair<Integer,Token> toReturn = new Pair(me,t);
+        return toReturn;
     }
 
     public CAMerror getError() {
