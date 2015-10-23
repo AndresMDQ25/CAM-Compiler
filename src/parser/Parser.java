@@ -376,12 +376,6 @@ final static String yyrule[] = {
 
 //#line 112 "Parser.y"
 
-{
-    private SymbolsTable symtab;  
-    private Error   SyntaxError;
-    private Error   LexicError; 
-    private LexicAnalyzer  lexicAnalyzer;
-}
 //#line 314 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state

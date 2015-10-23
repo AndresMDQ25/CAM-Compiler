@@ -120,7 +120,7 @@ public class LexicAnalyzer {
         //}
     }
     
-    public Pair<Integer, Token> getToken() throws IOException {
+    public Pair<Integer, Integer> getToken() throws IOException {
         this.currentString = new String();        
         currentState = 0;
         this.currentCode = 0;
@@ -134,7 +134,8 @@ public class LexicAnalyzer {
         }
         Token t = new Token(this.currentCode, this.currentString);
         int me = st.request(t);
-        Pair<Integer,Token> toReturn = new Pair(me,t);
+        int tokenCode = this.currentCode;
+        Pair<Integer,Integer> toReturn = new Pair(me,tokenCode);
         return toReturn;
     }
 
