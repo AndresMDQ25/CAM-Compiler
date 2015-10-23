@@ -54,6 +54,8 @@ public class MainView extends javax.swing.JFrame {
         textBoxError = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         textBoxWarning = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        textBoxSymbolsTable = new javax.swing.JTextPane();
         jMenuBar2 = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -115,6 +117,10 @@ public class MainView extends javax.swing.JFrame {
         jScrollPane2.setViewportView(textBoxWarning);
 
         jTabbedPane1.addTab("Warnings", jScrollPane2);
+
+        jScrollPane5.setViewportView(textBoxSymbolsTable);
+
+        jTabbedPane1.addTab("Symbols Table", jScrollPane5);
 
         FileMenu.setText("File");
         FileMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -254,6 +260,11 @@ public class MainView extends javax.swing.JFrame {
             for(int i=0; i<e.size();i++)
                 aux+=(e.elementAt(i)+"\n");
             textBoxWarning.setText(aux);
+            
+            aux = new String();
+            aux = st.toString();
+            textBoxSymbolsTable.setText(aux);
+            
 
         } catch (IOException ex) {
             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
@@ -310,6 +321,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextPane mainEditor;
@@ -317,6 +329,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenu run;
     private javax.swing.JTextPane textBoxError;
     private javax.swing.JTextPane textBoxLexic;
+    private javax.swing.JTextPane textBoxSymbolsTable;
     private javax.swing.JTextPane textBoxWarning;
     // End of variables declaration//GEN-END:variables
 }

@@ -25,10 +25,16 @@ class SymbolsTableEntry {
     }
     
     public int getCode(){return this.code;}
+    public String toString() {
+        String s = new String();
+        s = this.code +"           "+ this.type +"           "+ this.lexema +"           "+ this.cant; 
+        return s;
+    }
     public String getLexema(){return this.lexema;}
     public Token getToken(){return this.t;}
     public String getName(){return this.type+this.lexema;}
     public int getCant() {return this.cant;}
     public int getType() {return this.type;}
-    public void increaseCant(){this.cant++;}    
+    public void increaseCant(){this.cant++;}
+    
 }

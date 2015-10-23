@@ -37,4 +37,13 @@ public class SymbolsTable {
         this.addEntry(t);
         return m.elementAt(m.size()-1).getCode();
     }
+    public String toString() {
+        String s = new String();
+        s = "CODE      TYPE      LEXEME        CANT \n";
+        for (int i = 0; i < m.size(); i++) {
+            s+=m.elementAt(i).toString();
+            s+='\n';
+        }
+        return s;
+    }
 }
