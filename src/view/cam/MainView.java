@@ -5,6 +5,7 @@
  */
 package view.cam;
 
+import byacc.*;
 import camcompiler.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +22,7 @@ import javax.swing.JFileChooser;
  * @author Andres
  */
 public class MainView extends javax.swing.JFrame {
-    Consumer c;
+    //Consumer c;
     LexicAnalyzer lexicAnalyzer;
     SymbolsTable st;
     JFileChooser fileChooser;
@@ -243,11 +244,14 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_runActionPerformed
 
     private void runMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_runMouseClicked
-        try {            
+        try {                   
             lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st);
-            c = new Consumer(lexicAnalyzer);
-            c.consume();
-            textBoxLexic.setText(c.showConsumed());
+            //c = new Consumer(lexicAnalyzer);
+            ///c.consume();
+            CAMerror SyntaxError = new CAMerror();
+            Parser p = new Parser(lexicAnalyzer,SyntaxError);            
+            p.run();
+            textBoxLexic.setText(lexicAnalyzer.showConsumed());
             CAMerror l=lexicAnalyzer.getError();
             Vector<String> e=l.getLogs();
             String aux=new String();

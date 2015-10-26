@@ -1,18 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package camcompiler;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Vector;
 import javafx.util.Pair;
 
-/**
- *
- * @author Andres
- */
 
 
 public class LexicAnalyzer {
@@ -26,6 +18,7 @@ public class LexicAnalyzer {
     private String currentChar;
     private SymbolsTable st;
     private int currentState;
+    private final Vector<Integer> v;
     
     private final int[][] next_state = {
                 {2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
@@ -79,7 +72,7 @@ public class LexicAnalyzer {
     public LexicAnalyzer(String fileName, SymbolsTable st) throws IOException {
         this.reader = new Reader(fileName);
         this.st = st;
-        
+        this.v=new Vector();
     }
     
     private int getColumn() {
@@ -173,16 +166,56 @@ public class LexicAnalyzer {
     public void setCurrentState(int i) {
         this.currentState = i;
     }
-    
-    /**
-     *
-     * @return
-     */
+      
     public SymbolsTable getST(){return st;}
 
     void setCurrentChar(String string) {
         this.currentChar = string;
     }
+    
+    
+    
+    private String toToken(int number) {
+        switch (number) {
+            case 257 : return "ID";
+            case 258 : return "CTE";
+            case 259 : return "ERROR";
+            case 260 : return "FINAL";
+            case 261 : return "IF";
+            case 262 : return "THEN";
+            case 263 : return "ELSE";
+            case 264 : return "ENDIF";
+            case 265 : return "PRINT";
+            case 266 : return "INT";
+            case 267 : return "BEGIN";
+            case 268 : return "END";
+            case 269 : return "UNSIGNED";
+            case 270 : return "LONG";
+            case 271 : return "MY";
+            case 272 : return "LOOP";
+            case 273 : return "FROM";
+            case 274 : return "TO";
+            case 275 : return "BY";
+            case 276 : return "OPERATOR";
+            case 277 : return "STRING";
+         
+        }
+        return "";
+    }
+        
+    public String showConsumed(){
+        String t = new String();
+        t+="Index number - Token type - Token value \n";
+        for (Integer i : v) {
+             SymbolsTableEntry s = st.getEntry(i);
+           t+=(s.getCode() + "                 - "+toToken(s.getType()) + "            -           " + s.getLexema())+"\n";          
+            //t+=((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue();
+            //System.out.println(t);
+        }
+        return t;
+    }
+    
+    
 }
        
 
