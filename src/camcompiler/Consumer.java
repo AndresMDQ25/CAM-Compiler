@@ -16,7 +16,7 @@ public class Consumer {
         v=new Vector();
     }
     
-    public void consume() throws IOException{         
+    public void consume() throws IOException{    //ahora getToken devuelve un Token, cambiar:     
         Pair getTokenResult=l.getToken();        
         int aux= (int)getTokenResult.getKey();
         v.add(aux);

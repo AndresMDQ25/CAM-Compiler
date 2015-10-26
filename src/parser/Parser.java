@@ -1,3 +1,8 @@
+
+import camcompiler.LexicAnalyzer;
+import camcompiler.Token;
+import java.io.IOException;
+
 //### This file created by BYACC 1.8(/Java extension  1.15)
 //### Java capabilities added 7 Jan 97, Bob Jamison
 //### Updated : 27 Nov 97  -- Bob Jamison, Joe Nieten
@@ -14,7 +19,7 @@
 
 
 
-/*
+
 
 
 
@@ -22,7 +27,7 @@
 
 public class Parser
 {
-
+LexicAnalyzer lexicAnalyzer;
 boolean yydebug;        //do I want debug output?
 int yynerrs;            //number of errors so far
 int yyerrflag;          //was there an error?
@@ -407,7 +412,18 @@ String s=null;
   debug("state "+state+", reading "+ch+" ("+s+")");
 }
 
+int yylex() throws IOException {
+    Token t = lexicAnalyzer.getToken();
+    if (t!=null){
+	   yylval = new ParserVal(t);
+	   return t.getCode();
+	}
+    return 0;
+}
 
+void yyerror(String err) {
+    
+}
 
 
 
@@ -421,7 +437,7 @@ String yys;    //current token string
 //###############################################################
 // method: yyparse : parse input and execute indicated items
 //###############################################################
-int yyparse()
+int yyparse() throws IOException
 {
 boolean doaction;
   init_stacks();
@@ -647,8 +663,8 @@ break;
  * A default run method, used for operating this parser
  * object in the background.  It is intended for extending Thread
  * or implementing Runnable.  Turn off with -Jnorun .
- */ /*
-public void run()
+ */
+public void run() throws IOException
 {
   yyparse();
 }
@@ -660,27 +676,25 @@ public void run()
 /**
  * Default constructor.  Turn off with -Jnoconstruct .
 
- */ /*
-public Parser()
+ */
+public Parser(LexicAnalyzer lA)
 {
   //nothing to do
+    this.lexicAnalyzer = lA;
 }
 
 
 /**
  * Create a parser, setting the debug to true or false.
  * @param debugMe true for debugging, false for no debug.
- */ 
-/*
+ */
 public Parser(boolean debugMe)
 {
   yydebug=debugMe;
 }
-*/
 //###############################################################
 
 
 
-//}
+}
 //################### END OF CLASS ##############################
-//
