@@ -251,6 +251,7 @@ public class MainView extends javax.swing.JFrame {
             CAMerror SyntaxError = new CAMerror();
             Parser p = new Parser(lexicAnalyzer,SyntaxError);            
             p.run();
+            System.out.println("SALI DEL RUN-----------------------------");
             textBoxLexic.setText(lexicAnalyzer.showConsumed());
             CAMerror l=lexicAnalyzer.getError();
             Vector<String> e=l.getLogs();

@@ -20,13 +20,13 @@ public class Reader {
     private int line;
     private BufferedReader br;   
     private String currentLine;
-    private String previousLine;
+    private String previousLine;    
     
     public Reader(String fileName) throws FileNotFoundException, IOException{        
         this.br = new BufferedReader(new FileReader(fileName));                
         this.col  =  0;
         this.currentLine= br.readLine();
-        this.previousLine ="";        
+        this.previousLine ="";         
     }
         
     private void readLine(){
@@ -44,7 +44,7 @@ public class Reader {
     
     public String getChar() throws IOException
     {
-        String result="";
+        String result="";                
         if (this.col > this.currentLine.length()){
             this.readLine();							
             this.col=0;	
@@ -63,7 +63,7 @@ public class Reader {
                 }						
             }			
             this.col++;
-        }					
+        }	                        
     return result;		                                             
     }                                                          
             

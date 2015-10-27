@@ -421,7 +421,8 @@ String s=null;
   debug("state "+state+", reading "+ch+" ("+s+")");
 }
 int yylex() throws IOException {
-    Token t = lexicAnalyzer.getToken();    
+    Token t = lexicAnalyzer.getToken();
+    System.out.println("ESTOY EN yylex");
     if (t!=null){
 	   yylval = new ParserVal(t);
 	   return t.getCode();
@@ -444,7 +445,7 @@ String yys;    //current token string
 //###############################################################
 // method: yyparse : parse input and execute indicated items
 //###############################################################
-int yyparse() throws IOException
+int yyparse()
 {
 boolean doaction;
   init_stacks();
@@ -579,7 +580,7 @@ case 2:
 break;
 case 3:
 //#line 13 "parser.y"
-{SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine());}
+{SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine())}
 break;
 case 4:
 //#line 15 "parser.y"
@@ -595,7 +596,7 @@ case 6:
 break;
 case 7:
 //#line 20 "parser.y"
-{SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine());}
+{SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine())}
 break;
 case 8:
 //#line 23 "parser.y"
@@ -607,7 +608,7 @@ case 9:
 break;
 case 10:
 //#line 25 "parser.y"
-{SyntaxError.addLog("Invalid declaration of variables list",lexicAnalyzer.getLine());}
+{SyntaxError.addLog("Invalid declaration of variables list",lexicAnalyzer.getLine())}
 break;
 case 11:
 //#line 28 "parser.y"
@@ -643,7 +644,7 @@ case 18:
 break;
 case 19:
 //#line 42 "parser.y"
-{SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine());}
+{SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine())}
 break;
 case 20:
 //#line 45 "parser.y"
@@ -667,7 +668,7 @@ case 24:
 break;
 case 25:
 //#line 52 "parser.y"
-{SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
+{SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine())}
 break;
 case 26:
 //#line 55 "parser.y"
@@ -707,7 +708,7 @@ case 35:
 break;
 case 36:
 //#line 69 "parser.y"
-{SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine());}
+{SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine())}
 break;
 case 37:
 //#line 73 "parser.y"
@@ -715,7 +716,7 @@ case 37:
 break;
 case 38:
 //#line 74 "parser.y"
-{SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());}
+{SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine())}
 break;
 case 39:
 //#line 77 "parser.y"
@@ -723,7 +724,7 @@ case 39:
 break;
 case 40:
 //#line 78 "parser.y"
-{SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());}
+{SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine())}
 break;
 case 41:
 //#line 81 "parser.y"
@@ -847,7 +848,7 @@ break;
  * object in the background.  It is intended for extending Thread
  * or implementing Runnable.  Turn off with -Jnorun .
  */
-public void run() throws IOException
+public void run()
 {
   yyparse();
 }
@@ -858,14 +859,11 @@ public void run() throws IOException
 //## Constructors ###############################################
 /**
  * Default constructor.  Turn off with -Jnoconstruct .
-     * @param lA
-     * @param sErr
+
  */
-public Parser(LexicAnalyzer lA,CAMerror sErr)
+public Parser()
 {
-    System.out.println("ENTRE AL PARSER");
-    this.lexicAnalyzer = lA;
-    this.SyntaxError = sErr;
+  //nothing to do
 }
 
 

@@ -204,6 +204,7 @@ public class LexicAnalyzer {
     }
         
     public String showConsumed(){
+        System.out.println("SHOW CONSUMED----------------------------------------------------------------");
         String t = new String();
         t+="Index number - Token type - Token value \n";
         for (Integer i : v) {
