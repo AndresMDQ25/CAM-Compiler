@@ -421,8 +421,9 @@ String s=null;
   debug("state "+state+", reading "+ch+" ("+s+")");
 }
 int yylex() throws IOException {
-    Token t = lexicAnalyzer.getToken();    
-    if (t!=null){
+    Token t = lexicAnalyzer.getToken();
+    Token _TOKENFIN = new Token(260,"$");
+    if (!t.equals(_TOKENFIN)){
 	   yylval = new ParserVal(t);
 	   return t.getCode();
 	}
@@ -465,6 +466,7 @@ boolean doaction;
       if (yychar < 0)      //we want a char?
         {
         yychar = yylex();  //get next token
+        System.out.println(yychar);
         if (yydebug) debug(" next yychar:"+yychar);
         //#### ERROR CHECK ####
         if (yychar < 0)    //it it didn't work/error
