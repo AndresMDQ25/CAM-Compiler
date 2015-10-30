@@ -11,7 +11,7 @@ import java.io.IOException;
 
 %}
 
-%token ID CTE ERROR FINAL IF THEN ELSE ENDIF PRINT INT BEGIN END UNSIGNED LONG MY LOOP FROM TO BY SEMICOLON STRING PLUSLE MINUN MULTIPLY DIVIDE EQUAL COMMA LEFTPARENTHESIS RIGHTPARENTHESIS GREATTHAN LESSTHAN LEFTBRACE RIGHTBRACE   
+%token ID CTE ERROR FINAL IF THEN ELSE ENDIF PRINT INT BEGIN END UNSIGNED LONG MY LOOP FROM TO BY SEMICOLON STRING PLUSLE MINUN MULTIPLY DIVIDE EQUAL COMMA LEFTPARENTHESIS RIGHTPARENTHESIS GREATTHAN LESSTHAN LEFTBRACE RIGHTBRACE EQUALEQUAL GREATEQUAL LESSEQUAL DISTINCT
 
 %left PLUSLE MINUN
 %left MULTIPLY DIVIDE
@@ -58,7 +58,7 @@ ejecutablesimple    : ambito {System.out.println("ejecutablesimple");}
                     ;
 
 ejecutable          : asignacion SEMICOLON {System.out.println("ejecutable asig");}
-                    | sentenciaIF SEMICOLON {System.out.println("ejecutable IF");}
+                    | sentenciaIF {System.out.println("ejecutable IF");}
                     | sentenciaLOOP SEMICOLON {System.out.println("ejecutable LOOP");}
                     | sentenciaPRINT SEMICOLON {System.out.println("ejecutable PRINT");}
                     ;
@@ -95,11 +95,12 @@ sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {System.out.
                     | PRINT error {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());} 
                     ;
 
-condicion           : expresion EQUAL EQUAL expresion {} {System.out.println("condicion==");}
-                    | expresion GREATTHAN EQUAL expresion {} {System.out.println("condicion>=");}
-                    | expresion LESSTHAN EQUAL expresion {} {System.out.println("condicion<=");}
-                    | expresion GREATTHAN expresion {} {System.out.println("condicion>");}
-                    | expresion LESSTHAN expresion {} {System.out.println("condicion<");}
+condicion           : expresion EQUALEQUAL expresion {System.out.println("condicion==");}
+                    | expresion GREATEQUAL expresion {System.out.println("condicion>=");}
+                    | expresion LESSEQUAL expresion {System.out.println("condicion<=");}
+                    | expresion GREATTHAN expresion {System.out.println("condicion>");}
+                    | expresion LESSTHAN expresion {System.out.println("condicion<");}
+                    | expresion DISTINCT expresion {System.out.println("condicion<>");}
                     ;
 
 ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {System.out.println("ambito");}

@@ -1,28 +1,43 @@
 //declaraciones
+%{
+package byacc;
 
 
-%token ID CTE ERROR FINAL IF THEN ELSE ENDIF PRINT INT BEGIN END UNSIGNED LONG MY LOOP FROM TO BY OPERATOR STRING 
+import camcompiler.CAMerror;
+import camcompiler.LexicAnalyzer;
+import camcompiler.Token;
+import java.io.IOException;
 
-%left '+' '-'
-%left '*' '/'
+
+%}
+
+%token ID CTE ERROR FINAL IF THEN ELSE ENDIF PRINT INT BEGIN END UNSIGNED LONG MY LOOP FROM TO BY SEMICOLON STRING PLUSLE MINUN MULTIPLY DIVIDE EQUAL COMMA LEFTPARENTHESIS RIGHTPARENTHESIS GREATTHAN LESSTHAN LEFTBRACE RIGHTBRACE EQUALEQUAL GREATEQUAL LESSEQUAL DISTINCT
+
+%left PLUSLE MINUN
+%left MULTIPLY DIVIDE
 
 %%
 programa            : bloque {System.out.println("programa");}
                     ;
 bloque              : declarativas ejecutables {System.out.println("bloque");}
-                    | error {SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine())}
+                    | error {SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine());}
                     ;
+
+bloquesentencias    : declarativas ejecutables {System.out.println("bloque sentencias");}
+                    | ejecutables {System.out.println("bloque sentencias solo ejecutables");}
+                    ;
+
 declarativas        : declarativas declarativa {System.out.println("declarativas");}
                     | declarativa {System.out.println("declarativas2");}
                     ;
 
-declarativa         : tipo listavariables ';' {System.out.println("declarativa");}
-                    | error {SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine())}
+declarativa         : tipo listavariables SEMICOLON {System.out.println("declarativa");}
+                    | error {SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine());}
                     ;
 
-listavariables      : listavariables ',' ID {System.out.println("listavariables");}
+listavariables      : listavariables COMMA ID {System.out.println("listavariables");}
                     | ID {System.out.println("listavariables2");}
-                    | error {SyntaxError.addLog("Invalid declaration of variables list",lexicAnalyzer.getLine())}
+                    | error {SyntaxError.addLog("Invalid declaration of variables list",lexicAnalyzer.getLine());}
                     ;
 
 tipo                : INT {System.out.println("tipo");}
@@ -39,55 +54,58 @@ listaejecutables    : listaejecutables ejecutable {System.out.println("listaejec
 
 ejecutablesimple    : ambito {System.out.println("ejecutablesimple");}
                     | ejecutable {System.out.println("ejecutablesimple2");}
-		    		| error {SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine())}
+		    		| error {SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine());}
                     ;
 
-ejecutable          : asignacion ';' {System.out.println("ejecutable asig");}
-                    | sentenciaIF ';' {System.out.println("ejecutable IF");}
-                    | sentenciaLOOP ';' {System.out.println("ejecutable LOOP");}
-                    | sentenciaPRINT ';' {System.out.println("ejecutable PRINT");}
+ejecutable          : asignacion SEMICOLON {System.out.println("ejecutable asig");}
+                    | sentenciaIF {System.out.println("ejecutable IF");}
+                    | sentenciaLOOP SEMICOLON {System.out.println("ejecutable LOOP");}
+                    | sentenciaPRINT SEMICOLON {System.out.println("ejecutable PRINT");}
                     ;
 
-asignacion          : ID '=' expresion {System.out.println("asignacion");}
-                    | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine())}
+asignacion          : ID EQUAL expresion {System.out.println("asignacion");}
+                    | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
-expresion           : expresion '+' termino {System.out.println("expresion+");}
-                    | expresion '-' termino {System.out.println("expresion-");}
+expresion           : expresion PLUSLE termino {System.out.println("expresion+");}
+                    | expresion MINUN termino {System.out.println("expresion-");}
                     | termino
                     ;
-termino             : termino '*' factor {System.out.println("termino*");}
-                    | termino '/' factor {System.out.println("termino/");}
+termino             : termino MULTIPLY factor {System.out.println("termino*");}
+                    | termino DIVIDE factor {System.out.println("termino/");}
                     | factor {System.out.println("termino factor");}
                     ;
 factor              : ID {System.out.println("factor");}
                     | CTE {System.out.println("factor2");}
                     ;
 
-sentenciaIF         : IF '(' condicion ')' THEN bloque ENDIF {System.out.println("sentenciaIF");}
-                    | IF '(' condicion ')' THEN bloque ELSE bloque ENDIF {System.out.println("sentenciaIF ELSE");}
-                    | IF error {SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine())}
+sentenciaIF         : IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ENDIF {System.out.println("sentenciaIF");}
+                    | IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ELSE bloque ENDIF {System.out.println("sentenciaIF ELSE");}
+                    | IF error {SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine());}
                     ;
 
 
-sentenciaLOOP       : LOOP FROM asignacion TO expresion BY expresion bloque {System.out.println("sentenciaLOOP");}
-                    | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine())}
+sentenciaLOOP       : LOOP FROM asignacion TO expresion BY expresion bloquesentencias {System.out.println("sentenciaLOOP");}
+                    | LOOP FROM asignacion TO expresion BY error {System.out.println("ERROR en expresion2");}
+                    | LOOP FROM asignacion TO error {System.out.println("ERROR en expresion1");}
+                    | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());System.out.println("ERROR en LUP");}
                     ;
 
-sentenciaPRINT      : PRINT '(' STRING ')' {System.out.println("sentenciaPRINT");}
-                    | PRINT error {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine())} 
+sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {System.out.println("sentenciaPRINT");}
+                    | PRINT error {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());} 
                     ;
 
-condicion           : expresion '=' '=' expresion {} {System.out.println("condicion==");}
-                    | expresion '>' '=' expresion {} {System.out.println("condicion>=");}
-                    | expresion '<' '=' expresion {} {System.out.println("condicion<=");}
-                    | expresion '>' expresion {} {System.out.println("condicion>");}
-                    | expresion '<' expresion {} {System.out.println("condicion<");}
+condicion           : expresion EQUALEQUAL expresion {System.out.println("condicion==");}
+                    | expresion GREATEQUAL expresion {System.out.println("condicion>=");}
+                    | expresion LESSEQUAL expresion {System.out.println("condicion<=");}
+                    | expresion GREATTHAN expresion {System.out.println("condicion>");}
+                    | expresion LESSTHAN expresion {System.out.println("condicion<");}
+                    | expresion DISTINCT expresion {System.out.println("condicion<>");}
                     ;
 
-ambito              : '{' declarativasambito ejecutables '}' {System.out.println("ambito");}
-                    | '{' ejecutables '}' {System.out.println("ambito solo ejecutables");}
-                    | '{' '}' {System.out.println("ambito vacio");}
+ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {System.out.println("ambito");}
+                    | LEFTBRACE ejecutables RIGHTBRACE {System.out.println("ambito solo ejecutables");}
+                    | LEFTBRACE RIGHTBRACE {System.out.println("ambito vacio");}
                     ;
 
 declarativasambito  : declarativasambito declarativaambito {System.out.println("declarativaSambito");}
@@ -95,7 +113,7 @@ declarativasambito  : declarativasambito declarativaambito {System.out.println("
                     ;
 
 declarativaambito   : declarativa {System.out.println("declarativaambito");}
-                    | sentenciaMY ';' {System.out.println("declarativaambito MY");}
+                    | sentenciaMY SEMICOLON {System.out.println("declarativaambito MY");}
                     ;
 sentenciaMY         : MY listavariables {System.out.println("sentenciaMY");}
                     ;
@@ -103,3 +121,26 @@ sentenciaMY         : MY listavariables {System.out.println("sentenciaMY");}
 
 
 %%
+private LexicAnalyzer lexicAnalyzer;
+private CAMerror SyntaxError;
+
+int yylex() throws IOException {
+    Token t = lexicAnalyzer.getToken();
+    Token _TOKENFIN = new Token(260,"$");
+    if (!t.equals(_TOKENFIN)){
+	   yylval = new ParserVal(t);
+	   return t.getCode();
+	}
+    return 0;
+}
+
+void yyerror(String err) {
+    
+}
+
+public Parser(LexicAnalyzer lA,CAMerror sErr)
+{
+    System.out.println("ENTRE AL PARSER");
+    this.lexicAnalyzer = lA;
+    this.SyntaxError = sErr;
+}
