@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.util.Pair;
 import javax.swing.JFileChooser;
 
 /**
@@ -50,13 +49,13 @@ public class MainView extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        textBoxLexic = new javax.swing.JTextPane();
+        textBoxSintactic = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        textBoxSymbolsTable = new javax.swing.JTextPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         textBoxError = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         textBoxWarning = new javax.swing.JTextPane();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        textBoxSymbolsTable = new javax.swing.JTextPane();
         jMenuBar2 = new javax.swing.JMenuBar();
         FileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -92,7 +91,7 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane1.setViewportView(textBoxLexic);
+        jScrollPane1.setViewportView(textBoxSintactic);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -109,7 +108,11 @@ public class MainView extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Output Lexico", jPanel2);
+        jTabbedPane1.addTab("Output Sintáctico", jPanel2);
+
+        jScrollPane5.setViewportView(textBoxSymbolsTable);
+
+        jTabbedPane1.addTab("Symbols Table", jScrollPane5);
 
         jScrollPane4.setViewportView(textBoxError);
 
@@ -118,10 +121,6 @@ public class MainView extends javax.swing.JFrame {
         jScrollPane2.setViewportView(textBoxWarning);
 
         jTabbedPane1.addTab("Warnings", jScrollPane2);
-
-        jScrollPane5.setViewportView(textBoxSymbolsTable);
-
-        jTabbedPane1.addTab("Symbols Table", jScrollPane5);
 
         FileMenu.setText("File");
         FileMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -252,7 +251,6 @@ public class MainView extends javax.swing.JFrame {
             Parser p = new Parser(lexicAnalyzer,SyntaxError);            
             p.run();
             System.out.println("SALI DEL RUN-----------------------------");
-            textBoxLexic.setText(lexicAnalyzer.showConsumed());
             CAMerror l=lexicAnalyzer.getError();
             Vector<String> e=l.getLogs();
             String aux=new String();
@@ -333,7 +331,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenu run;
     private javax.swing.JTextPane textBoxError;
-    private javax.swing.JTextPane textBoxLexic;
+    private javax.swing.JTextPane textBoxSintactic;
     private javax.swing.JTextPane textBoxSymbolsTable;
     private javax.swing.JTextPane textBoxWarning;
     // End of variables declaration//GEN-END:variables

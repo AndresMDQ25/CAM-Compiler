@@ -1,24 +1,20 @@
 package camcompiler;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Vector;
-import javafx.util.Pair;
 
 
 
 public class LexicAnalyzer {
     
-    private Logger errors = new CAMerror();
-    private Logger warnings = new Warning();
-    private Reader reader;
+    private final Logger errors = new CAMerror();
+    private final Logger warnings = new Warning();
+    private final Reader reader;
     private int currentLine = 0;
     private String currentString;
     private int currentCode;
     private String currentChar;
-    private SymbolsTable st;
+    private final SymbolsTable st;
     private int currentState;
-    private final Vector<Integer> v;
     
     private final int[][] next_state = {
                 {2,2,2,2,3,1,-1,-1,-1,10,7,6,6,0,12,-1,-1,8,-1,-1,0,0,0,0,-1},
@@ -53,7 +49,7 @@ public class LexicAnalyzer {
     
     
         
-        private SemanticAction[][] sem_action = {
+        private final SemanticAction[][] sem_action = {
             //  "0    1     2    3    4   5     6    7    8    9   10   11      12    13  14   15   16   17    18  19   20   21   22   23  24"
          /*0*/{Sa12,Sa12,Sa12,Sa12,Sa12,Sa12, Sa8, Sa8, Sa8,Sa12, Sa8, Sa8,    Sa8, Sa7,Sa12, Sa8, Sa8,Sa10, Sa8, Sa8, Sa7,Sa13, Sa6,Sa13,Sa12},
          /*1*/{Sa12,Sa12,Sa12,Sa12, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7,    Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7},
@@ -72,7 +68,6 @@ public class LexicAnalyzer {
     public LexicAnalyzer(String fileName, SymbolsTable st) throws IOException {
         this.reader = new Reader(fileName);
         this.st = st;
-        this.v=new Vector();
     }
     
     private int getColumn() {
@@ -202,20 +197,7 @@ public class LexicAnalyzer {
         }
         return "";
     }
-        
-    public String showConsumed(){
-        System.out.println("SHOW CONSUMED----------------------------------------------------------------");
-        String t = new String();
-        t+="Index number - Token type - Token value \n";
-        for (Integer i : v) {
-             SymbolsTableEntry s = st.getEntry(i);
-           t+=(s.getCode() + "                 - "+toToken(s.getType()) + "            -           " + s.getLexema())+"\n";          
-            //t+=((Token)(v1.getKey())).getCode() + " " + ((Token)(v1.getKey())).getValue();
-            //System.out.println(t);
-        }
-        return t;
-    }
-    
+          
     
 }
        
