@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class LexicAnalyzer {
     
-    private final Logger errors = new CAMerror();
+    private final Logger errors;
     private final Logger warnings = new Warning();
     private final Reader reader;
     private int currentLine = 0;
@@ -65,9 +65,10 @@ public class LexicAnalyzer {
         /*11*/{Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,   Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12,Sa12, Sa9,Sa12,Sa12},
         /*12*/{ Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5,    Sa5, Sa5,Sa12, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5, Sa5}};;
     
-    public LexicAnalyzer(String fileName, SymbolsTable st) throws IOException {
+    public LexicAnalyzer(String fileName, SymbolsTable st, CAMerror errors) throws IOException {
         this.reader = new Reader(fileName);
         this.st = st;
+        this.errors=errors;
     }
     
     private int getColumn() {

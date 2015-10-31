@@ -433,6 +433,8 @@ final static String yyrule[] = {
 private LexicAnalyzer lexicAnalyzer;
 private CAMerror SyntaxError;
 
+public CAMerror getSyntaxError(){return SyntaxError;}
+
 int yylex() throws IOException {
     Token t = lexicAnalyzer.getToken();
     Token _TOKENFIN = new Token(260,"$");
@@ -453,7 +455,7 @@ public Parser(LexicAnalyzer lA,CAMerror sErr)
     this.lexicAnalyzer = lA;
     this.SyntaxError = sErr;
 }
-//#line 385 "Parser.java"
+//#line 387 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -835,7 +837,7 @@ case 58:
 //#line 118 "Parser.y"
 {System.out.println("sentenciaMY");}
 break;
-//#line 762 "Parser.java"
+//#line 764 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

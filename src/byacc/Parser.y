@@ -124,6 +124,8 @@ sentenciaMY         : MY listavariables {System.out.println("sentenciaMY");}
 private LexicAnalyzer lexicAnalyzer;
 private CAMerror SyntaxError;
 
+public CAMerror getSyntaxError(){return SyntaxError;}
+
 int yylex() throws IOException {
     Token t = lexicAnalyzer.getToken();
     Token _TOKENFIN = new Token(260,"$");

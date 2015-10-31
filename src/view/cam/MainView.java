@@ -243,16 +243,16 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_runActionPerformed
 
     private void runMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_runMouseClicked
-        try {                   
-            lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st);
+        try { 
+            CAMerror errors = new CAMerror();
+            lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors);
             //c = new Consumer(lexicAnalyzer);
             ///c.consume();
-            CAMerror SyntaxError = new CAMerror();
-            Parser p = new Parser(lexicAnalyzer,SyntaxError);            
+            Parser p = new Parser(lexicAnalyzer,errors);            
             p.run();
             System.out.println("SALI DEL RUN-----------------------------");
             CAMerror l=lexicAnalyzer.getError();
-            Vector<String> e=l.getLogs();
+            Vector<String> e=errors.getLogs();
             String aux=new String();
             for(int i=0; i<e.size();i++)
                 aux+=(e.elementAt(i)+"\n");
