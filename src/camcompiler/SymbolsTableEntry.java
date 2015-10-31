@@ -9,9 +9,9 @@ package camcompiler;
  *
  * @author Mariano
  */
-class SymbolsTableEntry {
+public class SymbolsTableEntry {
     private final int code;
-    private final String lexema;
+    private String lexema;
     private int cant;
     private final int type;
     private final Token t;
@@ -36,5 +36,8 @@ class SymbolsTableEntry {
     public int getCant() {return this.cant;}
     public int getType() {return this.type;}
     public void increaseCant(){this.cant++;}
+    public void setLexema(String lexema){
+        this.lexema = lexema;
+    }
     
 }
