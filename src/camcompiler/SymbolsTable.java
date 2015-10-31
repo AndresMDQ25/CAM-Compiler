@@ -19,7 +19,8 @@ public class SymbolsTable {
         m=new Vector();
     }        
     private void addEntry(Token t){
-        m.add(new SymbolsTableEntry(256+m.size()+1, t.getCode(), t.getValue(),1,t));
+        if ((t.getCode()==258) || (t.getCode()==257) || (t.getCode()==277))
+            m.add(new SymbolsTableEntry(256+m.size()+1, t.getCode(), t.getValue(),1,t));
     }
     
     public SymbolsTableEntry getEntry(int code){
@@ -31,9 +32,13 @@ public class SymbolsTable {
         
     public int request(Token t){
         for(int i=0;i<m.size();i++){
-           if(m.elementAt(i).getToken().equals(t))
+           if(m.elementAt(i).getToken().equals(t)){
+               m.elementAt(i).increaseCant();
                return m.elementAt(i).getCode();
+           }
         }
+        if (!((t.getCode()==258) || (t.getCode()==257) || (t.getCode()==277)))
+            return -1;
         this.addEntry(t);
         return m.elementAt(m.size()-1).getCode();
     }

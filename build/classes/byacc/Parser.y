@@ -7,6 +7,8 @@ import camcompiler.CAMerror;
 import camcompiler.LexicAnalyzer;
 import camcompiler.Token;
 import java.io.IOException;
+import camcompiler.SymbolsTable;
+import camcompiler.SymbolsTableEntry;
 
 
 %}
@@ -77,6 +79,13 @@ termino             : termino MULTIPLY factor {System.out.println("termino*");}
                     ;
 factor              : ID {System.out.println("factor");}
                     | CTE {System.out.println("factor2");}
+                    | MINUN CTE {
+                                int pointer = yylval.tok.getPointer();
+                                SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                                String temp = "-"+entry.getLexema();
+                                entry.setLexema(temp);
+                                System.out.println("factor negativo"+temp);
+                                }
                     ;
 
 sentenciaIF         : IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ENDIF {System.out.println("sentenciaIF");}
@@ -123,6 +132,7 @@ sentenciaMY         : MY listavariables {System.out.println("sentenciaMY");}
 %%
 private LexicAnalyzer lexicAnalyzer;
 private CAMerror SyntaxError;
+private SymbolsTable symbolsTable;
 
 public CAMerror getSyntaxError(){return SyntaxError;}
 
@@ -145,4 +155,5 @@ public Parser(LexicAnalyzer lA,CAMerror sErr)
     System.out.println("ENTRE AL PARSER");
     this.lexicAnalyzer = lA;
     this.SyntaxError = sErr;
+    this.symbolsTable = lA.getST();
 }

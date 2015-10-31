@@ -25,9 +25,25 @@ public class SymbolsTableEntry {
     }
     
     public int getCode(){return this.code;}
+
+    /**
+     *
+     * @return
+     */
+    @Override
     public String toString() {
-        String s = new String();
-        s = this.code +"           "+ this.type +"           "+ this.lexema +"           "+ this.cant; 
+        String sType;
+        switch (this.type) {
+            case 277:  sType="ST";
+                      break;
+            case 257:  sType="ID";
+                      break;
+            case 258: sType="CT";
+                      break;
+            default: sType="NK";
+                      break;
+        }
+        String s = this.code +"           "+ sType +"           "+ this.lexema +"           "+ this.cant; 
         return s;
     }
     public String getLexema(){return this.lexema;}
