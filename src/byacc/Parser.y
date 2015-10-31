@@ -9,6 +9,7 @@ import camcompiler.Token;
 import java.io.IOException;
 import camcompiler.SymbolsTable;
 import camcompiler.SymbolsTableEntry;
+import camcompiler.SyntacticLogger;
 
 
 %}
@@ -19,9 +20,9 @@ import camcompiler.SymbolsTableEntry;
 %left MULTIPLY DIVIDE
 
 %%
-programa            : bloque {System.out.println("programa");}
+programa            : bloque
                     ;
-bloque              : declarativas ejecutables {System.out.println("bloque");}
+bloque              : declarativas ejecutables
                     | error {SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine());}
                     ;
 
@@ -33,7 +34,7 @@ declarativas        : declarativas declarativa {System.out.println("declarativas
                     | declarativa {System.out.println("declarativas2");}
                     ;
 
-declarativa         : tipo listavariables SEMICOLON {System.out.println("declarativa");}
+declarativa         : tipo listavariables SEMICOLON {synlog.addLog("Declaration",lexicAnalyzer.getLine());}
                     | error {SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine());}
                     ;
 
@@ -46,7 +47,7 @@ tipo                : INT {System.out.println("tipo");}
                     | UNSIGNED LONG {System.out.println("tipo2");}
                     ;
 
-ejecutables         : BEGIN listaejecutables END {System.out.println("ejecutables (BEGIN y END)");}
+ejecutables         : BEGIN listaejecutables END
                     | ejecutablesimple {System.out.println("ejecutables (simple)");}
                     ;
 
@@ -56,13 +57,13 @@ listaejecutables    : listaejecutables ejecutable {System.out.println("listaejec
 
 ejecutablesimple    : ambito {System.out.println("ejecutablesimple");}
                     | ejecutable {System.out.println("ejecutablesimple2");}
-		    		| error {SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine());}
+		    | error {SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine());}
                     ;
 
-ejecutable          : asignacion SEMICOLON {System.out.println("ejecutable asig");}
-                    | sentenciaIF {System.out.println("ejecutable IF");}
-                    | sentenciaLOOP SEMICOLON {System.out.println("ejecutable LOOP");}
-                    | sentenciaPRINT SEMICOLON {System.out.println("ejecutable PRINT");}
+ejecutable          : asignacion SEMICOLON {synlog.addLog("Asignation",lexicAnalyzer.getLine());}
+                    | sentenciaIF {synlog.addLog("IF",lexicAnalyzer.getLine());}
+                    | sentenciaLOOP SEMICOLON {synlog.addLog("LOOP",lexicAnalyzer.getLine());}
+                    | sentenciaPRINT SEMICOLON {synlog.addLog("PRINT",lexicAnalyzer.getLine());}
                     ;
 
 asignacion          : ID EQUAL expresion {System.out.println("asignacion");}
@@ -112,9 +113,9 @@ condicion           : expresion EQUALEQUAL expresion {System.out.println("condic
                     | expresion DISTINCT expresion {System.out.println("condicion<>");}
                     ;
 
-ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {System.out.println("ambito");}
-                    | LEFTBRACE ejecutables RIGHTBRACE {System.out.println("ambito solo ejecutables");}
-                    | LEFTBRACE RIGHTBRACE {System.out.println("ambito vacio");}
+ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {synlog.addLog("Scope",lexicAnalyzer.getLine());}
+                    | LEFTBRACE ejecutables RIGHTBRACE {synlog.addLog("Scope",lexicAnalyzer.getLine());}
+                    | LEFTBRACE RIGHTBRACE {synlog.addLog("Empty scope",lexicAnalyzer.getLine());}
                     ;
 
 declarativasambito  : declarativasambito declarativaambito {System.out.println("declarativaSambito");}
@@ -124,7 +125,7 @@ declarativasambito  : declarativasambito declarativaambito {System.out.println("
 declarativaambito   : declarativa {System.out.println("declarativaambito");}
                     | sentenciaMY SEMICOLON {System.out.println("declarativaambito MY");}
                     ;
-sentenciaMY         : MY listavariables {System.out.println("sentenciaMY");}
+sentenciaMY         : MY listavariables {synlog.addLog("MY",lexicAnalyzer.getLine());}
                     ;
 
 
@@ -133,7 +134,10 @@ sentenciaMY         : MY listavariables {System.out.println("sentenciaMY");}
 private LexicAnalyzer lexicAnalyzer;
 private CAMerror SyntaxError;
 private SymbolsTable symbolsTable;
+private SyntacticLogger synlog;
 
+
+public SyntacticLogger getSynLog() {return this.synlog;}
 public CAMerror getSyntaxError(){return SyntaxError;}
 
 int yylex() throws IOException {
@@ -150,10 +154,11 @@ void yyerror(String err) {
     
 }
 
-public Parser(LexicAnalyzer lA,CAMerror sErr)
+public Parser(LexicAnalyzer lA, CAMerror sErr, SyntacticLogger synlog)
 {
     System.out.println("ENTRE AL PARSER");
     this.lexicAnalyzer = lA;
     this.SyntaxError = sErr;
     this.symbolsTable = lA.getST();
+    this.synlog = synlog;
 }

@@ -251,11 +251,12 @@ public class MainView extends javax.swing.JFrame {
     private void runMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_runMouseClicked
         try { 
             CAMerror errors = new CAMerror();
+            SyntacticLogger synLog = new SyntacticLogger();
             LexicLogger tokens = new LexicLogger();
             lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors,tokens);
             //c = new Consumer(lexicAnalyzer);
             ///c.consume();
-            Parser p = new Parser(lexicAnalyzer,errors);            
+            Parser p = new Parser(lexicAnalyzer,errors,synLog);            
             p.run();
             System.out.println("SALI DEL RUN-----------------------------");
             
@@ -266,6 +267,14 @@ public class MainView extends javax.swing.JFrame {
             for(int i=0; i<e.size();i++)
                 aux+=(e.elementAt(i)+"\n");
             textBoxError.setText(aux);
+            
+            SyntacticLogger sl=p.getSynLog();
+            Vector<String> v=sl.getLogs();
+            aux=new String();
+            for(int i=0; i<v.size();i++)
+                aux+=(v.elementAt(i)+"\n");
+            textBoxSintactic.setText(aux);
+        
             
             
             Warning w=lexicAnalyzer.getWarning();
