@@ -50,6 +50,8 @@ public class MainView extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textBoxSintactic = new javax.swing.JTextPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        textBoxLexic = new javax.swing.JTextPane();
         jScrollPane5 = new javax.swing.JScrollPane();
         textBoxSymbolsTable = new javax.swing.JTextPane();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -109,6 +111,10 @@ public class MainView extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Output Sintáctico", jPanel2);
+
+        jScrollPane6.setViewportView(textBoxLexic);
+
+        jTabbedPane1.addTab("Output Lexico", jScrollPane6);
 
         jScrollPane5.setViewportView(textBoxSymbolsTable);
 
@@ -245,24 +251,35 @@ public class MainView extends javax.swing.JFrame {
     private void runMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_runMouseClicked
         try { 
             CAMerror errors = new CAMerror();
-            lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors);
+            LexicLogger tokens = new LexicLogger();
+            lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors,tokens);
             //c = new Consumer(lexicAnalyzer);
             ///c.consume();
             Parser p = new Parser(lexicAnalyzer,errors);            
             p.run();
             System.out.println("SALI DEL RUN-----------------------------");
+            
+            
             CAMerror l=lexicAnalyzer.getError();
             Vector<String> e=errors.getLogs();
             String aux=new String();
             for(int i=0; i<e.size();i++)
                 aux+=(e.elementAt(i)+"\n");
             textBoxError.setText(aux);
+            
+            
             Warning w=lexicAnalyzer.getWarning();
             e=w.getLogs();
             aux=new String();
             for(int i=0; i<e.size();i++)
                 aux+=(e.elementAt(i)+"\n");
             textBoxWarning.setText(aux);
+            
+            e=tokens.getLogs();
+            aux=new String();
+            for(int i=0; i<e.size();i++)
+                aux+=(e.elementAt(i)+"\n");
+            textBoxLexic.setText(aux);
             
             aux = new String();
             aux = st.toString();
@@ -325,12 +342,14 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextPane mainEditor;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenu run;
     private javax.swing.JTextPane textBoxError;
+    private javax.swing.JTextPane textBoxLexic;
     private javax.swing.JTextPane textBoxSintactic;
     private javax.swing.JTextPane textBoxSymbolsTable;
     private javax.swing.JTextPane textBoxWarning;

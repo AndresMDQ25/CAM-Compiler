@@ -41,4 +41,9 @@ public class Token {
         hash = 23 * hash + this.code;
         return hash;
     }
+    
+    @Override
+    public String toString(){
+      return this.value;  
+    }
 }

@@ -6,7 +6,6 @@
 package camcompiler;
 
 import java.util.Vector;
-import javafx.util.Pair;
 
 /**
  *
