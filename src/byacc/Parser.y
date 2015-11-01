@@ -90,7 +90,7 @@ factor              : ID {System.out.println("factor");}
                     ;
 
 sentenciaIF         : IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ENDIF {System.out.println("sentenciaIF");}
-                    | IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ELSE bloque ENDIF {System.out.println("sentenciaIF ELSE");}
+                    | IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ELSE bloquesentencias ENDIF {System.out.println("sentenciaIF ELSE");}
                     | IF error {SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine());}
                     ;
 
