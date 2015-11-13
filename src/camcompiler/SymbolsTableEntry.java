@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package camcompiler;
 
-/**
- *
- * @author Mariano
- */
 public class SymbolsTableEntry {
     private final int code;
     private String lexema;
@@ -24,13 +15,10 @@ public class SymbolsTableEntry {
         this.t=t;
     }
     
-    public int getCode(){return this.code;}
+    public int getCode() {
+        return this.code;
+    }
 
-    /**
-     *
-     * @return
-     */
-    @Override
     public String toString() {
         String sType;
         switch (this.type) {
@@ -39,6 +27,8 @@ public class SymbolsTableEntry {
             case 257:  sType="ID";
                       break;
             case 258: sType="CT";
+                      break;
+            case 294: sType="CT";
                       break;
             default: sType="NK";
                       break;

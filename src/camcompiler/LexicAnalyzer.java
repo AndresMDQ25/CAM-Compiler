@@ -2,8 +2,6 @@ package camcompiler;
 
 import java.io.IOException;
 
-
-
 public class LexicAnalyzer {
     
     private final Logger errors;
@@ -33,25 +31,26 @@ public class LexicAnalyzer {
                 {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}    
     };
     
-    SemanticAction Sa0 = new SA0(this);
-    SemanticAction Sa1 = new SA1(this);
-    SemanticAction Sa2 = new SA2(this);
-    SemanticAction Sa3 = new SA3(this);
-    SemanticAction Sa4 = new SA4(this);
-    SemanticAction Sa5 = new SA5(this);
-    SemanticAction Sa6 = new SA6(this); //line++
-    SemanticAction Sa7 = new SA7(this);
-    SemanticAction Sa8 = new SA8(this);
-    SemanticAction Sa9 = new SA9(this);
-    SemanticAction Sa10 = new SA10(this);
-    SemanticAction Sa11 = new SA11(this);
-    SemanticAction Sa12 = new SA12(this);
-    SemanticAction Sa13 = new SA13(this);
+    SemanticAction Sa0 = new SA0(this); //Accion Semantica 0: AGREGA UN CARACTER AL FINAL DEL TOKEN
+    SemanticAction Sa1 = new SA1(this); //Accion Semantica 1: TRUNCA NOMBRES MAYORES A 15
+    SemanticAction Sa2 = new SA2(this); //Accion Semantica 2: CHEQUEA RANGO DE CTES ENTERAS  -> -2^15 -1<n< 2^15 -1 Y SACA _i
+    SemanticAction Sa3 = new SA3(this); //Accion Semantica 3: CHECKEA RANGO UNSIGNED LONG -> 0<n< 2^32 -1 and removes _ul
+    SemanticAction Sa4 = new SA4(this); //Accion Semantica 4: BORRA EL ULTIMO CARACTER DEL TOKEN Y RETROCEDE EL READER
+    SemanticAction Sa5 = new SA5(this); //Accion Semantica 5: VERIFICA PALABRAS RESERVADAS
+    SemanticAction Sa6 = new SA6(this); //Accion Semantica 6: AUMENTA EN 1 LA CANTIDAD DE LINEAS QUE GUARDA EL ANALIZADOR LEXICO
+    SemanticAction Sa7 = new SA7(this); //Accion Semantica 7: ERROR DE CARACTER INVALIDO
+    SemanticAction Sa8 = new SA8(this); //Accion Semantica 8: SETEA TOKEN DE OPERADOR 
+    SemanticAction Sa9 = new SA9(this); //Accion Semantica 9: BORRA TODO
+    SemanticAction Sa10 = new SA10(this); //Accion Semantica 10: SETEA TOKEN STRING
+    SemanticAction Sa11 = new SA11(this); //Accion Semantica 11: BORRA EL ULTIMO CARACTER DEL TOKEN, RETROCEDE EL READER Y SETEA TOKEN DE OPERADOR
+    SemanticAction Sa12 = new SA12(this); //Accion Semantica 12: NO HACE NADA
+    SemanticAction Sa13 = new SA13(this); //Accion Semantica 13: ELIMINA EL ULTIMO CARACTER
     
     
         
         private final SemanticAction[][] sem_action = {
-            //  "0    1     2    3    4   5     6    7    8    9   10   11      12    13  14   15   16   17    18  19   20   21   22   23  24"
+            //letters  l     u    i digits @   +{}   /    *    -   <     >      =      _  A.Z  (     )   "     ,    ; other tab   /n space $ 
+            //  "0    1     2    3    4    5    6    7    8    9   10   11      12    13  14   15   16   17    18  19   20   21   22   23  24"
          /*0*/{Sa12,Sa12,Sa12,Sa12,Sa12,Sa12, Sa8, Sa8, Sa8,Sa12, Sa8, Sa8,    Sa8, Sa7,Sa12, Sa8, Sa8,Sa10, Sa8, Sa8, Sa7,Sa13, Sa6,Sa13,Sa12},
          /*1*/{Sa12,Sa12,Sa12,Sa12, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7,    Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7, Sa7},
          /*2*/{Sa12,Sa12,Sa12,Sa12,Sa12,Sa12, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1,    Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1, Sa1},
@@ -74,11 +73,6 @@ public class LexicAnalyzer {
     }
     
     private int getColumn() {
-        /*if (this.currentChar.equals("   "))
-            return 21;
-        else if (this.currentChar.equals("/n"))
-            return 22;
-        else {*/ 
         switch (currentChar) {
             case "a":  return 0; case "b":  return 0; case "c":  return 0; case "d":  return 0;
             case "e":  return 0; case "f":  return 0; case "g":  return 0; case "h":  return 0;
@@ -108,7 +102,6 @@ public class LexicAnalyzer {
                 
             default: return 20;
         }
-        //}
     }
     
     public Token getToken() throws IOException {
@@ -171,10 +164,8 @@ public class LexicAnalyzer {
     void setCurrentChar(String string) {
         this.currentChar = string;
     }
-    
-    
-    
-    private String toToken(int number) {
+   /* toToken method never used     
+    private String toToken(int number) { 
         switch (number) {
             case 257 : return "ID";
             case 258 : return "CTE";
@@ -201,8 +192,7 @@ public class LexicAnalyzer {
         }
         return "";
     }
-          
-    
+    */
 }
        
 

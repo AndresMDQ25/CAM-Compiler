@@ -1,23 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package camcompiler;
 
-/**
- *
- * @author Mariano
- */
 public class SA11 extends SemanticAction {
+    //Accion Semantica 11: BORRA EL ULTIMO CARACTER DEL TOKEN, RETROCEDE EL READER Y SETEA TOKEN DE OPERADOR
     public SA11(LexicAnalyzer lA) {
         super(lA);
     } 
 
-    /**
-     *
-     */
-    @Override
     public void run(){        
         SemanticAction s=new SA4(lA);
         s.run();

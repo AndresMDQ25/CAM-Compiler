@@ -1,19 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package camcompiler;
 
 public class SA8 extends SemanticAction{
+    //Accion Semantica 8: SETEA TOKEN DE OPERADOR 
     public SA8(LexicAnalyzer lA){
         super(lA);
     } 
 
-    /**
-     *
-     */
-    @Override
     public void run(){
         String word = lA.getString();
         System.out.println(word);
