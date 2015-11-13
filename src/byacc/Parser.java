@@ -28,8 +28,10 @@ import camcompiler.SymbolsTable;
 import camcompiler.SymbolsTableEntry;
 import camcompiler.SyntacticLogger;
 
+import java.util.Vector;
 
-//#line 30 "Parser.java"
+
+//#line 32 "Parser.java"
 
 
 
@@ -440,11 +442,14 @@ final static String yyrule[] = {
 "sentenciaMY : MY listavariables",
 };
 
-//#line 152 "Parser.y"
+//#line 162 "Parser.y"
 private LexicAnalyzer lexicAnalyzer;
 private CAMerror SyntaxError;
 private SymbolsTable symbolsTable;
 private SyntacticLogger synlog;
+
+private Vector<Integer> IDlist = new Vector<Integer>();
+private String currentType = new String();
 
 
 public SyntacticLogger getSynLog() {return this.synlog;}
@@ -472,7 +477,7 @@ public Parser(LexicAnalyzer lA, CAMerror sErr, SyntacticLogger synlog)
     this.symbolsTable = lA.getST();
     this.synlog = synlog;
 }
-//#line 404 "Parser.java"
+//#line 409 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -627,131 +632,139 @@ boolean doaction;
       {
 //########## USER-SUPPLIED ACTIONS ##########
 case 3:
-//#line 26 "Parser.y"
+//#line 28 "Parser.y"
 {SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine());}
 break;
 case 4:
-//#line 29 "Parser.y"
+//#line 31 "Parser.y"
 {System.out.println("bloque sentencias");}
 break;
 case 5:
-//#line 30 "Parser.y"
+//#line 32 "Parser.y"
 {System.out.println("bloque sentencias solo ejecutables");}
 break;
 case 6:
-//#line 33 "Parser.y"
+//#line 35 "Parser.y"
 {System.out.println("declarativas");}
 break;
 case 7:
-//#line 34 "Parser.y"
+//#line 36 "Parser.y"
 {System.out.println("declarativas2");}
 break;
 case 8:
-//#line 37 "Parser.y"
-{synlog.addLog("Declaration",lexicAnalyzer.getLine());}
+//#line 39 "Parser.y"
+{
+                                                        synlog.addLog("Declaration",lexicAnalyzer.getLine());
+                                                        for (int i = 0; i < IDlist.size(); i++) {
+                                                            SymbolsTableEntry entry = symbolsTable.getEntry(IDlist.elementAt(i));
+                                                            entry.setSType(currentType);
+                                                        }
+                                                        IDlist.removeAllElements();
+                                                        currentType = "";
+                                                    }
 break;
 case 9:
-//#line 38 "Parser.y"
+//#line 48 "Parser.y"
 {SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine());}
 break;
 case 10:
-//#line 41 "Parser.y"
-{System.out.println("listavariables");}
+//#line 51 "Parser.y"
+{System.out.println("listavariables"); int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
 break;
 case 11:
-//#line 42 "Parser.y"
-{System.out.println("listavariables2");}
+//#line 52 "Parser.y"
+{System.out.println("listavariables2"); int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
 break;
 case 12:
-//#line 43 "Parser.y"
+//#line 53 "Parser.y"
 {SyntaxError.addLog("Invalid declaration of variables list",lexicAnalyzer.getLine());}
 break;
 case 13:
-//#line 46 "Parser.y"
-{System.out.println("tipo");}
+//#line 56 "Parser.y"
+{System.out.println("tipo"); currentType = "INTEG";}
 break;
 case 14:
-//#line 47 "Parser.y"
-{System.out.println("tipo2");}
+//#line 57 "Parser.y"
+{System.out.println("tipo2"); currentType = "ULONG";}
 break;
 case 16:
-//#line 51 "Parser.y"
+//#line 61 "Parser.y"
 {System.out.println("ejecutables (simple)");}
 break;
 case 17:
-//#line 54 "Parser.y"
+//#line 64 "Parser.y"
 {System.out.println("listaejecutables");}
 break;
 case 18:
-//#line 55 "Parser.y"
+//#line 65 "Parser.y"
 {System.out.println("listaejecutables2");}
 break;
 case 19:
-//#line 58 "Parser.y"
+//#line 68 "Parser.y"
 {System.out.println("ejecutablesimple");}
 break;
 case 20:
-//#line 59 "Parser.y"
+//#line 69 "Parser.y"
 {System.out.println("ejecutablesimple2");}
 break;
 case 21:
-//#line 60 "Parser.y"
+//#line 70 "Parser.y"
 {SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine());}
 break;
 case 22:
-//#line 63 "Parser.y"
+//#line 73 "Parser.y"
 {synlog.addLog("Asignation",lexicAnalyzer.getLine());}
 break;
 case 23:
-//#line 64 "Parser.y"
+//#line 74 "Parser.y"
 {synlog.addLog("IF",lexicAnalyzer.getLine());}
 break;
 case 24:
-//#line 65 "Parser.y"
+//#line 75 "Parser.y"
 {synlog.addLog("LOOP",lexicAnalyzer.getLine());}
 break;
 case 25:
-//#line 66 "Parser.y"
+//#line 76 "Parser.y"
 {synlog.addLog("PRINT",lexicAnalyzer.getLine());}
 break;
 case 26:
-//#line 69 "Parser.y"
+//#line 79 "Parser.y"
 {System.out.println("asignacion");}
 break;
 case 27:
-//#line 70 "Parser.y"
+//#line 80 "Parser.y"
 {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
 break;
 case 28:
-//#line 73 "Parser.y"
+//#line 83 "Parser.y"
 {System.out.println("expresion+");}
 break;
 case 29:
-//#line 74 "Parser.y"
+//#line 84 "Parser.y"
 {System.out.println("expresion-");}
 break;
 case 31:
-//#line 77 "Parser.y"
+//#line 87 "Parser.y"
 {System.out.println("termino*");}
 break;
 case 32:
-//#line 78 "Parser.y"
+//#line 88 "Parser.y"
 {System.out.println("termino/");}
 break;
 case 33:
-//#line 79 "Parser.y"
+//#line 89 "Parser.y"
 {System.out.println("termino factor");}
 break;
 case 34:
-//#line 81 "Parser.y"
+//#line 91 "Parser.y"
 {System.out.println("factor");}
 break;
 case 35:
-//#line 82 "Parser.y"
+//#line 92 "Parser.y"
 {System.out.println("factor2");}
 break;
 case 36:
-//#line 83 "Parser.y"
+//#line 93 "Parser.y"
 {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -763,7 +776,7 @@ case 36:
                                 }
 break;
 case 37:
-//#line 94 "Parser.y"
+//#line 104 "Parser.y"
 {
                                 System.out.println("constante entera");
                                 int pointer = yylval.tok.getPointer();
@@ -773,7 +786,7 @@ case 37:
                             }
 break;
 case 38:
-//#line 101 "Parser.y"
+//#line 111 "Parser.y"
 {
                                 System.out.println("constante larga");
                                 int pointer = yylval.tok.getPointer();
@@ -783,98 +796,98 @@ case 38:
                             }
 break;
 case 39:
-//#line 110 "Parser.y"
+//#line 120 "Parser.y"
 {System.out.println("sentenciaIF");}
 break;
 case 40:
-//#line 111 "Parser.y"
+//#line 121 "Parser.y"
 {System.out.println("sentenciaIF ELSE");}
 break;
 case 41:
-//#line 112 "Parser.y"
+//#line 122 "Parser.y"
 {SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine());}
 break;
 case 42:
-//#line 116 "Parser.y"
+//#line 126 "Parser.y"
 {System.out.println("sentenciaLOOP");}
 break;
 case 43:
-//#line 117 "Parser.y"
+//#line 127 "Parser.y"
 {System.out.println("ERROR en expresion2");}
 break;
 case 44:
-//#line 118 "Parser.y"
+//#line 128 "Parser.y"
 {System.out.println("ERROR en expresion1");}
 break;
 case 45:
-//#line 119 "Parser.y"
+//#line 129 "Parser.y"
 {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());System.out.println("ERROR en LUP");}
 break;
 case 46:
-//#line 122 "Parser.y"
+//#line 132 "Parser.y"
 {System.out.println("sentenciaPRINT");}
 break;
 case 47:
-//#line 123 "Parser.y"
+//#line 133 "Parser.y"
 {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());}
 break;
 case 48:
-//#line 126 "Parser.y"
+//#line 136 "Parser.y"
 {System.out.println("condicion==");}
 break;
 case 49:
-//#line 127 "Parser.y"
+//#line 137 "Parser.y"
 {System.out.println("condicion>=");}
 break;
 case 50:
-//#line 128 "Parser.y"
+//#line 138 "Parser.y"
 {System.out.println("condicion<=");}
 break;
 case 51:
-//#line 129 "Parser.y"
+//#line 139 "Parser.y"
 {System.out.println("condicion>");}
 break;
 case 52:
-//#line 130 "Parser.y"
+//#line 140 "Parser.y"
 {System.out.println("condicion<");}
 break;
 case 53:
-//#line 131 "Parser.y"
+//#line 141 "Parser.y"
 {System.out.println("condicion<>");}
 break;
 case 54:
-//#line 134 "Parser.y"
+//#line 144 "Parser.y"
 {synlog.addLog("Scope",lexicAnalyzer.getLine());}
 break;
 case 55:
-//#line 135 "Parser.y"
+//#line 145 "Parser.y"
 {synlog.addLog("Scope",lexicAnalyzer.getLine());}
 break;
 case 56:
-//#line 136 "Parser.y"
+//#line 146 "Parser.y"
 {synlog.addLog("Empty scope",lexicAnalyzer.getLine());}
 break;
 case 57:
-//#line 139 "Parser.y"
+//#line 149 "Parser.y"
 {System.out.println("declarativaSambito");}
 break;
 case 58:
-//#line 140 "Parser.y"
+//#line 150 "Parser.y"
 {System.out.println("declarativaSambito2");}
 break;
 case 59:
-//#line 143 "Parser.y"
+//#line 153 "Parser.y"
 {System.out.println("declarativaambito");}
 break;
 case 60:
-//#line 144 "Parser.y"
+//#line 154 "Parser.y"
 {System.out.println("declarativaambito MY");}
 break;
 case 61:
-//#line 146 "Parser.y"
+//#line 156 "Parser.y"
 {synlog.addLog("MY",lexicAnalyzer.getLine());}
 break;
-//#line 801 "Parser.java"
+//#line 814 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

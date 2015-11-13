@@ -11,6 +11,8 @@ import camcompiler.SymbolsTable;
 import camcompiler.SymbolsTableEntry;
 import camcompiler.SyntacticLogger;
 
+import java.util.Vector;
+
 
 %}
 
@@ -34,17 +36,25 @@ declarativas        : declarativas declarativa {System.out.println("declarativas
                     | declarativa {System.out.println("declarativas2");}
                     ;
 
-declarativa         : tipo listavariables SEMICOLON {synlog.addLog("Declaration",lexicAnalyzer.getLine());}
+declarativa         : tipo listavariables SEMICOLON {
+                                                        synlog.addLog("Declaration",lexicAnalyzer.getLine());
+                                                        for (int i = 0; i < IDlist.size(); i++) {
+                                                            SymbolsTableEntry entry = symbolsTable.getEntry(IDlist.elementAt(i));
+                                                            entry.setSType(currentType);
+                                                        }
+                                                        IDlist.removeAllElements();
+                                                        currentType = "";
+                                                    }
                     | error {SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine());}
                     ;
 
-listavariables      : listavariables COMMA ID {System.out.println("listavariables");}
-                    | ID {System.out.println("listavariables2");}
+listavariables      : listavariables COMMA ID {System.out.println("listavariables"); int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
+                    | ID {System.out.println("listavariables2"); int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
                     | error {SyntaxError.addLog("Invalid declaration of variables list",lexicAnalyzer.getLine());}
                     ;
 
-tipo                : INT {System.out.println("tipo");}
-                    | UNSIGNED LONG {System.out.println("tipo2");}
+tipo                : INT {System.out.println("tipo"); currentType = "INTEG";}
+                    | UNSIGNED LONG {System.out.println("tipo2"); currentType = "ULONG";}
                     ;
 
 ejecutables         : BEGIN listaejecutables END
@@ -153,6 +163,9 @@ private LexicAnalyzer lexicAnalyzer;
 private CAMerror SyntaxError;
 private SymbolsTable symbolsTable;
 private SyntacticLogger synlog;
+
+private Vector<Integer> IDlist = new Vector<Integer>();
+private String currentType = new String();
 
 
 public SyntacticLogger getSynLog() {return this.synlog;}
