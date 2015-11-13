@@ -93,6 +93,7 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
+        textBoxSintactic.setEditable(false);
         jScrollPane1.setViewportView(textBoxSintactic);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -112,18 +113,22 @@ public class MainView extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Output Sintáctico", jPanel2);
 
+        textBoxLexic.setEditable(false);
         jScrollPane6.setViewportView(textBoxLexic);
 
         jTabbedPane1.addTab("Output Lexico", jScrollPane6);
 
+        textBoxSymbolsTable.setEditable(false);
         jScrollPane5.setViewportView(textBoxSymbolsTable);
 
         jTabbedPane1.addTab("Symbols Table", jScrollPane5);
 
+        textBoxError.setEditable(false);
         jScrollPane4.setViewportView(textBoxError);
 
         jTabbedPane1.addTab("Errores", jScrollPane4);
 
+        textBoxWarning.setEditable(false);
         jScrollPane2.setViewportView(textBoxWarning);
 
         jTabbedPane1.addTab("Warnings", jScrollPane2);
