@@ -14,7 +14,7 @@ import camcompiler.SyntacticLogger;
 
 %}
 
-%token ID CTE ERROR FINAL IF THEN ELSE ENDIF PRINT INT BEGIN END UNSIGNED LONG MY LOOP FROM TO BY SEMICOLON STRING PLUSLE MINUN MULTIPLY DIVIDE EQUAL COMMA LEFTPARENTHESIS RIGHTPARENTHESIS GREATTHAN LESSTHAN LEFTBRACE RIGHTBRACE EQUALEQUAL GREATEQUAL LESSEQUAL DISTINCT
+%token ID CTEINT ERROR FINAL IF THEN ELSE ENDIF PRINT INT BEGIN END UNSIGNED LONG MY LOOP FROM TO BY SEMICOLON STRING PLUSLE MINUN MULTIPLY DIVIDE EQUAL COMMA LEFTPARENTHESIS RIGHTPARENTHESIS GREATTHAN LESSTHAN LEFTBRACE RIGHTBRACE EQUALEQUAL GREATEQUAL LESSEQUAL DISTINCT CTEUL
 
 %left PLUSLE MINUN
 %left MULTIPLY DIVIDE
@@ -79,14 +79,32 @@ termino             : termino MULTIPLY factor {System.out.println("termino*");}
                     | factor {System.out.println("termino factor");}
                     ;
 factor              : ID {System.out.println("factor");}
-                    | CTE {System.out.println("factor2");}
-                    | MINUN CTE {
+                    | constant {System.out.println("factor2");}
+                    | MINUN CTEINT {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "-"+entry.getLexema();
                                 entry.setLexema(temp);
                                 System.out.println("factor negativo"+temp);
+                                temp = "INTEG";
+                                entry.setSType(temp);
                                 }
+                    ;
+
+constant            : CTEINT {
+                                System.out.println("constante entera");
+                                int pointer = yylval.tok.getPointer();
+                                SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                                String temp = "INTEG";
+                                entry.setSType(temp);
+                            }
+                    | CTEUL {
+                                System.out.println("constante larga");
+                                int pointer = yylval.tok.getPointer();
+                                SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                                String temp = "ULONG";
+                                entry.setSType(temp);
+                            }
                     ;
 
 sentenciaIF         : IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ENDIF {System.out.println("sentenciaIF");}
