@@ -22,12 +22,6 @@ public class SymbolsTable {
     }
         
     public int request(Token t){
-        for(int i=0;i<m.size();i++){
-           if(m.elementAt(i).getToken().equals(t)){
-               m.elementAt(i).increaseCant();
-               return m.elementAt(i).getCode();
-           }
-        }
         if (!((t.getCode()==258) || (t.getCode()==257) || (t.getCode()==294) || (t.getCode()==277)))
             return -1;
         this.addEntry(t);
