@@ -16,3 +16,8 @@ build/classes/view/cam/MainView$2.class
 build/classes/view/cam/MainView.form
 *.form
 build/built-jar.properties
+*.properties
+build/classes/byacc/Parser.y
+*.TXT
+nbproject/private/private.properties
+*.xml

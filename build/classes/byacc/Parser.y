@@ -65,7 +65,7 @@ listaejecutables    : listaejecutables ejecutable {System.out.println("listaejec
                     | ejecutable {System.out.println("listaejecutables2");}
                     ;
 
-ejecutablesimple    : ambito {System.out.println("ejecutablesimple");}
+ejecutablesimple    : listaambitos {System.out.println("ejecutablesimple");}
                     | ejecutable {System.out.println("ejecutablesimple2");}
 		    | error {SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine());}
                     ;
@@ -141,9 +141,13 @@ condicion           : expresion EQUALEQUAL expresion {System.out.println("condic
                     | expresion DISTINCT expresion {System.out.println("condicion<>");}
                     ;
 
-ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {synlog.addLog("Scope",lexicAnalyzer.getLine());}
-                    | LEFTBRACE ejecutables RIGHTBRACE {synlog.addLog("Scope",lexicAnalyzer.getLine());}
-                    | LEFTBRACE RIGHTBRACE {synlog.addLog("Empty scope",lexicAnalyzer.getLine());}
+ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {synlog.addLog("Scope ends",lexicAnalyzer.getLine());}
+                    | LEFTBRACE ejecutables RIGHTBRACE {synlog.addLog("Scope ends",lexicAnalyzer.getLine());}
+                    | LEFTBRACE RIGHTBRACE {synlog.addLog("Empty scope ends",lexicAnalyzer.getLine());}
+                    ;
+
+listaambitos        : ambito listaambitos
+                    | ambito
                     ;
 
 declarativasambito  : declarativasambito declarativaambito {System.out.println("declarativaSambito");}

@@ -61,6 +61,9 @@ public class SymbolsTableEntry {
     public void setLexema(String lexema){
         this.lexema = lexema;
     }
+    public void addScope(String scope) {
+        this.lexema += scope;
+    }
     public void setSType(String syntacticType) {
         this.stype = syntacticType;
     }
