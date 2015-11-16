@@ -8,7 +8,6 @@ public class SA8 extends SemanticAction{
 
     public void run(){
         String word = lA.getString();
-        System.out.println(word);
         switch(word) {
             case "+" : { lA.setCode(278); break;}
             case "*" : { lA.setCode(280); break;}

@@ -37,8 +37,10 @@ public class Scope {
     public String getScopeSuffix(){
         Scope a=this;
         String acc=new String();
-        while(a!=null)
+        while(a!=null) {
             acc='_'+a.getName()+acc;
+            a = a.getFather();
+        }
         return acc;
     }
     

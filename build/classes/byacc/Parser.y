@@ -28,12 +28,12 @@ bloque              : declarativas ejecutables
                     | error {SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine());}
                     ;
 
-bloquesentencias    : declarativas ejecutables {System.out.println("bloque sentencias");}
-                    | ejecutables {System.out.println("bloque sentencias solo ejecutables");}
+bloquesentencias    : declarativas ejecutables 
+                    | ejecutables 
                     ;
 
-declarativas        : declarativas declarativa {System.out.println("declarativas");}
-                    | declarativa {System.out.println("declarativas2");}
+declarativas        : declarativas declarativa {}
+                    | declarativa 
                     ;
 
 declarativa         : tipo listavariables SEMICOLON {
@@ -48,25 +48,25 @@ declarativa         : tipo listavariables SEMICOLON {
                     | error {SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine());}
                     ;
 
-listavariables      : listavariables COMMA ID {System.out.println("listavariables"); int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
-                    | ID {System.out.println("listavariables2"); int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
+listavariables      : listavariables COMMA ID {int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
+                    | ID {int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
                     | error {SyntaxError.addLog("Invalid declaration of variables list",lexicAnalyzer.getLine());}
                     ;
 
-tipo                : INT {System.out.println("tipo"); currentType = "INTEG";}
-                    | UNSIGNED LONG {System.out.println("tipo2"); currentType = "ULONG";}
+tipo                : INT {currentType = "INTEG";}
+                    | UNSIGNED LONG {currentType = "ULONG";}
                     ;
 
 ejecutables         : BEGIN listaejecutables END
-                    | ejecutablesimple {System.out.println("ejecutables (simple)");}
+                    | ejecutablesimple 
                     ;
 
-listaejecutables    : listaejecutables ejecutable {System.out.println("listaejecutables");}
-                    | ejecutable {System.out.println("listaejecutables2");}
+listaejecutables    : listaejecutables ejecutable 
+                    | ejecutable 
                     ;
 
-ejecutablesimple    : listaambitos {System.out.println("ejecutablesimple");}
-                    | ejecutable {System.out.println("ejecutablesimple2");}
+ejecutablesimple    : listaambitos 
+                    | ejecutable 
 		    | error {SyntaxError.addLog("Invalid simple executable",lexicAnalyzer.getLine());}
                     ;
 
@@ -76,37 +76,36 @@ ejecutable          : asignacion SEMICOLON {synlog.addLog("Asignation",lexicAnal
                     | sentenciaPRINT SEMICOLON {synlog.addLog("PRINT",lexicAnalyzer.getLine());}
                     ;
 
-asignacion          : ID EQUAL expresion {System.out.println("asignacion");}
+asignacion          : ID EQUAL expresion 
                     | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
-asignacionLOOP      : ID EQUAL expresionLOOP {System.out.println("asignacion");}
+asignacionLOOP      : ID EQUAL expresionLOOP 
                     | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
-expresion           : expresion PLUSLE termino {System.out.println("expresion+");}
-                    | expresion MINUN termino {System.out.println("expresion-");}
+expresion           : expresion PLUSLE termino 
+                    | expresion MINUN termino
                     | termino
                     ;
 
-expresionLOOP       : expresionLOOP PLUSLE terminoLOOP {System.out.println("expresion+");}
-                    | expresionLOOP MINUN terminoLOOP {System.out.println("expresion-");}
+expresionLOOP       : expresionLOOP PLUSLE terminoLOOP 
+                    | expresionLOOP MINUN terminoLOOP
                     | terminoLOOP
                     ;
 
-termino             : termino MULTIPLY factor {System.out.println("termino*");}
-                    | termino DIVIDE factor {System.out.println("termino/");}
-                    | factor {System.out.println("termino factor");}
+termino             : termino MULTIPLY factor 
+                    | termino DIVIDE factor 
+                    | factor 
                     ;
 
-terminoLOOP         : terminoLOOP MULTIPLY factorLOOP {System.out.println("termino*");}
-                    | terminoLOOP DIVIDE factorLOOP {System.out.println("termino/");}
-                    | factorLOOP {System.out.println("termino factor");}
+terminoLOOP         : terminoLOOP MULTIPLY factorLOOP 
+                    | terminoLOOP DIVIDE factorLOOP 
+                    | factorLOOP 
                     ;
 
-factorLOOP          : ID {System.out.println("factor");}
+factorLOOP          : ID 
                     | CTEINT {
-                                System.out.println("constante entera");
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "INTEG";
@@ -117,34 +116,30 @@ factorLOOP          : ID {System.out.println("factor");}
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "-"+entry.getLexema();
                                 entry.setLexema(temp);
-                                System.out.println("factor negativo"+temp);
                                 temp = "INTEG";
                                 entry.setSType(temp);
                                 }
                     ; 
 
-factor              : ID {System.out.println("factor");}
-                    | constant {System.out.println("factor2");}
+factor              : ID 
+                    | constant
                     | MINUN CTEINT {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "-"+entry.getLexema();
                                 entry.setLexema(temp);
-                                System.out.println("factor negativo"+temp);
                                 temp = "INTEG";
                                 entry.setSType(temp);
                                 }
                     ;
 
 constant            : CTEINT {
-                                System.out.println("constante entera");
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "INTEG";
                                 entry.setSType(temp);
                             }
                     | CTEUL {
-                                System.out.println("constante larga");
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "ULONG";
@@ -152,28 +147,37 @@ constant            : CTEINT {
                             }
                     ;
 
-sentenciaIF         : IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ENDIF {System.out.println("sentenciaIF");}
-                    | IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ELSE bloquesentencias ENDIF {System.out.println("sentenciaIF ELSE");}
+sentenciaIF         : IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ENDIF 
+                    | IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloquesentencias ELSE bloquesentencias ENDIF
                     | IF error {SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine());}
                     ;
 
 
-sentenciaLOOP       : LOOP FROM asignacionLOOP TO expresionLOOP BY expresionLOOP bloquesentencias {System.out.println("sentenciaLOOP");}
-                    | LOOP FROM asignacionLOOP TO expresionLOOP BY error {System.out.println("ERROR en expresion2");}
-                    | LOOP FROM asignacionLOOP TO error {System.out.println("ERROR en expresion1");}
-                    | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());System.out.println("ERROR en LUP");}
+sentenciaLOOP       : LOOP FROM asignacionLOOP TO expresionLOOP BY expresionLOOP bloquesentencias 
+                    | LOOP FROM asignacionLOOP TO expresionLOOP BY error 
+                    | LOOP FROM asignacionLOOP TO error 
+                    | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());}
                     ;
 
-sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {System.out.println("sentenciaPRINT");}
+sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS 
                     | PRINT error {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());} 
                     ;
 
-condicion           : expresion EQUALEQUAL expresion {System.out.println("condicion==");}
-                    | expresion GREATEQUAL expresion {System.out.println("condicion>=");}
-                    | expresion LESSEQUAL expresion {System.out.println("condicion<=");}
-                    | expresion GREATTHAN expresion {System.out.println("condicion>");}
-                    | expresion LESSTHAN expresion {System.out.println("condicion<");}
-                    | expresion DISTINCT expresion {System.out.println("condicion<>");}
+condicion           : expresion EQUALEQUAL expresion 
+                    | expresion GREATEQUAL expresion 
+                    | expresion LESSEQUAL expresion 
+                    | expresion GREATTHAN expresion
+                    | expresion LESSTHAN expresion 
+                    | expresion DISTINCT expresion 
+                    ;
+
+ambitotemp          : {         int number = myScope.getScopesContained()+1;
+                                String numb = Integer.toString(number);
+                                Scope currentScope = new Scope(numb, myScope);
+                                myScope.push(currentScope);
+                                myScope = currentScope;
+                                System.out.println(myScope.getScopeSuffix());
+                                } ambito
                     ;
 
 ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {synlog.addLog("Scope ends",lexicAnalyzer.getLine());}
@@ -181,18 +185,18 @@ ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {synlo
                     | LEFTBRACE RIGHTBRACE {synlog.addLog("Empty scope ends",lexicAnalyzer.getLine());}
                     ;
 
-listaambitos        : ambito listaambitos
-                    | ambito
+listaambitos        : ambitotemp {myScope = myScope.getFather();System.out.println(myScope.getScopeSuffix());} listaambitos
+                    | ambitotemp {myScope = myScope.getFather();System.out.println(myScope.getScopeSuffix());}
                     ;
 
-declarativasambito  : declarativasambito declarativaambito {System.out.println("declarativaSambito");}
-                    | declarativaambito {System.out.println("declarativaSambito2");}
+declarativasambito  : declarativasambito declarativaambito
+                    | declarativaambito 
                     ;
 
-declarativaambito   : declarativa {System.out.println("declarativaambito");}
-                    | sentenciaMY SEMICOLON {System.out.println("declarativaambito MY");}
+declarativaambito   : declarativa 
+                    | sentenciaMY SEMICOLON 
                     ;
-sentenciaMY         : MY listavariables {synlog.addLog("MY",lexicAnalyzer.getLine());}
+sentenciaMY         : MY listavariables 
                     ;
 
 
@@ -205,6 +209,8 @@ private SyntacticLogger synlog;
 
 private Vector<Integer> IDlist = new Vector<Integer>();
 private String currentType = new String();
+
+private Scope myScope = new Scope("0", null);
 
 
 public SyntacticLogger getSynLog() {return this.synlog;}
@@ -226,7 +232,6 @@ void yyerror(String err) {
 
 public Parser(LexicAnalyzer lA, CAMerror sErr, SyntacticLogger synlog)
 {
-    System.out.println("ENTRE AL PARSER");
     this.lexicAnalyzer = lA;
     this.SyntaxError = sErr;
     this.symbolsTable = lA.getST();
