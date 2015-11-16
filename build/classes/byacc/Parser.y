@@ -80,14 +80,49 @@ asignacion          : ID EQUAL expresion {System.out.println("asignacion");}
                     | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
+asignacionLOOP      : ID EQUAL expresionLOOP {System.out.println("asignacion");}
+                    | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
+                    ;
+
 expresion           : expresion PLUSLE termino {System.out.println("expresion+");}
                     | expresion MINUN termino {System.out.println("expresion-");}
                     | termino
                     ;
+
+expresionLOOP       : expresionLOOP PLUSLE terminoLOOP {System.out.println("expresion+");}
+                    | expresionLOOP MINUN terminoLOOP {System.out.println("expresion-");}
+                    | terminoLOOP
+                    ;
+
 termino             : termino MULTIPLY factor {System.out.println("termino*");}
                     | termino DIVIDE factor {System.out.println("termino/");}
                     | factor {System.out.println("termino factor");}
                     ;
+
+terminoLOOP         : terminoLOOP MULTIPLY factorLOOP {System.out.println("termino*");}
+                    | terminoLOOP DIVIDE factorLOOP {System.out.println("termino/");}
+                    | factorLOOP {System.out.println("termino factor");}
+                    ;
+
+factorLOOP          : ID {System.out.println("factor");}
+                    | CTEINT {
+                                System.out.println("constante entera");
+                                int pointer = yylval.tok.getPointer();
+                                SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                                String temp = "INTEG";
+                                entry.setSType(temp);
+                            }
+                    | MINUN CTEINT {
+                                int pointer = yylval.tok.getPointer();
+                                SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                                String temp = "-"+entry.getLexema();
+                                entry.setLexema(temp);
+                                System.out.println("factor negativo"+temp);
+                                temp = "INTEG";
+                                entry.setSType(temp);
+                                }
+                    ; 
+
 factor              : ID {System.out.println("factor");}
                     | constant {System.out.println("factor2");}
                     | MINUN CTEINT {
@@ -123,9 +158,9 @@ sentenciaIF         : IF LEFTPARENTHESIS condicion RIGHTPARENTHESIS THEN bloques
                     ;
 
 
-sentenciaLOOP       : LOOP FROM asignacion TO expresion BY expresion bloquesentencias {System.out.println("sentenciaLOOP");}
-                    | LOOP FROM asignacion TO expresion BY error {System.out.println("ERROR en expresion2");}
-                    | LOOP FROM asignacion TO error {System.out.println("ERROR en expresion1");}
+sentenciaLOOP       : LOOP FROM asignacionLOOP TO expresionLOOP BY expresionLOOP bloquesentencias {System.out.println("sentenciaLOOP");}
+                    | LOOP FROM asignacionLOOP TO expresionLOOP BY error {System.out.println("ERROR en expresion2");}
+                    | LOOP FROM asignacionLOOP TO error {System.out.println("ERROR en expresion1");}
                     | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());System.out.println("ERROR en LUP");}
                     ;
 
