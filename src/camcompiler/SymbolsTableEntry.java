@@ -7,6 +7,7 @@ public class SymbolsTableEntry {
     private final int ltype;
     private String stype = "          ";
     private final Token t;
+    private String scope;
     
     public SymbolsTableEntry(int code,int ltype, String lexema, int cant, Token t){
         this.code=code;
@@ -14,6 +15,7 @@ public class SymbolsTableEntry {
         this.lexema=lexema;
         this.cant=cant;
         this.t=t;
+        this.scope = "";
     }
     
     public int getCode() {
@@ -34,7 +36,7 @@ public class SymbolsTableEntry {
             default: sType="NK";
                       break;
         }
-        String s = this.code +"           "+ sType +"           "+ this.stype +"           "+ this.cant+"           "+ this.lexema ; 
+        String s = this.code +"           "+ sType +"           "+ this.stype +"           "+ this.cant+"           "+ this.lexema+this.scope ; 
         return s;
     }
     public String getLexema() {
@@ -62,7 +64,7 @@ public class SymbolsTableEntry {
         this.lexema = lexema;
     }
     public void addScope(String scope) {
-        this.lexema += scope;
+        this.scope = scope;
     }
     public void setSType(String syntacticType) {
         this.stype = syntacticType;
