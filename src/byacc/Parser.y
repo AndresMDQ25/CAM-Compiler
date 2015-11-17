@@ -41,6 +41,7 @@ declarativa         : tipo listavariables SEMICOLON {
                                                         for (int i = 0; i < IDlist.size(); i++) {
                                                             SymbolsTableEntry entry = symbolsTable.getEntry(IDlist.elementAt(i));
                                                             entry.setSType(currentType);
+                                                            entry.addScope(myScope.getScopeSuffix());
                                                         }
                                                         IDlist.removeAllElements();
                                                         currentType = "";
@@ -76,11 +77,20 @@ ejecutable          : asignacion SEMICOLON {synlog.addLog("Asignation",lexicAnal
                     | sentenciaPRINT SEMICOLON {synlog.addLog("PRINT",lexicAnalyzer.getLine());}
                     ;
 
-asignacion          : ID EQUAL expresion 
-                    | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
+asignacion          : identificador EQUAL expresion 
+                    | identificador error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
-asignacionLOOP      : ID EQUAL expresionLOOP 
+identificador       : ID {  int pointer = yylval.tok.getPointer();
+                            System.out.println(pointer);
+                            System.out.println(yylval.tok.getCode());
+                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                            entry.addScope(myScope.getScopeSuffix());}
+                    ;
+
+asignacionLOOP      : ID {  int pointer = yylval.tok.getPointer();
+                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                            entry.addScope(myScope.getScopeSuffix());} EQUAL expresionLOOP 
                     | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
@@ -104,7 +114,9 @@ terminoLOOP         : terminoLOOP MULTIPLY factorLOOP
                     | factorLOOP 
                     ;
 
-factorLOOP          : ID 
+factorLOOP          : ID {  int pointer = yylval.tok.getPointer();
+                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                            entry.addScope(myScope.getScopeSuffix());}
                     | CTEINT {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -121,7 +133,9 @@ factorLOOP          : ID
                                 }
                     ; 
 
-factor              : ID 
+factor              : ID {  int pointer = yylval.tok.getPointer();
+                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                            entry.addScope(myScope.getScopeSuffix());}
                     | constant
                     | MINUN CTEINT {
                                 int pointer = yylval.tok.getPointer();
