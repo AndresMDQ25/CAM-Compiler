@@ -22,3 +22,5 @@ build/classes/byacc/Parser.y
 nbproject/private/private.properties
 *.xml
 /dist/
+build/classes/byacc/Parser.y
+nbproject/private/private.xml

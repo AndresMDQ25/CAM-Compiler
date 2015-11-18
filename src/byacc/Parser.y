@@ -49,8 +49,8 @@ declarativa         : tipo listavariables SEMICOLON {
                     | error {SyntaxError.addLog("Invalid declarative sentence",lexicAnalyzer.getLine());}
                     ;
 
-listavariables      : listavariables COMMA ID {int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
-                    | ID {int pointer = yylval.tok.getPointer(); IDlist.addElement(pointer);}
+listavariables      : listavariables COMMA ID {int pointer = $3.tok.getPointer(); IDlist.addElement(pointer);}
+                    | ID {int pointer = $1.tok.getPointer(); IDlist.addElement(pointer);}
                     | error {SyntaxError.addLog("Invalid declaration of variables list",lexicAnalyzer.getLine());}
                     ;
 
@@ -81,19 +81,18 @@ asignacion          : identificador EQUAL expresion
                     | identificador error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
-identificador       : ID {  int pointer = yylval.tok.getPointer();
-                            System.out.println(pointer);
-                            System.out.println(yylval.tok.getCode());
+identificador       : ID {  int pointer = $1.tok.getPointer();
+                            System.out.println("pointer: "+pointer);
+                            System.out.println("code   : "+$1.tok.getCode());
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             entry.addScope(myScope.getScopeSuffix());                                                        
                             boolean isInScope = symbolsTable.inScope(pointer,entry);
                             if (!isInScope)
-                                SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());}
+                                SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());
+                            $$ = $1;}
                     ;
 
-asignacionLOOP      : ID {  int pointer = yylval.tok.getPointer();
-                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
-                            entry.addScope(myScope.getScopeSuffix());} EQUAL expresionLOOP 
+asignacionLOOP      : identificador EQUAL expresionLOOP
                     | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
@@ -117,17 +116,17 @@ terminoLOOP         : terminoLOOP MULTIPLY factorLOOP
                     | factorLOOP 
                     ;
 
-factorLOOP          : ID {  int pointer = yylval.tok.getPointer();
+factorLOOP          : ID {  int pointer = $1.tok.getPointer();
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             entry.addScope(myScope.getScopeSuffix());}
                     | CTEINT {
-                                int pointer = yylval.tok.getPointer();
+                                int pointer = $1.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "INTEG";
                                 entry.setSType(temp);
                             }
                     | MINUN CTEINT {
-                                int pointer = yylval.tok.getPointer();
+                                int pointer = $2.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "-"+entry.getLexema();
                                 entry.setLexema(temp);
@@ -136,12 +135,12 @@ factorLOOP          : ID {  int pointer = yylval.tok.getPointer();
                                 }
                     ; 
 
-factor              : ID {  int pointer = yylval.tok.getPointer();
+factor              : ID {  int pointer = $1.tok.getPointer();
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             entry.addScope(myScope.getScopeSuffix());}
                     | constant
                     | MINUN CTEINT {
-                                int pointer = yylval.tok.getPointer();
+                                int pointer = $2.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "-"+entry.getLexema();
                                 entry.setLexema(temp);
@@ -151,13 +150,13 @@ factor              : ID {  int pointer = yylval.tok.getPointer();
                     ;
 
 constant            : CTEINT {
-                                int pointer = yylval.tok.getPointer();
+                                int pointer = $1.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "INTEG";
                                 entry.setSType(temp);
                             }
                     | CTEUL {
-                                int pointer = yylval.tok.getPointer();
+                                int pointer = $1.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "ULONG";
                                 entry.setSType(temp);
