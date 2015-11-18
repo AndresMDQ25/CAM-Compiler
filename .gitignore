@@ -21,3 +21,4 @@ build/classes/byacc/Parser.y
 *.TXT
 nbproject/private/private.properties
 *.xml
+/dist/

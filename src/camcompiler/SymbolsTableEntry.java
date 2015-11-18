@@ -7,8 +7,7 @@ public class SymbolsTableEntry {
     private final int ltype;
     private String stype = "          ";
     private final Token t;
-    private String scope;
-    
+    private String scope;    
     public SymbolsTableEntry(int code,int ltype, String lexema, int cant, Token t){
         this.code=code;
         this.ltype=ltype;
@@ -57,6 +56,12 @@ public class SymbolsTableEntry {
     public String getSType() {
         return this.stype;
     }
+    public String getScope() {
+        return this.scope;
+    }
+    public String getSimpleName(){
+        return this.t.getValue();
+    }
     public void increaseCant() {
         this.cant++;
     }
@@ -68,6 +73,5 @@ public class SymbolsTableEntry {
     }
     public void setSType(String syntacticType) {
         this.stype = syntacticType;
-    }
-    
+    } 
 }

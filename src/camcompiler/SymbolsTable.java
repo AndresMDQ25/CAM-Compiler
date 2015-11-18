@@ -1,5 +1,6 @@
 package camcompiler;
 
+import byacc.Scope;
 import java.util.Vector;
 
 public class SymbolsTable {
@@ -36,4 +37,17 @@ public class SymbolsTable {
         }
         return s;
     }
+    public boolean inScope(int pointer, SymbolsTableEntry entry){
+        Vector<SymbolsTableEntry> matches = new Vector<>();
+        for (int i=0;i<m.size();i++)
+            if((m.elementAt(i).getToken().getValue().equals(entry.getSimpleName())) &&(m.elementAt(i).getCode()!= pointer))
+                matches.add(m.elementAt(i));
+        for (int i=0;i<matches.size();i++)
+            if (validScope(matches.elementAt(i).getScope(),entry.getScope()))
+                return true;
+        return false;
+    }
+    public boolean validScope(String declaredScope, String currentScope){                
+        return currentScope.substring(0,declaredScope.length()).equals(declaredScope);               
+    }         
 }

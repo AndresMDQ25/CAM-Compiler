@@ -475,7 +475,7 @@ final static String yyrule[] = {
 "sentenciaMY : MY listavariables",
 };
 
-//#line 219 "Parser.y"
+//#line 222 "Parser.y"
 private LexicAnalyzer lexicAnalyzer;
 private CAMerror SyntaxError;
 private SymbolsTable symbolsTable;
@@ -740,26 +740,29 @@ case 28:
                             System.out.println(pointer);
                             System.out.println(yylval.tok.getCode());
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
-                            entry.addScope(myScope.getScopeSuffix());}
+                            entry.addScope(myScope.getScopeSuffix());                                                        
+                            boolean isInScope = symbolsTable.inScope(pointer,entry);
+                            if (!isInScope)
+                                SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());}
 break;
 case 29:
-//#line 91 "Parser.y"
+//#line 94 "Parser.y"
 {  int pointer = yylval.tok.getPointer();
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             entry.addScope(myScope.getScopeSuffix());}
 break;
 case 31:
-//#line 94 "Parser.y"
+//#line 97 "Parser.y"
 {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
 break;
 case 44:
-//#line 117 "Parser.y"
+//#line 120 "Parser.y"
 {  int pointer = yylval.tok.getPointer();
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             entry.addScope(myScope.getScopeSuffix());}
 break;
 case 45:
-//#line 120 "Parser.y"
+//#line 123 "Parser.y"
 {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -768,7 +771,7 @@ case 45:
                             }
 break;
 case 46:
-//#line 126 "Parser.y"
+//#line 129 "Parser.y"
 {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -779,13 +782,13 @@ case 46:
                                 }
 break;
 case 47:
-//#line 136 "Parser.y"
+//#line 139 "Parser.y"
 {  int pointer = yylval.tok.getPointer();
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             entry.addScope(myScope.getScopeSuffix());}
 break;
 case 49:
-//#line 140 "Parser.y"
+//#line 143 "Parser.y"
 {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -796,7 +799,7 @@ case 49:
                                 }
 break;
 case 50:
-//#line 150 "Parser.y"
+//#line 153 "Parser.y"
 {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -805,7 +808,7 @@ case 50:
                             }
 break;
 case 51:
-//#line 156 "Parser.y"
+//#line 159 "Parser.y"
 {
                                 int pointer = yylval.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -814,19 +817,19 @@ case 51:
                             }
 break;
 case 54:
-//#line 166 "Parser.y"
+//#line 169 "Parser.y"
 {SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine());}
 break;
 case 58:
-//#line 173 "Parser.y"
+//#line 176 "Parser.y"
 {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());}
 break;
 case 60:
-//#line 177 "Parser.y"
+//#line 180 "Parser.y"
 {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());}
 break;
 case 67:
-//#line 188 "Parser.y"
+//#line 191 "Parser.y"
 {         int number = myScope.getScopesContained()+1;
                                 String numb = Integer.toString(number);
                                 Scope currentScope = new Scope(numb, myScope);
@@ -836,26 +839,26 @@ case 67:
                                 }
 break;
 case 69:
-//#line 197 "Parser.y"
+//#line 200 "Parser.y"
 {synlog.addLog("Scope ends",lexicAnalyzer.getLine());}
 break;
 case 70:
-//#line 198 "Parser.y"
+//#line 201 "Parser.y"
 {synlog.addLog("Scope ends",lexicAnalyzer.getLine());}
 break;
 case 71:
-//#line 199 "Parser.y"
+//#line 202 "Parser.y"
 {synlog.addLog("Empty scope ends",lexicAnalyzer.getLine());}
 break;
 case 72:
-//#line 202 "Parser.y"
+//#line 205 "Parser.y"
 {myScope = myScope.getFather();System.out.println(myScope.getScopeSuffix());}
 break;
 case 74:
-//#line 203 "Parser.y"
+//#line 206 "Parser.y"
 {myScope = myScope.getFather();System.out.println(myScope.getScopeSuffix());}
 break;
-//#line 782 "Parser.java"
+//#line 785 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

@@ -85,7 +85,10 @@ identificador       : ID {  int pointer = yylval.tok.getPointer();
                             System.out.println(pointer);
                             System.out.println(yylval.tok.getCode());
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
-                            entry.addScope(myScope.getScopeSuffix());}
+                            entry.addScope(myScope.getScopeSuffix());                                                        
+                            boolean isInScope = symbolsTable.inScope(pointer,entry);
+                            if (!isInScope)
+                                SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());}
                     ;
 
 asignacionLOOP      : ID {  int pointer = yylval.tok.getPointer();
