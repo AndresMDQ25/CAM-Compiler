@@ -59,9 +59,6 @@ public class SymbolsTableEntry {
     public String getScope() {
         return this.scope;
     }
-    public String getSimpleName(){
-        return this.t.getValue();
-    }
     public void increaseCant() {
         this.cant++;
     }

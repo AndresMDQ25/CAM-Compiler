@@ -216,8 +216,7 @@ public class MainView extends javax.swing.JFrame {
                 FileReader in;
                 in = new FileReader(fileChooser.getSelectedFile().getAbsolutePath());
                 st = new SymbolsTable();
-                //lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st);
-                //c = new Consumer(lexicAnalyzer);                
+             
                 BufferedReader br = new BufferedReader(in);
                 String code = new String();
                 String count = new String();
@@ -259,12 +258,9 @@ public class MainView extends javax.swing.JFrame {
             SyntacticLogger synLog = new SyntacticLogger();
             LexicLogger tokens = new LexicLogger();
             lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors,tokens);
-            //c = new Consumer(lexicAnalyzer);
-            ///c.consume();
             Parser p = new Parser(lexicAnalyzer,errors,synLog);            
             p.run();
-            System.out.println("SALI DEL RUN-----------------------------");
-            
+           
             
             CAMerror l=lexicAnalyzer.getError();
             Vector<String> e=errors.getLogs();

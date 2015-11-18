@@ -21,7 +21,7 @@ public class SymbolsTable {
                 return m.elementAt(i);
         return null;
     }
-        
+
     public int request(Token t){
         if (!((t.getCode()==258) || (t.getCode()==257) || (t.getCode()==294) || (t.getCode()==277)))
             return -1;
@@ -37,17 +37,37 @@ public class SymbolsTable {
         }
         return s;
     }
-    public boolean inScope(int pointer, SymbolsTableEntry entry){
-        Vector<SymbolsTableEntry> matches = new Vector<>();
+        
+    public boolean inScope(int pointer) {
+        SymbolsTableEntry entry = this.getEntry(pointer);
+        Token t = entry.getToken();
+        Vector<SymbolsTableEntry> matches = new Vector<SymbolsTableEntry>();
+        
         for (int i=0;i<m.size();i++)
-            if((m.elementAt(i).getToken().getValue().equals(entry.getSimpleName())) &&(m.elementAt(i).getCode()!= pointer))
-                matches.add(m.elementAt(i));
-        for (int i=0;i<matches.size();i++)
-            if (validScope(matches.elementAt(i).getScope(),entry.getScope()))
+            if((m.elementAt(i).getLexema().equals(entry.getLexema())) && ((m.elementAt(i).getCode())!= pointer)) {
+                    matches.add(m.elementAt(i));
+                }
+        for (int i=matches.size()-1;i>=0;i--) {
+            if (validScope(matches.elementAt(i).getScope(),entry.getScope())) {
+                t.setPointer(matches.elementAt(i).getCode());
+                matches.elementAt(i).increaseCant();
+                removeEntry(pointer);
                 return true;
+            }
+        }
         return false;
     }
     public boolean validScope(String declaredScope, String currentScope){                
         return currentScope.substring(0,declaredScope.length()).equals(declaredScope);               
-    }         
+    }
+    
+    public void removeEntry(int pointer) {
+        for (int i = 0; i < m.size(); i++) {
+            if (m.elementAt(i).getCode() == pointer)
+                m.remove(i);
+        }
+        
+        //acomodar los indices                                                                                                  o no
+    }
+    
 }

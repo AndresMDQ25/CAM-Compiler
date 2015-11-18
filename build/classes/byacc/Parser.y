@@ -86,7 +86,7 @@ identificador       : ID {  int pointer = $1.tok.getPointer();
                             System.out.println("code   : "+$1.tok.getCode());
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             entry.addScope(myScope.getScopeSuffix());                                                        
-                            boolean isInScope = symbolsTable.inScope(pointer,entry);
+                            boolean isInScope = symbolsTable.inScope(pointer);
                             if (!isInScope)
                                 SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());
                             $$ = $1;}
@@ -116,9 +116,7 @@ terminoLOOP         : terminoLOOP MULTIPLY factorLOOP
                     | factorLOOP 
                     ;
 
-factorLOOP          : ID {  int pointer = $1.tok.getPointer();
-                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
-                            entry.addScope(myScope.getScopeSuffix());}
+factorLOOP          : identificador 
                     | CTEINT {
                                 int pointer = $1.tok.getPointer();
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -135,9 +133,7 @@ factorLOOP          : ID {  int pointer = $1.tok.getPointer();
                                 }
                     ; 
 
-factor              : ID {  int pointer = $1.tok.getPointer();
-                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
-                            entry.addScope(myScope.getScopeSuffix());}
+factor              : identificador
                     | constant
                     | MINUN CTEINT {
                                 int pointer = $2.tok.getPointer();
