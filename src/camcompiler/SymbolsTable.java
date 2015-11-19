@@ -49,7 +49,6 @@ public class SymbolsTable {
                 }
         for (int i=matches.size()-1;i>=0;i--) {
             if (validScope(matches.elementAt(i).getScope(),entry.getScope())) {
-                System.out.println("CODIGO A SETEAR : "+matches.elementAt(i).getCode());
                 t.setPointer(matches.elementAt(i).getCode());
                 matches.elementAt(i).increaseCant();
                 removeEntry(pointer);

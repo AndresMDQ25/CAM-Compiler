@@ -25,7 +25,7 @@ import java.util.List;
 %left MULTIPLY DIVIDE
 
 %%
-programa            : bloque{System.out.println(pInv);imprimirPolaca();}
+programa            : bloque{}
 bloque              : declarativas ejecutables
                     | error {SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine());}
                     ;
@@ -193,11 +193,14 @@ cuerpoIF            : bloquesentenciasTHEN ENDIF
 bloquesentenciasTHEN: bloquesentencias {int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 3); nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BI");}
                     ;
 
-sentenciaLOOP       : LOOP FROM asignacionLOOP TO expresionLOOP BY expresionLOOP bloquesentencias 
-                    | LOOP FROM asignacionLOOP TO expresionLOOP BY error 
-                    | LOOP FROM asignacionLOOP TO error 
+sentenciaLOOP       : LOOP condicionLOOP cuerpoLOOP {int nro_p_inc = pilaLOOP.pop(); int nro_temp = pilaLOOP.pop(); completar(nro_p_inc, nro_temp);}
                     | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());}
                     ;
+cuerpoLOOP          : bloquesentencias  {int nro_p_inc = pilaLOOP.peek(); completar(nro_p_inc, nro_ploop + 3); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BI");}
+                    ;
+
+condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY expresionLOOP {nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BE");}
+                    | FROM asignacionLOOP TO expresionLOOP BY error
 
 sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS 
                     | PRINT error {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());} 
@@ -291,7 +294,9 @@ private SyntacticLogger synlog;
 
 private List pInv= new ArrayList();
 private Stack<Integer> pila = new Stack<Integer>();
+private Stack<Integer> pilaLOOP = new Stack<Integer>();
 private int nro_p;
+private int nro_ploop;
 
 private Vector<Integer> IDlist = new Vector<Integer>();
 private String currentType = new String();
@@ -342,4 +347,8 @@ private void imprimirPolaca(){
                 System.out.print(symbolsTable.getEntry((int)pInv.get(i)).getLexema()+" ");
         }
     }
+}
+
+public List getPolich() {
+    return pInv; //Luis
 }

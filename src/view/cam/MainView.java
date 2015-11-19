@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +48,8 @@ public class MainView extends javax.swing.JFrame {
         mainEditor = new javax.swing.JTextPane();
         counterPane = new javax.swing.JTextPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        textBoxPolish = new javax.swing.JTextPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textBoxSintactic = new javax.swing.JTextPane();
@@ -92,6 +95,11 @@ public class MainView extends javax.swing.JFrame {
                 jTabbedPane1MouseClicked(evt);
             }
         });
+
+        textBoxPolish.setEditable(false);
+        jScrollPane7.setViewportView(textBoxPolish);
+
+        jTabbedPane1.addTab("Output Polish", jScrollPane7);
 
         textBoxSintactic.setEditable(false);
         jScrollPane1.setViewportView(textBoxSintactic);
@@ -260,7 +268,7 @@ public class MainView extends javax.swing.JFrame {
             lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors,tokens);
             Parser p = new Parser(lexicAnalyzer,errors,synLog);            
             p.run();
-           
+                       
             
             CAMerror l=lexicAnalyzer.getError();
             Vector<String> e=errors.getLogs();
@@ -295,7 +303,32 @@ public class MainView extends javax.swing.JFrame {
             aux = st.toString();
             textBoxSymbolsTable.setText(aux);
             
-
+            List polaca = p.getPolich();
+            for (int i = 0; i < polaca.size()-1; i++) {
+                if (!(polaca.get(i) instanceof String)) {
+                    if (polaca.get(i+1) instanceof String) {
+                        String temp = (String)polaca.get(i+1);
+                        if (!(temp.equals("BI") || temp.equals("BE") || temp.equals("BF"))) {
+                            SymbolsTableEntry entry = st.getEntry((int)polaca.get(i));
+                            polaca.set(i, entry.getLexema()+entry.getScope());
+                        }
+                    }
+                    else {
+                        SymbolsTableEntry entry = st.getEntry((int)polaca.get(i));
+                        polaca.set(i, entry.getLexema()+entry.getScope());
+                    }
+                }
+            }
+            if (!(polaca.get(polaca.size()-1) instanceof String)) {
+                SymbolsTableEntry entry = st.getEntry((int)polaca.get(polaca.size()-1));
+                polaca.set(polaca.size()-1, entry.getLexema()+entry.getScope());
+            }
+            aux = new String();
+            for (int i = 0; i < polaca.size(); i++) {
+                aux += i + "    " + polaca.get(i) +"\n";
+            }
+            textBoxPolish.setText(aux);
+            
         } catch (IOException ex) {
             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -353,6 +386,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextPane mainEditor;
@@ -360,6 +394,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenu run;
     private javax.swing.JTextPane textBoxError;
     private javax.swing.JTextPane textBoxLexic;
+    private javax.swing.JTextPane textBoxPolish;
     private javax.swing.JTextPane textBoxSintactic;
     private javax.swing.JTextPane textBoxSymbolsTable;
     private javax.swing.JTextPane textBoxWarning;
