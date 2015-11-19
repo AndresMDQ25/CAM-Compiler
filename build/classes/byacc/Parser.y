@@ -25,7 +25,7 @@ import java.util.List;
 %left MULTIPLY DIVIDE
 
 %%
-programa            : bloque{System.out.println(pInv);}
+programa            : bloque{}
                     ;
 bloque              : declarativas ejecutables
                     | error {SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine());}
@@ -88,13 +88,13 @@ asignacion          : identificador EQUAL expresion {String toAdd = $2.tok.getVa
 identificador       : ID {  
                             int pointer = $1.tok.getPointer();
                             pInv.add(pointer);
-                            System.out.println("pointer: "+pointer);
-                            System.out.println("code   : "+$1.tok.getCode());
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             entry.addScope(myScope.getScopeSuffix());                                                        
                             boolean isInScope = symbolsTable.inScope(pointer);
-                            if (!isInScope)
+                            if (!isInScope) {
                                 SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());
+                                symbolsTable.removeEntry(pointer);
+                            }
                             $$ = $1;}
                     ;
 
@@ -224,7 +224,6 @@ ambitotemp          : {         int number = myScope.getScopesContained()+1;
                                 Scope currentScope = new Scope(numb, myScope);
                                 myScope.push(currentScope);
                                 myScope = currentScope;
-                                System.out.println(myScope.getScopeSuffix());
                                 } ambito
                     ;
 
@@ -233,8 +232,8 @@ ambito              : LEFTBRACE declarativasambito ejecutables RIGHTBRACE {synlo
                     | LEFTBRACE RIGHTBRACE {synlog.addLog("Empty scope ends",lexicAnalyzer.getLine());}
                     ;
 
-listaambitos        : ambitotemp {myScope = myScope.getFather();System.out.println(myScope.getScopeSuffix());} listaambitos
-                    | ambitotemp {myScope = myScope.getFather();System.out.println(myScope.getScopeSuffix());}
+listaambitos        : ambitotemp {myScope = myScope.getFather();} listaambitos
+                    | ambitotemp {myScope = myScope.getFather();}
                     ;
 
 declarativasambito  : declarativasambito declarativaambito
@@ -244,7 +243,41 @@ declarativasambito  : declarativasambito declarativaambito
 declarativaambito   : declarativa 
                     | sentenciaMY SEMICOLON 
                     ;
-sentenciaMY         : MY listavariables 
+sentenciaMY         : MY listavariablesMY 
+                    ;
+
+listavariablesMY    : listavariablesMY ID {  int pointer = $2.tok.getPointer(); 
+                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer); 
+                            entry.addScope(myScope.getScopeSuffix());
+                            Token t = entry.getToken();                                                        
+                            boolean isInScope = symbolsTable.inScope(pointer);
+                            if (!isInScope) {
+                                SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());
+                                symbolsTable.removeEntry(pointer);
+                            }
+                                
+                            else {
+                                pointer = t.getPointer(); 
+                                entry = symbolsTable.getEntry(pointer);
+                                entry.setMyScope(myScope.getScopeSuffix());
+                            }
+                                
+                        }
+                    | ID {  int pointer = $1.tok.getPointer(); 
+                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                            Token t = entry.getToken();
+                            entry.addScope(myScope.getScopeSuffix());                                                        
+                            boolean isInScope = symbolsTable.inScope(pointer);
+                            if (!isInScope) {
+                                SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());
+                                symbolsTable.removeEntry(pointer);
+                            }
+                            else {
+                                pointer = t.getPointer();
+                                entry = symbolsTable.getEntry(pointer);
+                                entry.setMyScope(myScope.getScopeSuffix());
+                            }
+                        }
                     ;
 
 
@@ -270,7 +303,6 @@ public CAMerror getSyntaxError(){return SyntaxError;}
 
 private void completar(int nro_p_inc, int num) {
     pInv.set(nro_p_inc, num);
-    System.out.println("NRO P INC: "+nro_p_inc+" "+num);
 }
 
 private int generar(String text) {

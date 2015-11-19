@@ -42,10 +42,10 @@ public class SymbolsTable {
         SymbolsTableEntry entry = this.getEntry(pointer);
         Token t = entry.getToken();
         Vector<SymbolsTableEntry> matches = new Vector<SymbolsTableEntry>();
-        
         for (int i=0;i<m.size();i++)
             if((m.elementAt(i).getLexema().equals(entry.getLexema())) && ((m.elementAt(i).getCode())!= pointer)) {
-                    matches.add(m.elementAt(i));
+                    if ((m.elementAt(i).getMyScope().equals("")) || (m.elementAt(i).getMyScope().equals(entry.getScope()))) 
+                        matches.add(m.elementAt(i));
                 }
         for (int i=matches.size()-1;i>=0;i--) {
             if (validScope(matches.elementAt(i).getScope(),entry.getScope())) {
