@@ -25,8 +25,7 @@ import java.util.List;
 %left MULTIPLY DIVIDE
 
 %%
-programa            : bloque{}
-                    ;
+programa            : bloque{System.out.println(pInv);imprimirPolaca();}
 bloque              : declarativas ejecutables
                     | error {SyntaxError.addLog("Invalid block structure",lexicAnalyzer.getLine());}
                     ;
@@ -87,14 +86,16 @@ asignacion          : identificador EQUAL expresion {String toAdd = $2.tok.getVa
 
 identificador       : ID {  
                             int pointer = $1.tok.getPointer();
-                            pInv.add(pointer);
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                            Token t = $1.tok;
                             entry.addScope(myScope.getScopeSuffix());                                                        
                             boolean isInScope = symbolsTable.inScope(pointer);
                             if (!isInScope) {
                                 SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());
                                 symbolsTable.removeEntry(pointer);
                             }
+                            pointer = t.getPointer();
+                            pInv.add(pointer);
                             $$ = $1;}
                     ;
 
@@ -330,4 +331,15 @@ public Parser(LexicAnalyzer lA, CAMerror sErr, SyntacticLogger synlog)
     this.SyntaxError = sErr;
     this.symbolsTable = lA.getST();
     this.synlog = synlog;
+}
+
+private void imprimirPolaca(){
+    for (int i=0; i<pInv.size();i++)
+    {                    
+        if (!(pInv.get(i) instanceof String))
+        {
+            if (((int)pInv.get(i))>256)
+                System.out.print(symbolsTable.getEntry((int)pInv.get(i)).getLexema()+" ");
+        }
+    }
 }
