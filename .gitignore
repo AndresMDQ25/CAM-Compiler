@@ -25,3 +25,5 @@ nbproject/private/private.properties
 build/classes/byacc/Parser.y
 nbproject/private/private.xml
 build/built-jar.properties
+src/byacc/yacc.oa01636
+build/classes/byacc/yacc.oa01636
