@@ -202,7 +202,10 @@ cuerpoLOOP          : bloquesentencias  {int nro_p_inc = pilaLOOP.peek(); comple
 condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY expresionLOOP {nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BE");}
                     | FROM asignacionLOOP TO expresionLOOP BY error
 
-sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS 
+sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {String toAdd = $3.tok.getValue();
+                                                                    pInv.add(toAdd);
+                                                                    toAdd = $1.tok.getValue();
+                                                                     pInv.add(toAdd);}
                     | PRINT error {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());} 
                     ;
 
