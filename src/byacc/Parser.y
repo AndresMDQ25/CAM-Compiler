@@ -99,9 +99,26 @@ identificador       : ID {
                             $$ = $1;}
                     ;
 
-asignacionLOOP      : identificador EQUAL expresionLOOP {String toAdd = $2.tok.getValue();
-                                                        pInv.add(toAdd);
-                                                        pilaLOOP.add(toAdd);}
+identificadorLOOP       : ID {  
+                            int pointer = $1.tok.getPointer();
+                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                            Token t = $1.tok;
+                            entry.addScope(myScope.getScopeSuffix());                                                        
+                            boolean isInScope = symbolsTable.inScope(pointer);
+                            if (!isInScope) {
+                                SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());
+                                symbolsTable.removeEntry(pointer);
+                            }
+                            pointer = t.getPointer();
+                            pInv.add(pointer);
+                            int index = pInv.size()-1;
+                            currentVariable.add(index);
+                            $$ = $1;}
+                    ;
+
+asignacionLOOP      : identificadorLOOP EQUAL expresionLOOP {String toAdd = $2.tok.getValue(); System.out.println("LLEGO A ASIGNACION LOOP");
+                                                        pInv.add(toAdd); int index = currentVariable.peek(); int variablePointer = (int) pInv.get(index); pInv.add(variablePointer); index = pInv.size()-1; pilaLOOP.push(index);
+                                                        }
                     | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
@@ -194,17 +211,18 @@ cuerpoIF            : bloquesentenciasTHEN ENDIF
 bloquesentenciasTHEN: bloquesentencias {int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 3); nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BI");}
                     ;
 
-sentenciaLOOP       : LOOP condicionLOOP cuerpoLOOP {int nro_p_inc = pilaLOOP.pop(); int nro_temp = pilaLOOP.pop(); completar(nro_p_inc, nro_temp);}
+sentenciaLOOP       : LOOP condicionLOOP cuerpoLOOP {System.out.println("LLEGO A SENTENCIA LOOP"); int nro_p_inc = pilaLOOP.pop(); completar(nro_p_inc, nro_ploop + 3); nro_p_inc = pilaLOOP.pop(); nro_ploop = generar(" "); completar(nro_ploop, nro_p_inc); nro_ploop = generar("BI");}
                     | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());}
                     ;
-cuerpoLOOP          : bloquesentencias  {   List temporal = pilasSTEP.pop();
-                                            pInv.addAll(temporal);}{int nro_p_inc = pilaLOOP.peek(); completar(nro_p_inc, nro_ploop + 3); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BI");}
+cuerpoLOOP          : bloquesentencias  {   int index = currentVariable.peek(); int variablePointer = (int) pInv.get(index); pInv.add(variablePointer); pInv.add(variablePointer);
+                                            List temporal = pilasSTEP.pop(); System.out.println(temporal);
+                                            pInv.addAll(temporal); pInv.add("+");pInv.add("=");nro_ploop += temporal.size()-1;}
                     ;
 
-condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY stepLOOP {nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BE");}
+condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY stepLOOP {nro_ploop = generar("=="); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BF");}
                     | FROM asignacionLOOP TO expresionLOOP BY error
                     ;
-stepLOOP            : expresionLOOPstep {pilasSTEP.push(currentStep); currentStep.clear();}
+stepLOOP            : expresionLOOPstep {List temp = new ArrayList(); temp.addAll(currentStep); pilasSTEP.push(temp); currentStep.clear();}
                     ;
 
 expresionLOOPstep   : expresionLOOPstep PLUSLE terminoLOOPstep {String toAdd = $2.tok.getValue();
@@ -350,8 +368,12 @@ private SyntacticLogger synlog;
 
 private List pInv= new ArrayList();
 private Stack<Integer> pila = new Stack<Integer>();
-private Stack<Integer> pilaLOOP = new Stack<Integer>();
-private Stack<List> pilasSTEP = new Stack<List>();
+
+private Stack<Integer> pilaLOOP = new Stack<Integer>(); //pila para el loop
+private Stack<Integer> currentVariable = new Stack<Integer>(); //pila para almacenar el indice de la variable asignada
+private Stack<List> pilasSTEP = new Stack<List>(); //pila de la lista de sentencias a realizar al final del bloque del LOOP
+
+
 
 private List currentStep = new ArrayList();
 private int nro_p;
