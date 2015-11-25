@@ -216,7 +216,7 @@ sentenciaLOOP       : LOOP condicionLOOP cuerpoLOOP {System.out.println("LLEGO A
                     ;
 cuerpoLOOP          : bloquesentencias  {   int index = currentVariable.peek(); int variablePointer = (int) pInv.get(index); pInv.add(variablePointer); pInv.add(variablePointer);
                                             List temporal = pilasSTEP.pop(); System.out.println(temporal);
-                                            pInv.addAll(temporal); pInv.add("+");pInv.add("=");nro_ploop += temporal.size()-1;}
+                                            pInv.addAll(temporal); pInv.add("+");pInv.add("=");nro_ploop += temporal.size()-1; currentVariable.pop();}
                     ;
 
 condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY stepLOOP {nro_ploop = generar("=="); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BF");}

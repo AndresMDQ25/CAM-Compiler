@@ -976,7 +976,7 @@ case 59:
 //#line 217 "Parser.y"
 {   int index = currentVariable.peek(); int variablePointer = (int) pInv.get(index); pInv.add(variablePointer); pInv.add(variablePointer);
                                             List temporal = pilasSTEP.pop(); System.out.println(temporal);
-                                            pInv.addAll(temporal); pInv.add("+");pInv.add("=");nro_ploop += temporal.size()-1;}
+                                            pInv.addAll(temporal); pInv.add("+");pInv.add("=");nro_ploop += temporal.size()-1; currentVariable.pop();}
 break;
 case 60:
 //#line 222 "Parser.y"
