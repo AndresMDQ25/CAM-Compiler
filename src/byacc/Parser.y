@@ -100,7 +100,8 @@ identificador       : ID {
                     ;
 
 asignacionLOOP      : identificador EQUAL expresionLOOP {String toAdd = $2.tok.getValue();
-                                                        pInv.add(toAdd);}
+                                                        pInv.add(toAdd);
+                                                        pilaLOOP.add(toAdd);}
                     | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
 
@@ -196,11 +197,63 @@ bloquesentenciasTHEN: bloquesentencias {int nro_p_inc = pila.pop(); completar(nr
 sentenciaLOOP       : LOOP condicionLOOP cuerpoLOOP {int nro_p_inc = pilaLOOP.pop(); int nro_temp = pilaLOOP.pop(); completar(nro_p_inc, nro_temp);}
                     | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());}
                     ;
-cuerpoLOOP          : bloquesentencias  {int nro_p_inc = pilaLOOP.peek(); completar(nro_p_inc, nro_ploop + 3); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BI");}
+cuerpoLOOP          : bloquesentencias  {   List temporal = pilasSTEP.pop();
+                                            pInv.addAll(temporal);}{int nro_p_inc = pilaLOOP.peek(); completar(nro_p_inc, nro_ploop + 3); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BI");}
                     ;
 
-condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY expresionLOOP {nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BE");}
+condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY stepLOOP {nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BE");}
                     | FROM asignacionLOOP TO expresionLOOP BY error
+                    ;
+stepLOOP            : expresionLOOPstep {pilasSTEP.push(currentStep); currentStep.clear();}
+                    ;
+
+expresionLOOPstep   : expresionLOOPstep PLUSLE terminoLOOPstep {String toAdd = $2.tok.getValue();
+                                                        currentStep.add(toAdd);}
+                    | expresionLOOPstep MINUN terminoLOOPstep {String toAdd = $2.tok.getValue();
+                                                        currentStep.add(toAdd);}
+                    | terminoLOOPstep
+                    ;
+
+terminoLOOPstep     : terminoLOOPstep MULTIPLY factorLOOPstep {String toAdd = $2.tok.getValue();
+                                                    currentStep.add(toAdd);}
+                    | terminoLOOPstep DIVIDE factorLOOPstep  {String toAdd = $2.tok.getValue();
+                                                    currentStep.add(toAdd);}
+                    | factorLOOPstep 
+                    ;
+
+factorLOOPstep      : identificadorstep 
+                    | CTEINT {  int pointer = $1.tok.getPointer();
+                                currentStep.add(pointer);
+                                SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                                String temp = "INTEG";
+                                entry.setSType(temp);
+                            }
+                    | MINUN CTEINT {
+                                $2.tok.setValue("-"+$2.tok.getValue());                                
+                                int pointer = $2.tok.getPointer();
+                                currentStep.add(pointer);
+                                SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                                String temp = "-"+entry.getLexema();
+                                entry.setLexema(temp);
+                                temp = "INTEG";
+                                entry.setSType(temp);
+                                }
+                    ;
+
+identificadorstep       : ID {  
+                            int pointer = $1.tok.getPointer();
+                            SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
+                            Token t = $1.tok;
+                            entry.addScope(myScope.getScopeSuffix());                                                        
+                            boolean isInScope = symbolsTable.inScope(pointer);
+                            if (!isInScope) {
+                                SyntaxError.addLog("Variable not declared",lexicAnalyzer.getLine());
+                                symbolsTable.removeEntry(pointer);
+                            }
+                            pointer = t.getPointer();
+                            currentStep.add(pointer);
+                            $$ = $1;}
+                    ;
 
 sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {String toAdd = $3.tok.getValue();
                                                                     pInv.add(toAdd);
@@ -298,6 +351,9 @@ private SyntacticLogger synlog;
 private List pInv= new ArrayList();
 private Stack<Integer> pila = new Stack<Integer>();
 private Stack<Integer> pilaLOOP = new Stack<Integer>();
+private Stack<List> pilasSTEP = new Stack<List>();
+
+private List currentStep = new ArrayList();
 private int nro_p;
 private int nro_ploop;
 
@@ -353,5 +409,5 @@ private void imprimirPolaca(){
 }
 
 public List getPolich() {
-    return pInv; //Luis
+    return pInv;
 }
