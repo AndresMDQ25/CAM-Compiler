@@ -17,15 +17,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
-/**
- *
- * @author Andres
- */
 public class MainView extends javax.swing.JFrame {
     //Consumer c;
     LexicAnalyzer lexicAnalyzer;
     SymbolsTable st;
     JFileChooser fileChooser;
+    Ensamblator ens;
     
     /**
      * Creates new form MainView
@@ -262,9 +259,11 @@ public class MainView extends javax.swing.JFrame {
 
     private void runMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_runMouseClicked
         try { 
+            st = new SymbolsTable();
             CAMerror errors = new CAMerror();
             SyntacticLogger synLog = new SyntacticLogger();
             LexicLogger tokens = new LexicLogger();
+            ens = new Ensamblator();
             lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors,tokens);
             Parser p = new Parser(lexicAnalyzer,errors,synLog);            
             p.run();
@@ -304,20 +303,13 @@ public class MainView extends javax.swing.JFrame {
             textBoxSymbolsTable.setText(aux);
             
             List polaca = p.getPolich();
+            ens.start(polaca);
             for (int i = 0; i < polaca.size()-1; i++) {
-                if (!(polaca.get(i) instanceof String)) {
-                    if (polaca.get(i+1) instanceof String) {
-                        String temp = (String)polaca.get(i+1);
-                        if (!(temp.equals("BI") || temp.equals("BE") || temp.equals("BF"))) {
-                            SymbolsTableEntry entry = st.getEntry((int)polaca.get(i));
-                            polaca.set(i, entry.getLexema()+entry.getScope());
-                        }
-                    }
-                    else {
-                        SymbolsTableEntry entry = st.getEntry((int)polaca.get(i));
-                        polaca.set(i, entry.getLexema()+entry.getScope());
-                    }
-                }
+                Object o = polaca.get(i);
+                if (o instanceof Integer) {
+                    SymbolsTableEntry entry = st.getEntry((int)o);
+                    polaca.set(i, entry.getLexema()+entry.getScope());
+                }             
             }
             if (!(polaca.get(polaca.size()-1) instanceof String)) {
                 SymbolsTableEntry entry = st.getEntry((int)polaca.get(polaca.size()-1));

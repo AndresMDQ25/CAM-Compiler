@@ -536,7 +536,8 @@ public SyntacticLogger getSynLog() {return this.synlog;}
 public CAMerror getSyntaxError(){return SyntaxError;}
 
 private void completar(int nro_p_inc, int num) {
-    pInv.set(nro_p_inc, num);
+    String asd = String.valueOf(num);
+    pInv.set(nro_p_inc, asd);
 }
 
 private int generar(String text) {
@@ -580,7 +581,7 @@ private void imprimirPolaca(){
 public List getPolich() {
     return pInv;
 }
-//#line 512 "Parser.java"
+//#line 513 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -954,7 +955,7 @@ case 51:
 break;
 case 52:
 //#line 203 "Parser.y"
-{int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 1);}
+{nro_p = pInv.size()-1; int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 1); nro_p++; nro_p = generar("L"+nro_p);}
 break;
 case 53:
 //#line 204 "Parser.y"
@@ -962,7 +963,7 @@ case 53:
 break;
 case 56:
 //#line 211 "Parser.y"
-{int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 3); nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BI");}
+{nro_p = pInv.size()-1; int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 3); nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BI"); nro_p++; nro_p = generar("L"+nro_p);}
 break;
 case 57:
 //#line 214 "Parser.y"
@@ -1046,10 +1047,10 @@ case 72:
 break;
 case 73:
 //#line 276 "Parser.y"
-{String toAdd = val_peek(1).tok.getValue();
-                                                                    pInv.add(toAdd);
-                                                                    toAdd = val_peek(3).tok.getValue();
-                                                                     pInv.add(toAdd);}
+{   int pointer = val_peek(3).tok.getPointer();                                                                    
+                                                                        pInv.add(pointer);
+                                                                        String toAdd = val_peek(3).tok.getValue();
+                                                                        pInv.add(toAdd);}
 break;
 case 74:
 //#line 280 "Parser.y"
@@ -1156,7 +1157,7 @@ case 96:
                             }
                         }
 break;
-//#line 1083 "Parser.java"
+//#line 1084 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

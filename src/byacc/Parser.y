@@ -200,7 +200,7 @@ constant            : CTEINT {
                             }
                     ;
 
-sentenciaIF         : IF LEFTPARENTHESIS condicionIF RIGHTPARENTHESIS THEN cuerpoIF {int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 1);}
+sentenciaIF         : IF LEFTPARENTHESIS condicionIF RIGHTPARENTHESIS THEN cuerpoIF {nro_p = pInv.size()-1; int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 1); nro_p++; nro_p = generar("L"+nro_p);}
                     | IF error {SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine());}
                     ;
 
@@ -208,7 +208,7 @@ cuerpoIF            : bloquesentenciasTHEN ENDIF
                     | bloquesentenciasTHEN ELSE bloquesentencias ENDIF
                     ;
 
-bloquesentenciasTHEN: bloquesentencias {int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 3); nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BI");}
+bloquesentenciasTHEN: bloquesentencias {nro_p = pInv.size()-1; int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 3); nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BI"); nro_p++; nro_p = generar("L"+nro_p);}
                     ;
 
 sentenciaLOOP       : LOOP condicionLOOP cuerpoLOOP {System.out.println("LLEGO A SENTENCIA LOOP"); int nro_p_inc = pilaLOOP.pop(); completar(nro_p_inc, nro_ploop + 3); nro_p_inc = pilaLOOP.pop(); nro_ploop = generar(" "); completar(nro_ploop, nro_p_inc); nro_ploop = generar("BI");}
@@ -273,10 +273,10 @@ identificadorstep       : ID {
                             $$ = $1;}
                     ;
 
-sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {String toAdd = $3.tok.getValue();
-                                                                    pInv.add(toAdd);
-                                                                    toAdd = $1.tok.getValue();
-                                                                     pInv.add(toAdd);}
+sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {   int pointer = $1.tok.getPointer();                                                                    
+                                                                        pInv.add(pointer);
+                                                                        String toAdd = $1.tok.getValue();
+                                                                        pInv.add(toAdd);}
                     | PRINT error {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());} 
                     ;
 
@@ -389,7 +389,8 @@ public SyntacticLogger getSynLog() {return this.synlog;}
 public CAMerror getSyntaxError(){return SyntaxError;}
 
 private void completar(int nro_p_inc, int num) {
-    pInv.set(nro_p_inc, num);
+    String asd = String.valueOf(num);
+    pInv.set(nro_p_inc, asd);
 }
 
 private int generar(String text) {
