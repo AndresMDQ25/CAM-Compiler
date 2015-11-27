@@ -83,7 +83,47 @@ public class Ensamblator {
                                     }                                    
                                     break;
                                 }
-                    case "==": {break;}
+                    case "==": {
+                                    int var1 = (Integer)stack.pop();
+                                    int var2 = (Integer)stack.pop();
+                                    if (var1 < 257) {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            String toAdd = "CMP R"+var1+", _"+var2;
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                    }
+                                    else {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP _"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            int currentRegister = getFreeRegister();
+                                            if (currentRegister != -1) {
+                                                String toAdd = "MOV R"+currentRegister+", _"+var1;
+                                                assembler.add(toAdd);
+                                                toAdd = "CMP R"+currentRegister+", _"+var2;
+                                                registerOcupation.set(currentRegister, false);
+                                                assembler.add(toAdd);
+                                            }
+                                            else
+                                                System.out.println("NO HAY MAS REGISTROS EN ==, FIJATE QUE ONDA");
+                                        }
+                                    }        
+                                    i++;
+                                    String jump = (String)polaca.get(i);
+                                    String toAdd = "JE L"+jump;
+                                    assembler.add(toAdd);
+                                    break;
+                                }
                     case "*" :  {
                                     int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
@@ -244,15 +284,222 @@ public class Ensamblator {
                                     }                                    
                                     break;
                                 }
-                    case "<" : {break;}
-                    case ">" : {break;}
-                    case "<=": {break;}
-                    case ">=": {break;}
-                    case "<>": {break;}
+                    case "<" :  {
+                                    int var1 = (Integer)stack.pop();
+                                    int var2 = (Integer)stack.pop();
+                                    if (var1 < 257) {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            String toAdd = "CMP R"+var1+", _"+var2;
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                    }
+                                    else {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP _"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            int currentRegister = getFreeRegister();
+                                            if (currentRegister != -1) {
+                                                String toAdd = "MOV R"+currentRegister+", _"+var1;
+                                                assembler.add(toAdd);
+                                                toAdd = "CMP R"+currentRegister+", _"+var2;
+                                                registerOcupation.set(currentRegister, false);
+                                                assembler.add(toAdd);
+                                            }
+                                            else
+                                                System.out.println("NO HAY MAS REGISTROS EN <, FIJATE QUE ONDA");
+                                        }
+                                    }
+                                    i++;
+                                    String jump = (String)polaca.get(i);
+                                    String toAdd = "JL L"+jump;
+                                    assembler.add(toAdd);
+                                    break;
+                                }
+                    case ">" : {
+                                    int var1 = (Integer)stack.pop();
+                                    int var2 = (Integer)stack.pop();
+                                    if (var1 < 257) {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            String toAdd = "CMP R"+var1+", _"+var2;
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                    }
+                                    else {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP _"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            int currentRegister = getFreeRegister();
+                                            if (currentRegister != -1) {
+                                                String toAdd = "MOV R"+currentRegister+", _"+var1;
+                                                assembler.add(toAdd);
+                                                toAdd = "CMP R"+currentRegister+", _"+var2;
+                                                registerOcupation.set(currentRegister, false);
+                                                assembler.add(toAdd);
+                                            }
+                                            else
+                                                System.out.println("NO HAY MAS REGISTROS EN >, FIJATE QUE ONDA");
+                                        }
+                                    }     
+                                    i++;
+                                    String jump = (String)polaca.get(i);
+                                    String toAdd = "JG L"+jump;
+                                    assembler.add(toAdd);
+                                    break;
+                                }
+                    case "<=": {
+                                    int var1 = (Integer)stack.pop();
+                                    int var2 = (Integer)stack.pop();
+                                    if (var1 < 257) {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            String toAdd = "CMP R"+var1+", _"+var2;
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                    }
+                                    else {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP _"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            int currentRegister = getFreeRegister();
+                                            if (currentRegister != -1) {
+                                                String toAdd = "MOV R"+currentRegister+", _"+var1;
+                                                assembler.add(toAdd);
+                                                toAdd = "CMP R"+currentRegister+", _"+var2;
+                                                registerOcupation.set(currentRegister, false);
+                                                assembler.add(toAdd);
+                                            }
+                                            else
+                                                System.out.println("NO HAY MAS REGISTROS EN <=, FIJATE QUE ONDA");
+                                        }
+                                    }     
+                                    i++;
+                                    String jump = (String)polaca.get(i);
+                                    String toAdd = "JLE L"+jump;
+                                    assembler.add(toAdd);
+                                    break;
+                                }
+                    case ">=": {
+                                    int var1 = (Integer)stack.pop();
+                                    int var2 = (Integer)stack.pop();
+                                    if (var1 < 257) {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            String toAdd = "CMP R"+var1+", _"+var2;
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                    }
+                                    else {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP _"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            int currentRegister = getFreeRegister();
+                                            if (currentRegister != -1) {
+                                                String toAdd = "MOV R"+currentRegister+", _"+var1;
+                                                assembler.add(toAdd);
+                                                toAdd = "CMP R"+currentRegister+", _"+var2;
+                                                registerOcupation.set(currentRegister, false);
+                                                assembler.add(toAdd);
+                                            }
+                                            else
+                                                System.out.println("NO HAY MAS REGISTROS EN >=, FIJATE QUE ONDA");
+                                        }
+                                    }           
+                                    i++;
+                                    String jump = (String)polaca.get(i);
+                                    String toAdd = "JGE L"+jump;
+                                    assembler.add(toAdd);
+                                    break;
+                                }
+                    case "<>": {
+                                    int var1 = (Integer)stack.pop();
+                                    int var2 = (Integer)stack.pop();
+                                    if (var1 < 257) {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            String toAdd = "CMP R"+var1+", _"+var2;
+                                            registerOcupation.set(var1, false);
+                                            assembler.add(toAdd);
+                                        }
+                                    }
+                                    else {
+                                        if (var2 < 257) {
+                                            String toAdd = "CMP _"+var1+", R"+var2;
+                                            registerOcupation.set(var2, false);
+                                            assembler.add(toAdd);
+                                        }
+                                        else {
+                                            int currentRegister = getFreeRegister();
+                                            if (currentRegister != -1) {
+                                                String toAdd = "MOV R"+currentRegister+", _"+var1;
+                                                assembler.add(toAdd);
+                                                toAdd = "CMP R"+currentRegister+", _"+var2;
+                                                registerOcupation.set(currentRegister, false);
+                                                assembler.add(toAdd);
+                                            }
+                                            else
+                                                System.out.println("NO HAY MAS REGISTROS EN <>, FIJATE QUE ONDA");
+                                        }
+                                    }        
+                                    i++;
+                                    String jump = (String)polaca.get(i);
+                                    String toAdd = "JNE L"+jump;
+                                    assembler.add(toAdd);
+                                    break;
+                                }
                     case "PRINT":{break;}
                     case "BI":{break;}
                     case "BF":{break;}
-                    default: {break;} // es un numero antes del branch
+                    default:    { // es un numero antes del branch
+                                    String unomaslargo = (String)o;
+                                    if (unomaslargo.startsWith("L")) {
+                                        String toAdd = unomaslargo+":";
+                                        assembler.add(toAdd);
+                                    }                                        
+                                    break;
+                                }
                 }
             }
             else 
