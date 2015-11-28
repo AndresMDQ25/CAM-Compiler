@@ -45,8 +45,8 @@ public class Ensamblator {
                 System.out.println("String: "+(String)o+" R0: "+registerOcupation.get(0)+" R1: "+registerOcupation.get(1)+" R2: "+registerOcupation.get(2)+" R3: "+registerOcupation.get(3));
                 switch((String)o) {
                     case "=" :  {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "MOV R"+var1+", R"+var2;
@@ -84,8 +84,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case "==": {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "CMP R"+var1+", R"+var2;
@@ -125,8 +125,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case "*" :  {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "MUL R"+var1+", R"+var2;
@@ -168,8 +168,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case "/" : {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "DIV R"+var1+", R"+var2;
@@ -211,8 +211,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case "+" :  {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "ADD R"+var1+", R"+var2;
@@ -248,8 +248,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case "-" :  {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "SUB R"+var1+", R"+var2;
@@ -285,8 +285,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case "<" :  {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "CMP R"+var1+", R"+var2;
@@ -326,8 +326,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case ">" : {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "CMP R"+var1+", R"+var2;
@@ -367,8 +367,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case "<=": {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "CMP R"+var1+", R"+var2;
@@ -408,8 +408,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case ">=": {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "CMP R"+var1+", R"+var2;
@@ -449,8 +449,8 @@ public class Ensamblator {
                                     break;
                                 }
                     case "<>": {
-                                    int var1 = (Integer)stack.pop();
                                     int var2 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
                                         if (var2 < 257) {
                                             String toAdd = "CMP R"+var1+", R"+var2;
@@ -489,15 +489,23 @@ public class Ensamblator {
                                     assembler.add(toAdd);
                                     break;
                                 }
+                    case "BI" : {break;}
+                    case "BF" : {break;}
                     case "PRINT":{break;}
-                    case "BI":{break;}
-                    case "BF":{break;}
                     default:    { // es un numero antes del branch
                                     String unomaslargo = (String)o;
                                     if (unomaslargo.startsWith("L")) {
                                         String toAdd = unomaslargo+":";
                                         assembler.add(toAdd);
-                                    }                                        
+                                    }
+                                    else {
+                                        i++;
+                                        String jump = (String)polaca.get(i);
+                                        if (jump.equals("BI")) {
+                                            String toAdd = "JMP L"+unomaslargo;
+                                            assembler.add(toAdd);
+                                        }
+                                    }
                                     break;
                                 }
                 }

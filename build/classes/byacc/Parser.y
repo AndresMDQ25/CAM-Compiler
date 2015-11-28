@@ -117,7 +117,8 @@ identificadorLOOP       : ID {
                     ;
 
 asignacionLOOP      : identificadorLOOP EQUAL expresionLOOP {String toAdd = $2.tok.getValue(); System.out.println("LLEGO A ASIGNACION LOOP");
-                                                        pInv.add(toAdd); int index = currentVariable.peek(); int variablePointer = (int) pInv.get(index); pInv.add(variablePointer); index = pInv.size()-1; pilaLOOP.push(index);
+                                                        pInv.add(toAdd); int index = currentVariable.peek(); int variablePointer = (int) pInv.get(index); pInv.add(variablePointer); index = pInv.size()-1; pilaLOOP.push(index+1);
+                                                        nro_ploop = pInv.size()-1; nro_ploop = generar("L"+(nro_ploop+1));
                                                         }
                     | ID error {SyntaxError.addLog("Invalid assigment",lexicAnalyzer.getLine());}
                     ;
@@ -211,7 +212,7 @@ cuerpoIF            : bloquesentenciasTHEN ENDIF
 bloquesentenciasTHEN: bloquesentencias {nro_p = pInv.size()-1; int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 3); nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BI"); nro_p++; nro_p = generar("L"+nro_p);}
                     ;
 
-sentenciaLOOP       : LOOP condicionLOOP cuerpoLOOP {System.out.println("LLEGO A SENTENCIA LOOP"); int nro_p_inc = pilaLOOP.pop(); completar(nro_p_inc, nro_ploop + 3); nro_p_inc = pilaLOOP.pop(); nro_ploop = generar(" "); completar(nro_ploop, nro_p_inc); nro_ploop = generar("BI");}
+sentenciaLOOP       : LOOP condicionLOOP cuerpoLOOP {nro_ploop = pInv.size()-1; int nro_p_inc = pilaLOOP.pop(); completar(nro_p_inc, nro_ploop + 3); nro_p_inc = pilaLOOP.pop(); nro_ploop = generar(" "); completar(nro_ploop, nro_p_inc); nro_ploop = generar("BI"); nro_ploop = generar("L"+(nro_ploop+1));}
                     | LOOP error {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());}
                     ;
 cuerpoLOOP          : bloquesentencias  {   int index = currentVariable.peek(); int variablePointer = (int) pInv.get(index); pInv.add(variablePointer); pInv.add(variablePointer);
@@ -273,7 +274,7 @@ identificadorstep       : ID {
                             $$ = $1;}
                     ;
 
-sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {   int pointer = $1.tok.getPointer();                                                                    
+sentenciaPRINT      : PRINT LEFTPARENTHESIS STRING RIGHTPARENTHESIS {   int pointer = $3.tok.getPointer();                                                                    
                                                                         pInv.add(pointer);
                                                                         String toAdd = $1.tok.getValue();
                                                                         pInv.add(toAdd);}

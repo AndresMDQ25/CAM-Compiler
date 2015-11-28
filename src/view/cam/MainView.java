@@ -304,6 +304,7 @@ public class MainView extends javax.swing.JFrame {
             
             List polaca = p.getPolich();
             ens.start(polaca);
+            System.out.println(polaca);
             for (int i = 0; i < polaca.size()-1; i++) {
                 Object o = polaca.get(i);
                 if (o instanceof Integer) {
