@@ -262,11 +262,11 @@ public class MainView extends javax.swing.JFrame {
             st = new SymbolsTable();
             CAMerror errors = new CAMerror();
             SyntacticLogger synLog = new SyntacticLogger();
-            LexicLogger tokens = new LexicLogger();
-            ens = new Ensamblator();
+            LexicLogger tokens = new LexicLogger();            
             lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors,tokens);
             Parser p = new Parser(lexicAnalyzer,errors,synLog);            
             p.run();
+            ens = new Ensamblator(st);
                        
             
             CAMerror l=lexicAnalyzer.getError();
