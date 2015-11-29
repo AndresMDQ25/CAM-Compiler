@@ -546,7 +546,10 @@ public class Ensamblator {
                     case "BI" : {break;}
                     case "BF" : {break;}
                     case "PRINT":   {
-                                        
+                                        int var = (Integer)stack.pop();
+                                        SymbolsTableEntry entry1 = st.getEntry(var);
+                                        String toAdd = "invoke StdOut, "+entry1.getName();
+                                        code.add(toAdd);
                                         break;
                                     }
                     default:    { // es un numero antes del branch
