@@ -18,14 +18,19 @@ public class Ensamblator {
     private Vector<String> code = new Vector<String>();
     private Vector<String> data = new Vector<String>();
     private List registerOcupation = new ArrayList<Boolean>();
+    private List <String> registerName = new ArrayList<String>();
     private Stack stack = new Stack();
     private SymbolsTable st;
     
     public Ensamblator(SymbolsTable st) {
         registerOcupation.add(false); //R1
+        registerName.add("AX");
         registerOcupation.add(false); //R2
+        registerName.add("BX");
         registerOcupation.add(false); //R3
+        registerName.add("CX");
         registerOcupation.add(false); //R4
+        registerName.add("DX");
         this.st  = st;
     }
     
@@ -54,25 +59,28 @@ public class Ensamblator {
                 switch((String)o) {
                     case "=" :  {
                                     int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
+                                    int var1 = (Integer)stack.pop();                                    
                                     if (var1 < 257) {
-                                        if (var2 < 257) {
-                                            String toAdd = "MOV R"+var1+", R"+var2;
+                                        String currentRegisterName1  = registerName.get(var1);
+                                        if (var2 < 257) {                                            
+                                            String currentRegisterName2  = registerName.get(var2);                                    
+                                            String toAdd = "MOV "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
                                             SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "MOV R"+var1+", _"+entry.getName();
+                                            String toAdd = "MOV "+currentRegisterName1+", _"+entry.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);                                    
                                             SymbolsTableEntry entry = st.getEntry(var1);
-                                            String toAdd = "MOV _"+entry.getName()+", R"+var2;
+                                            String toAdd = "MOV _"+entry.getName()+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                             stack.push(var1);
@@ -82,7 +90,7 @@ public class Ensamblator {
                                             SymbolsTableEntry entry2 = st.getEntry(var2);
                                             SymbolsTableEntry entry1 = st.getEntry(var1);
                                             if (currentRegister != -1) {
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry2.getName();
+                                                String toAdd = "MOV R"+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 code.add(toAdd);
                                                 toAdd = "MOV _"+entry1.getName()+", R"+currentRegister;
                                                 code.add(toAdd);
@@ -99,23 +107,26 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "CMP R"+var1+", _"+entry.getName();
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry.getName();
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);
                                             SymbolsTableEntry entry = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry.getName()+", R"+var2;
+                                            String toAdd = "CMP _"+entry.getName()+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                         }
@@ -123,10 +134,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -144,15 +155,17 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "MUL R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "MUL "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
                                             SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "MUL R"+var1+", _"+entry.getName();
+                                            String toAdd = "MUL "+currentRegisterName1+", _"+entry.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
@@ -162,10 +175,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "MUL R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "MUL "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 code.add(toAdd);
                                                 registerOcupation.set(var2, false);
                                                 stack.push(currentRegister);
@@ -175,10 +188,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "MUL R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "MUL "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 code.add(toAdd);
                                                 stack.push(currentRegister);
                                             }
@@ -192,15 +205,17 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "DIV R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "DIV "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
                                             SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "DIV R"+var1+", _"+entry.getName();
+                                            String toAdd = "DIV "+currentRegisterName1+", _"+entry.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
@@ -210,10 +225,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "DIV R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "DIV "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 code.add(toAdd);
                                                 registerOcupation.set(var2, false);
                                                 stack.push(currentRegister);
@@ -223,10 +238,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "DIV R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "DIV "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 code.add(toAdd);
                                                 stack.push(currentRegister);
                                             }
@@ -240,23 +255,26 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "ADD R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "ADD "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
                                             SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "ADD R"+var1+", _"+entry.getName();
+                                            String toAdd = "ADD "+currentRegisterName1+", _"+entry.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);
                                             SymbolsTableEntry entry = st.getEntry(var1);
-                                            String toAdd = "ADD R"+var2+", _"+entry.getName();
+                                            String toAdd = "ADD "+currentRegisterName2+", _"+entry.getName();
                                             code.add(toAdd);
                                             stack.push(var2);
                                         }
@@ -264,10 +282,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+var1;
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1;
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "ADD R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "ADD "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 code.add(toAdd);
                                                 stack.push(currentRegister);
                                             }
@@ -281,23 +299,26 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "SUB R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "SUB "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
                                             SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "SUB R"+var1+", _"+entry2.getName();
+                                            String toAdd = "SUB "+currentRegisterName1+", _"+entry2.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);
                                             SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "SUB R"+var2+", _"+entry1.getName();
+                                            String toAdd = "SUB "+currentRegisterName2+", _"+entry1.getName();
                                             code.add(toAdd);
                                             stack.push(var2);
                                         }
@@ -305,10 +326,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "SUB R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "SUB "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 code.add(toAdd);
                                                 stack.push(currentRegister);
                                             }
@@ -322,23 +343,26 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP R"+var1+", _"+entry2.getName();
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);
                                             SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", R"+var2;
+                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                         }
@@ -346,10 +370,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -367,23 +391,26 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP R"+var1+", _"+entry2.getName();
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);
                                             SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", R"+var2;
+                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                         }
@@ -391,10 +418,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -412,23 +439,26 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP R"+var1+", _"+entry2.getName();
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);
                                             SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", R"+var2;
+                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                         }
@@ -436,10 +466,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -457,23 +487,26 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP R"+var1+", _"+entry2.getName();
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);
                                             SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", R"+var2;
+                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                         }
@@ -481,10 +514,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -502,23 +535,26 @@ public class Ensamblator {
                                     int var2 = (Integer)stack.pop();
                                     int var1 = (Integer)stack.pop();
                                     if (var1 < 257) {
+                                        String currentRegisterName1  = registerName.get(var1);
                                         if (var2 < 257) {
-                                            String toAdd = "CMP R"+var1+", R"+var2;
+                                            String currentRegisterName2  = registerName.get(var2);
+                                            String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP R"+var1+", _"+entry2.getName();
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
                                             registerOcupation.set(var1, false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
                                         if (var2 < 257) {
+                                            String currentRegisterName2  = registerName.get(var2);
                                             SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", R"+var2;
+                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
                                             registerOcupation.set(var2, false);
                                             code.add(toAdd);
                                         }
@@ -526,10 +562,10 @@ public class Ensamblator {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
                                                 SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV R"+currentRegister+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
                                                 code.add(toAdd);
                                                 SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP R"+currentRegister+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
