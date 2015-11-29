@@ -6,13 +6,21 @@ import java.util.Vector;
 public class SymbolsTable {
     
     private final Vector<SymbolsTableEntry> m;
+    private int stringCounter;
     
     public SymbolsTable(){
         m=new Vector();
+        stringCounter = 0;
     }        
     private void addEntry(Token t){
-        if ((t.getCode()==258) || (t.getCode()==257) || (t.getCode()==294) || (t.getCode()==277))
+        if ((t.getCode()==258) || (t.getCode()==257) || (t.getCode()==294))
             m.add(new SymbolsTableEntry(256+m.size()+1, t.getCode(), t.getValue(),1,t));
+        else if ((t.getCode()==277)) {
+            SymbolsTableEntry estring = new SymbolsTableEntry(256+m.size()+1, t.getCode(), t.getValue(),1,t);
+            stringCounter++;
+            estring.setSType(Integer.toString(stringCounter));
+            m.add(estring);
+        }
     }
     
     public SymbolsTableEntry getEntry(int code){
@@ -36,6 +44,15 @@ public class SymbolsTable {
             s+='\n';
         }
         return s;
+    }
+    
+    public Vector<String> getNames() {
+        Vector<String> names = new Vector<String>();
+        for (int i = 0; i < m.size(); i++) {
+            String temp = m.elementAt(i).getASMName();
+            names.add(temp);
+        }
+        return names;
     }
         
     public boolean inScope(int pointer) {

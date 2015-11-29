@@ -54,7 +54,17 @@ public class SymbolsTableEntry {
         return this.t;
     }
     public String getName() {
-        return this.ltype+this.lexema;
+        return this.lexema+this.scope; 
+    }
+    public String getASMName() {
+        if (this.ltype == 277) {
+            String lexeme = this.lexema;
+            String toReturn = "string"+this.stype+" db "+this.lexema+", 0";
+            return toReturn;
+        }
+        else {
+            return "_"+this.lexema+this.scope+" dw 0";
+        }
     }
     public int getCant() {
         return this.cant;

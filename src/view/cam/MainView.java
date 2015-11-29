@@ -263,7 +263,7 @@ public class MainView extends javax.swing.JFrame {
             CAMerror errors = new CAMerror();
             SyntacticLogger synLog = new SyntacticLogger();
             LexicLogger tokens = new LexicLogger();
-            ens = new Ensamblator();
+            
             lexicAnalyzer = new LexicAnalyzer(fileChooser.getSelectedFile().getAbsolutePath(),st, errors,tokens);
             Parser p = new Parser(lexicAnalyzer,errors,synLog);            
             p.run();
@@ -303,6 +303,7 @@ public class MainView extends javax.swing.JFrame {
             textBoxSymbolsTable.setText(aux);
             
             List polaca = p.getPolich();
+            ens = new Ensamblator(st);
             ens.start(polaca);
             System.out.println(polaca);
             for (int i = 0; i < polaca.size()-1; i++) {
