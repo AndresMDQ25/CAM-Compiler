@@ -65,6 +65,9 @@ public class SymbolsTableEntry {
             String toReturn = "addr string"+this.stype+" db "+this.lexema+", 0";
             return toReturn;
         }
+        else if (this.stype.equals("ULONG")) {
+            return "_"+this.lexema+this.scope+" dd 0";
+        }
         else {
             return "_"+this.lexema+this.scope+" dw 0";
         }
