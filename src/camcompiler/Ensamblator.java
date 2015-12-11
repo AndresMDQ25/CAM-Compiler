@@ -19,7 +19,7 @@ public class Ensamblator {
     private Vector<String> data = new Vector<String>();
     private List registerOcupation = new ArrayList<Boolean>();
     private List <String> registerName = new ArrayList<String>();
-    private Stack stack = new Stack();
+    private Stack<StackElement> stack = new Stack<StackElement>();
     private SymbolsTable st;
     
     public Ensamblator(SymbolsTable st) {
@@ -58,41 +58,39 @@ public class Ensamblator {
                 System.out.println("String: "+(String)o+" R0: "+registerOcupation.get(0)+" R1: "+registerOcupation.get(1)+" R2: "+registerOcupation.get(2)+" R3: "+registerOcupation.get(3));
                 switch((String)o) {
                     case "=" :  {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();                                    
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {                                            
-                                            String currentRegisterName2  = registerName.get(var2);                                    
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();                                    
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {                                            
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());                                    
                                             String toAdd = "MOV "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
-                                            SymbolsTableEntry entry = st.getEntry(var2);
+                                            SymbolsTableEntry entry = st.getEntry(var2.getPointer());
                                             String toAdd = "MOV "+currentRegisterName1+", _"+entry.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);                                    
-                                            SymbolsTableEntry entry = st.getEntry(var1);
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());                                    
+                                            SymbolsTableEntry entry = st.getEntry(var1.getPointer());
                                             String toAdd = "MOV _"+entry.getName()+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                             }
                                         else {
                                             int currentRegister = getFreeRegister();
-                                            SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            SymbolsTableEntry entry1 = st.getEntry(var1);
                                             if (currentRegister != -1) {
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 code.add(toAdd);
-                                                toAdd = "MOV _"+entry1.getName()+", "+currentRegister;
+                                                toAdd = "MOV _"+var1.getName()+", "+currentRegister;
                                                 code.add(toAdd);
                                                 registerOcupation.set(currentRegister, false);
                                                 stack.push(var1);
@@ -104,40 +102,36 @@ public class Ensamblator {
                                     break;
                                 }
                     case "==": {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
-                                            registerOcupation.set(var1, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
-                                            SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry.getName();
-                                            registerOcupation.set(var1, false);
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+var2.getName();
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
-                                            SymbolsTableEntry entry = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry.getName()+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
+                                            String toAdd = "CMP _"+var1.getName()+", "+currentRegisterName2;
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -152,48 +146,49 @@ public class Ensamblator {
                                     break;
                                 }
                     case "*" :  {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "MUL "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
-                                            SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "MUL "+currentRegisterName1+", _"+entry.getName();
+                                            String toAdd = "MUL "+currentRegisterName1+", _"+var2.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
+                                        if (var2.getType().equals("Register")) {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "MUL "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "MUL "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 code.add(toAdd);
-                                                registerOcupation.set(var2, false);
-                                                stack.push(currentRegister);
+                                                registerOcupation.set(var2.getRegNumber(), false);
+                                                StackElement element = new StackElement();
+                                                element.setType("Register");
+                                                element.setRegNumber(currentRegister);
+                                                stack.push(element);
                                             }
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "MUL "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "MUL "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 code.add(toAdd);
-                                                stack.push(currentRegister);
+                                                StackElement element = new StackElement();
+                                                element.setType("Register");
+                                                element.setRegNumber(currentRegister);
+                                                stack.push(element);
                                             }
                                             else
                                                 System.out.println("NO HAY MAS REGISTROS EN *, FIJATE QUE ONDA");
@@ -202,48 +197,49 @@ public class Ensamblator {
                                     break;
                                 }
                     case "/" : {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "DIV "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
-                                            SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "DIV "+currentRegisterName1+", _"+entry.getName();
+                                            String toAdd = "DIV "+currentRegisterName1+", _"+var2.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
+                                        if (var2.getType().equals("Register")) {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "DIV "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "DIV "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 code.add(toAdd);
-                                                registerOcupation.set(var2, false);
-                                                stack.push(currentRegister);
+                                                registerOcupation.set(var2.getRegNumber(), false);
+                                                StackElement element = new StackElement();
+                                                element.setType("Register");
+                                                element.setRegNumber(currentRegister);
+                                                stack.push(element);
                                             }
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "DIV "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "DIV "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 code.add(toAdd);
-                                                stack.push(currentRegister);
+                                                StackElement element = new StackElement();
+                                                element.setType("Register");
+                                                element.setRegNumber(currentRegister);
+                                                stack.push(element);
                                             }
                                             else
                                                 System.out.println("NO HAY MAS REGISTROS EN *, FIJATE QUE ONDA");
@@ -252,42 +248,41 @@ public class Ensamblator {
                                     break;
                                 }
                     case "+" :  {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "ADD "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
-                                            SymbolsTableEntry entry = st.getEntry(var2);
-                                            String toAdd = "ADD "+currentRegisterName1+", _"+entry.getName();
+                                            String toAdd = "ADD "+currentRegisterName1+", _"+var2.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
-                                            SymbolsTableEntry entry = st.getEntry(var1);
-                                            String toAdd = "ADD "+currentRegisterName2+", _"+entry.getName();
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
+                                            String toAdd = "ADD "+currentRegisterName2+", _"+var1.getName();
                                             code.add(toAdd);
                                             stack.push(var2);
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "ADD "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "ADD "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 code.add(toAdd);
-                                                stack.push(currentRegister);
+                                                StackElement element = new StackElement();
+                                                element.setType("Register");
+                                                element.setRegNumber(currentRegister);
+                                                stack.push(element);
                                             }
                                             else
                                                 System.out.println("NO HAY MAS REGISTROS EN +, FIJATE QUE ONDA");
@@ -296,42 +291,41 @@ public class Ensamblator {
                                     break;
                                 }
                     case "-" :  {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "SUB "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                         else {
-                                            SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "SUB "+currentRegisterName1+", _"+entry2.getName();
+                                            String toAdd = "SUB "+currentRegisterName1+", _"+var2.getName();
                                             code.add(toAdd);
                                             stack.push(var1);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
-                                            SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "SUB "+currentRegisterName2+", _"+entry1.getName();
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
+                                            String toAdd = "SUB "+currentRegisterName2+", _"+var1.getName();
                                             code.add(toAdd);
                                             stack.push(var2);
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "SUB "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "SUB "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 code.add(toAdd);
-                                                stack.push(currentRegister);
+                                                StackElement element = new StackElement();
+                                                element.setType("Register");
+                                                element.setRegNumber(currentRegister);
+                                                stack.push(element);
                                             }
                                             else
                                                 System.out.println("NO HAY MAS REGISTROS EN -, FIJATE QUE ONDA");
@@ -340,40 +334,36 @@ public class Ensamblator {
                                     break;
                                 }
                     case "<" :  {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
-                                            registerOcupation.set(var1, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
-                                            SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
-                                            registerOcupation.set(var1, false);
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+var2.getName();
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
-                                            SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
+                                            String toAdd = "CMP _"+var1.getName()+", "+currentRegisterName2;
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -388,40 +378,36 @@ public class Ensamblator {
                                     break;
                                 }
                     case ">" : {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
-                                            registerOcupation.set(var1, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
-                                            SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
-                                            registerOcupation.set(var1, false);
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+var2.getName();
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
-                                            SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
+                                            String toAdd = "CMP _"+var1.getName()+", "+currentRegisterName2;
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -436,40 +422,36 @@ public class Ensamblator {
                                     break;
                                 }
                     case "<=": {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
-                                            registerOcupation.set(var1, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
-                                            SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
-                                            registerOcupation.set(var1, false);
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+var2.getName();
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
-                                            SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
+                                            String toAdd = "CMP _"+var1.getName()+", "+currentRegisterName2;
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -484,40 +466,36 @@ public class Ensamblator {
                                     break;
                                 }
                     case ">=": {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
-                                            registerOcupation.set(var1, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
-                                            SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
-                                            registerOcupation.set(var1, false);
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+var2.getName();
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
-                                            SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
+                                            String toAdd = "CMP _"+var1.getName()+", "+currentRegisterName2;
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -532,40 +510,36 @@ public class Ensamblator {
                                     break;
                                 }
                     case "<>": {
-                                    int var2 = (Integer)stack.pop();
-                                    int var1 = (Integer)stack.pop();
-                                    if (var1 < 257) {
-                                        String currentRegisterName1  = registerName.get(var1);
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
+                                    StackElement var2 = stack.pop();
+                                    StackElement var1 = stack.pop();
+                                    if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1  = registerName.get(var1.getRegNumber());
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
                                             String toAdd = "CMP "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
-                                            registerOcupation.set(var1, false);
+                                            registerOcupation.set(var2.getRegNumber(), false);
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
-                                            SymbolsTableEntry entry2 = st.getEntry(var2);
-                                            String toAdd = "CMP "+currentRegisterName1+", _"+entry2.getName();
-                                            registerOcupation.set(var1, false);
+                                            String toAdd = "CMP "+currentRegisterName1+", _"+var2.getName();
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                     }
                                     else {
-                                        if (var2 < 257) {
-                                            String currentRegisterName2  = registerName.get(var2);
-                                            SymbolsTableEntry entry1 = st.getEntry(var1);
-                                            String toAdd = "CMP _"+entry1.getName()+", "+currentRegisterName2;
-                                            registerOcupation.set(var2, false);
+                                        if (var2.getType().equals("Register")) {
+                                            String currentRegisterName2  = registerName.get(var2.getRegNumber());
+                                            String toAdd = "CMP _"+var1.getName()+", "+currentRegisterName2;
+                                            registerOcupation.set(var2.getRegNumber(), false);
                                             code.add(toAdd);
                                         }
                                         else {
                                             int currentRegister = getFreeRegister();
                                             if (currentRegister != -1) {
-                                                SymbolsTableEntry entry1 = st.getEntry(var1);
-                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+entry1.getName();
+                                                String toAdd = "MOV "+registerName.get(currentRegister)+", _"+var1.getName();
                                                 code.add(toAdd);
-                                                SymbolsTableEntry entry2 = st.getEntry(var2);
-                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+entry2.getName();
+                                                toAdd = "CMP "+registerName.get(currentRegister)+", _"+var2.getName();
                                                 registerOcupation.set(currentRegister, false);
                                                 code.add(toAdd);
                                             }
@@ -582,9 +556,8 @@ public class Ensamblator {
                     case "BI" : {break;}
                     case "BF" : {break;}
                     case "PRINT":   {
-                                        int var = (Integer)stack.pop();
-                                        SymbolsTableEntry entry1 = st.getEntry(var);
-                                        String toAdd = "invoke StdOut, "+entry1.getName();
+                                        StackElement var = stack.pop();
+                                        String toAdd = "invoke StdOut, "+var.getName();
                                         code.add(toAdd);
                                         break;
                                     }
@@ -606,8 +579,20 @@ public class Ensamblator {
                                 }
                 }
             }
-            else 
-                stack.add(o);
+            else {
+                StackElement element = new StackElement();
+                int var = (Integer)o;
+                element.setType("Number");
+                SymbolsTableEntry entry = st.getEntry(var);
+                String type = entry.getSType();
+                if (type.equals("ULONG")) 
+                    element.setSize(32);
+                else 
+                    element.setSize(16);
+                element.setName(entry.getName());
+                element.setPointer(var);
+                stack.add(element);
+            } 
         }
         System.out.println(code);
         return null;
