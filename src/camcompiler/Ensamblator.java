@@ -75,7 +75,6 @@ public class Ensamblator {
             Object o = polaca.get(i);
             
             if (o instanceof String) {
-                System.out.println("String: "+(String)o+" R0: "+registerOcupation.get(0)+" R1: "+registerOcupation.get(1)+" R2: "+registerOcupation.get(2)+" R3: "+registerOcupation.get(3));
                 switch((String)o) {
                     case "=" :  {
                                     StackElement var2 = stack.pop();
@@ -168,52 +167,141 @@ public class Ensamblator {
                     case "*" :  {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
-                                    if (var1.getType().equals("Register")) {
-                                        String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
-                                        if (var2.getType().equals("Register")) {
-                                            String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());
-                                            String toAdd = "MUL "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2.getRegNumber(), false);
-                                            code.add(toAdd);
-                                            stack.push(var1);
+                                    if (var1.getSize() == var2.getSize()) { //MISMO TAMAÑO INT-INT o ULONG-ULONG
+                                        if (var1.getType().equals("Register")) {
+                                        String currentRegisterName1 = getRegName(var1.getRegNumber(), var1.getSize());
+                                            if (var2.getType().equals("Register")) {
+                                                String currentRegisterName2 = getRegName(var2.getRegNumber(), var2.getSize());
+                                                String toAdd;
+                                                if (var1.getSize() == 16) 
+                                                    toAdd = "IMUL "+currentRegisterName1+", "+currentRegisterName2;
+                                                else
+                                                    toAdd = "MUL "+currentRegisterName1+", "+currentRegisterName2;
+                                                registerOcupation.set(var2.getRegNumber(), false);
+                                                code.add(toAdd);
+                                                stack.push(var1);
+                                            }
+                                            else {
+                                                String toAdd;
+                                                if (var1.getSize() == 16) 
+                                                    toAdd = "IMUL "+currentRegisterName1+", _"+var2.getName();
+                                                else 
+                                                    toAdd = "MUL "+currentRegisterName1+", _"+var2.getName();
+                                                code.add(toAdd);
+                                                stack.push(var1);
+                                            }
                                         }
                                         else {
-                                            String toAdd = "MUL "+currentRegisterName1+", _"+var2.getName();
-                                            code.add(toAdd);
-                                            stack.push(var1);
+                                            if (var2.getType().equals("Register")) {
+                                                String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());
+                                                String toAdd;
+                                                if (var1.getSize() == 16)
+                                                    toAdd = "IMUL "+currentRegisterName2+", _"+var1.getName();
+                                                else
+                                                    toAdd = "MUL "+currentRegisterName2+", _"+var1.getName();
+                                                code.add(toAdd);
+                                                stack.push(var2);
+                                            }
+                                            else {
+                                                int currentRegister = getFreeRegister();
+                                                int size = var1.getSize(); //puede ser cualquiera de los dos, son del mismo tamaño
+                                                if (currentRegister != -1) {
+                                                    String toAdd = "MOV "+getRegName(currentRegister, size)+", _"+var1.getName();
+                                                    code.add(toAdd);
+                                                    if (var1.getSize() == 16)
+                                                        toAdd = "IMUL "+getRegName(currentRegister, size)+", _"+var2.getName();
+                                                    else
+                                                        toAdd = "MUL "+getRegName(currentRegister, size)+", _"+var2.getName();
+                                                    code.add(toAdd);
+                                                    StackElement element = new StackElement();
+                                                    element.setType("Register");
+                                                    element.setRegNumber(currentRegister);
+                                                    element.setSize(var1.getSize());
+                                                    stack.push(element);
+                                                }
+                                                else
+                                                    System.out.println("NO HAY MAS REGISTROS EN +, FIJATE QUE ONDA");
+                                            }
                                         }
                                     }
-                                    else {
-                                        if (var2.getType().equals("Register")) {
-                                            int currentRegister = getFreeRegister(); int size = var1.getSize();
-                                            if (currentRegister != -1) {
-                                                String toAdd = "MOV "+getRegName(currentRegister, size)+", _"+var1.getName();
+                                    else { //DISTINTO TAMAÑO var1 y var2, HAY QUE CONVERTIR A 32
+                                        StackElement var16; //seteo el elemento de 16 bits
+                                        StackElement var32;
+                                        if (var1.getSize() == 16) {
+                                            var16 = var1;
+                                            var32 = var2;
+                                        }
+                                        else { //var2 es de 16
+                                            var16 = var2;
+                                            var32 = var1;
+                                        }
+                                        checkPositive(var16);
+                                        //ahora igual que antes:
+                                        if (var16.getType().equals("Register")) {
+                                            String currentRegisterName1  = getRegName(var16.getRegNumber(), var16.getSize());
+                                            if (var32.getType().equals("Register")) { //los dos son registros
+                                                String currentRegisterName2 = getRegName(var32.getRegNumber(), var32.getSize());
+                                                int currentRegister = getFreeRegister(); //pido un reg de 32
+                                                int size = 32; 
+                                                String toAdd = "MOV "+getRegName(currentRegister, 32)+", 0"; //seteo el nuevo con 0
                                                 code.add(toAdd);
-                                                toAdd = "MUL "+getRegName(currentRegister, size)+", _"+var2.getName();
+                                                toAdd = "MOV "+getRegName(currentRegister, 16)+", "+currentRegisterName1; //seteo la parte chica con el de 16 
                                                 code.add(toAdd);
-                                                registerOcupation.set(var2.getRegNumber(), false);
+                                                toAdd = "MUL "+currentRegisterName2+", "+getRegName(currentRegister, 32); //le sumo al de 32 el nuevo
+                                                code.add(toAdd);
+                                                registerOcupation.set(var16.getRegNumber(), false); //libero el de 16
+                                                registerOcupation.set(currentRegister, false); //libero el nuevo de 32
+                                                stack.push(var32); //pushea el registro de 32 con el resultado de sumar el mismo mas el de 16 pasado a 32
+                                            }
+                                            else {
+                                                int currentRegister = getFreeRegister(); //pido un reg de 32
+                                                int size = 32;
+                                                String toAdd = "MOV "+getRegName(currentRegister, 32)+", 0"; //seteo el nuevo con 0
+                                                code.add(toAdd);
+                                                toAdd = "MOV "+getRegName(currentRegister, 16)+", "+currentRegisterName1; //seteo la parte chica con el de 16 
+                                                code.add(toAdd);
+                                                toAdd = "MUL "+getRegName(currentRegister, 32)+", _"+var32.getName(); //le sumo al reg nuevo la var de 32
+                                                code.add(toAdd);
+                                                registerOcupation.set(var16.getRegNumber(), false); //libero el de 16
                                                 StackElement element = new StackElement();
                                                 element.setType("Register");
                                                 element.setRegNumber(currentRegister);
-                                                stack.push(element);
+                                                element.setSize(32);
+                                                stack.push(element); //creo un nuevo stackElement con el Reg nuevo de 32 y lo pusheo
                                             }
                                         }
                                         else {
-                                            int currentRegister = getFreeRegister(); int size = var1.getSize();
-                                            if (currentRegister != -1) {
-                                                String toAdd = "MOV "+getRegName(currentRegister, size)+", _"+var1.getName();
+                                            if (var32.getType().equals("Register")) { //el de 16 NO es un registro, y el de 32 si
+                                                String currentRegisterName2 = getRegName(var32.getRegNumber(), var32.getSize());
+                                                int currentRegister = getFreeRegister(); //pido un reg de 32 para convertir la var de 16
+                                                int size = 32; 
+                                                String toAdd = "MOV "+getRegName(currentRegister, 32)+", 0"; //seteo el nuevo con 0
                                                 code.add(toAdd);
-                                                toAdd = "MUL "+getRegName(currentRegister, size)+", _"+var2.getName();
+                                                toAdd = "MOV "+getRegName(currentRegister, 16)+", _"+var16.getName(); //seteo la parte chica con el de 16 
+                                                code.add(toAdd);
+                                                toAdd = "MUL "+currentRegisterName2+", "+getRegName(currentRegister, 32); //le sumo al de 32 el nuevo
+                                                code.add(toAdd);
+                                                registerOcupation.set(currentRegister, false); //libero el nuevo de 32
+                                                stack.push(var32); //pushea el registro de 32 con el resultado de sumar el mismo mas el de 16 pasado a 32
+                                            }
+                                            else {//ninguno de los dos es un reg
+                                                int currentRegister = getFreeRegister(); //pido un reg de 32
+                                                int size = 32;
+                                                String toAdd = "MOV "+getRegName(currentRegister, 32)+", 0"; //seteo el nuevo con 0
+                                                code.add(toAdd);
+                                                toAdd = "MOV "+getRegName(currentRegister, 16)+", _"+var16.getName(); //seteo la parte chica con el de 16 
+                                                code.add(toAdd);
+                                                toAdd = "MUL "+getRegName(currentRegister, 32)+", _"+var32.getName(); //le sumo al reg nuevo la var de 32
                                                 code.add(toAdd);
                                                 StackElement element = new StackElement();
                                                 element.setType("Register");
                                                 element.setRegNumber(currentRegister);
-                                                stack.push(element);
+                                                element.setSize(32);
+                                                stack.push(element); //creo un nuevo stackElement con el Reg nuevo de 32 y lo pusheo
                                             }
-                                            else
-                                                System.out.println("NO HAY MAS REGISTROS EN *, FIJATE QUE ONDA");
                                         }
-                                    }                                    
+                                    }
+                                                                        
                                     break;
                                 }
                     case "/" : {
