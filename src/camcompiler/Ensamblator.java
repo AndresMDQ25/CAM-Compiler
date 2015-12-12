@@ -34,6 +34,16 @@ public class Ensamblator {
         this.st  = st;
     }
     
+    private void divideByZero(StackElement sE){
+        if(sE.getType().equals("Register")){
+            code.add("CMP "+getRegName(sE.getRegNumber(),sE.getSize())+",0");            
+        }
+        else{
+            code.add("CMP _"+sE.getName()+",0");            
+        }        
+        code.add("JE ERRORZERO");
+    }
+    
     private String getRegName(int number, int size){
         if (size == 32){
             String toReturn  ="E"+registerName.get(number);
@@ -51,7 +61,7 @@ public class Ensamblator {
         else{
             code.add("CMP _"+sE.getName()+",0");            
         }        
-        code.add("JL ERROR");               
+        code.add("JL ERRORNEGATIVE");               
     }
     
     private int getFreeRegister() {
