@@ -15,6 +15,7 @@ import java.util.Vector;
  * @author Andres
  */
 public class Ensamblator {
+    private Vector<String> preface = new Vector<String>();
     private Vector<String> code = new Vector<String>();
     private Vector<String> data = new Vector<String>();
     private List registerOcupation = new ArrayList<Boolean>();
@@ -74,13 +75,33 @@ public class Ensamblator {
         return -1;
     }
     
-    public List start(List polaca) {
-        
+    public List start(List polaca) {        
+        preface.add(".586");        
+        preface.add(".model flat, stdcall");
+        preface.add("option casemap :none");
+        preface.add("include \\masm32\\include\\windows.inc ");
+        preface.add("include \\masm32\\include\\kernel32.inc ");
+        preface.add("include \\masm32\\include\\masm32.inc"); 
+        preface.add("includelib \\masm32\\lib\\kernel32.lib"); 
+        preface.add("includelib \\masm32\\lib\\masm32.lib");
         Vector<String> names = st.getNames();
+        data.add(".data");
         for (int e = 0; e < names.size(); e++) {
             data.add(names.elementAt(e));
         }
         System.out.println(data);
+        data.add("addr errorNegative db ERROR_NEGATIVE, 0");
+        data.add("addr errorZero db ERROR_ZERO, 0");
+        code.add(".code");
+        code.add("start:");
+        code.add("jmp BEGIN");
+        code.add("ERRORZERO:");
+        code.add("invoke StdOut, errorZero");
+        code.add("invoke ExitProcess,0"); 
+        code.add("ERRORNEGATIVE:");
+        code.add("invoke StdOut, errorNegative");
+        code.add("invoke ExitProcess,0"); 
+        code.add("BEGIN:");
         for (int i = 0; i < polaca.size(); i++) {
             Object o = polaca.get(i);
             
@@ -793,13 +814,17 @@ public class Ensamblator {
                 element.setPointer(var);
                 stack.add(element);
             } 
+        }        
+        code.add("end start");
+        for (String a : preface) {
+            System.out.println(a);
         }
         for (String a : data) {
             System.out.println(a);
         }
         for (String a : code) {
             System.out.println(a);
-        }
+        }                
         return null;
     }
     
