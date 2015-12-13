@@ -201,57 +201,179 @@ public class Ensamblator {
                                     if (var1.getSize() == var2.getSize()) { //MISMO TAMAÑO INT-INT o ULONG-ULONG
                                         if (var1.getType().equals("Register")) {
                                         String currentRegisterName1 = getRegName(var1.getRegNumber(), var1.getSize());
-                                            if (var2.getType().equals("Register")) {
+                                            if (var2.getType().equals("Register")) { //el segundo es un registro
                                                 String currentRegisterName2 = getRegName(var2.getRegNumber(), var2.getSize());
+                                                //acomodo registros
+                                                //me fijo si alguno de los dos es A
                                                 String toAdd;
-                                                if (var1.getSize() == 16) 
-                                                    toAdd = "IMUL "+currentRegisterName1+", "+currentRegisterName2;
-                                                else
-                                                    toAdd = "MUL "+currentRegisterName1+", "+currentRegisterName2;
-                                                registerOcupation.set(var2.getRegNumber(), false);
-                                                code.add(toAdd);
-                                                stack.push(var1);
+                                                if (var1.getRegNumber() == 0) {
+                                                    if (var1.getSize() == 16) 
+                                                        toAdd = "IMUL "+currentRegisterName1+", "+currentRegisterName2;
+                                                    else
+                                                        toAdd = "MUL "+currentRegisterName1+", "+currentRegisterName2;
+                                                    registerOcupation.set(var2.getRegNumber(), false);
+                                                    code.add(toAdd);
+                                                    stack.push(var1);
+                                                }
+                                                else if (var2.getRegNumber() == 0) {
+                                                    if (var1.getSize() == 16) 
+                                                        toAdd = "IMUL "+currentRegisterName2+", "+currentRegisterName1;
+                                                    else
+                                                        toAdd = "MUL "+currentRegisterName2+", "+currentRegisterName1;
+                                                    registerOcupation.set(var1.getRegNumber(), false);
+                                                    code.add(toAdd);
+                                                    stack.push(var2);
+                                                }
+                                                else {
+                                                    if ((boolean)registerOcupation.get(0) == true) {
+                                                        toAdd = "PUSH EAX";
+                                                        code.add(toAdd);
+                                                    }
+                                                    if (var1.getSize() == 16) {
+                                                        toAdd = "MOV AX, "+currentRegisterName2;
+                                                        code.add(toAdd);
+                                                        toAdd = "IMUL AX, "+currentRegisterName1;
+                                                        code.add(toAdd);
+                                                        toAdd = "MOV "+currentRegisterName1+", AX";
+                                                        code.add(toAdd);
+                                                        registerOcupation.set(var2.getRegNumber(), false);
+                                                        stack.push(var1);
+                                                    } 
+                                                    else {
+                                                        toAdd = "MOV EAX, "+currentRegisterName2;
+                                                        code.add(toAdd);
+                                                        toAdd = "MUL EAX, "+currentRegisterName1;
+                                                        code.add(toAdd);
+                                                        toAdd = "MOV "+currentRegisterName1+", EAX";
+                                                        code.add(toAdd);
+                                                        registerOcupation.set(var2.getRegNumber(), false);
+                                                        stack.push(var1);
+                                                    }
+                                                    if ((boolean)registerOcupation.get(0) == true) {
+                                                        toAdd = "POP EAX";
+                                                        code.add(toAdd);
+                                                    }
+                                                }
                                             }
-                                            else {
+                                            else { //el segundo NO es un registro, es una variable. El primero es un registro.
                                                 String toAdd;
-                                                if (var1.getSize() == 16) 
-                                                    toAdd = "IMUL "+currentRegisterName1+", _"+var2.getName();
-                                                else 
-                                                    toAdd = "MUL "+currentRegisterName1+", _"+var2.getName();
-                                                code.add(toAdd);
-                                                stack.push(var1);
+                                                if (var1.getRegNumber() == 0) { //el primero ES AX/EAX
+                                                    if (var1.getSize() == 16) 
+                                                        toAdd = "IMUL "+currentRegisterName1+", _"+var2.getName();
+                                                    else
+                                                        toAdd = "MUL "+currentRegisterName1+", _"+var2.getName();
+                                                    code.add(toAdd);
+                                                    stack.push(var1);
+                                                }
+                                                else { //el primero NO es AX/EAX
+                                                    if ((boolean)registerOcupation.get(0) == true) { //si el primero esta ocupado
+                                                        toAdd = "PUSH EAX";
+                                                        code.add(toAdd);
+                                                    }
+                                                    if (var1.getSize() == 16) {
+                                                        toAdd = "MOV AX, _"+var2.getName();
+                                                        code.add(toAdd);
+                                                        toAdd = "IMUL AX, "+currentRegisterName1;
+                                                        code.add(toAdd);
+                                                        toAdd = "MOV "+currentRegisterName1+", AX";
+                                                        code.add(toAdd);
+                                                        stack.push(var1);
+                                                    } 
+                                                    else {
+                                                        toAdd = "MOV EAX, _"+var2.getName();
+                                                        code.add(toAdd);
+                                                        toAdd = "MUL EAX, "+currentRegisterName1;
+                                                        code.add(toAdd);
+                                                        toAdd = "MOV "+currentRegisterName1+", EAX";
+                                                        code.add(toAdd);
+                                                        stack.push(var1);
+                                                    }
+                                                    if ((boolean)registerOcupation.get(0) == true) {
+                                                        toAdd = "POP EAX";
+                                                        code.add(toAdd);
+                                                    }
+                                                }
                                             }
                                         }
-                                        else {
-                                            if (var2.getType().equals("Register")) {
+                                        else { //el primero NO es un registro
+                                            if (var2.getType().equals("Register")) { //el segundo ES un registro
                                                 String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());
                                                 String toAdd;
-                                                if (var1.getSize() == 16)
-                                                    toAdd = "IMUL "+currentRegisterName2+", _"+var1.getName();
-                                                else
-                                                    toAdd = "MUL "+currentRegisterName2+", _"+var1.getName();
-                                                code.add(toAdd);
-                                                stack.push(var2);
+                                                if (var2.getRegNumber() == 0) { //el segundo ES AX/EAX
+                                                    if (var1.getSize() == 16) 
+                                                        toAdd = "IMUL "+currentRegisterName2+", _"+var1.getName();
+                                                    else
+                                                        toAdd = "MUL "+currentRegisterName2+", _"+var1.getName();
+                                                    code.add(toAdd);
+                                                    stack.push(var1);
+                                                }
+                                                else { //el segundo NO es AX/EAX
+                                                    if ((boolean)registerOcupation.get(0) == true) { //si el primero esta ocupado
+                                                        toAdd = "PUSH EAX";
+                                                        code.add(toAdd);
+                                                    }
+                                                    if (var2.getSize() == 16) {
+                                                        toAdd = "MOV AX, _"+var1.getName();
+                                                        code.add(toAdd);
+                                                        toAdd = "IMUL AX, "+currentRegisterName2;
+                                                        code.add(toAdd);
+                                                        toAdd = "MOV "+currentRegisterName2+", AX";
+                                                        code.add(toAdd);
+                                                        stack.push(var2);
+                                                    } 
+                                                    else {
+                                                        toAdd = "MOV EAX, _"+var1.getName();
+                                                        code.add(toAdd);
+                                                        toAdd = "MUL EAX, "+currentRegisterName2;
+                                                        code.add(toAdd);
+                                                        toAdd = "MOV "+currentRegisterName2+", EAX";
+                                                        code.add(toAdd);
+                                                        stack.push(var2);
+                                                    }
+                                                    if ((boolean)registerOcupation.get(0) == true) {
+                                                        toAdd = "POP EAX";
+                                                        code.add(toAdd);
+                                                    }
+                                                }
                                             }
-                                            else {
+                                            else { //ninguno de los dos es un registro
+                                                String toAdd;
                                                 int currentRegister = getFreeRegister();
                                                 int size = var1.getSize(); //puede ser cualquiera de los dos, son del mismo tamaño
-                                                if (currentRegister != -1) {
-                                                    String toAdd = "MOV "+getRegName(currentRegister, size)+", _"+var1.getName();
+                                                if ((boolean)registerOcupation.get(0) == true) { //si el primero esta ocupado
+                                                        toAdd = "PUSH EAX";
+                                                        code.add(toAdd);
+                                                    }
+                                                if (size == 16) {
+                                                    toAdd = "MOV AX, _"+var1.getName();
                                                     code.add(toAdd);
-                                                    if (var1.getSize() == 16)
-                                                        toAdd = "IMUL "+getRegName(currentRegister, size)+", _"+var2.getName();
-                                                    else
-                                                        toAdd = "MUL "+getRegName(currentRegister, size)+", _"+var2.getName();
+                                                    toAdd = "IMUL AX, "+var2.getName();
+                                                    code.add(toAdd);
+                                                    toAdd = "MOV "+getRegName(currentRegister, size)+", AX";
                                                     code.add(toAdd);
                                                     StackElement element = new StackElement();
                                                     element.setType("Register");
                                                     element.setRegNumber(currentRegister);
-                                                    element.setSize(var1.getSize());
+                                                    element.setSize(size);
+                                                    stack.push(element);
+                                                } 
+                                                else {
+                                                    toAdd = "MOV EAX, _"+var1.getName();
+                                                    code.add(toAdd);
+                                                    toAdd = "MUL EAX, "+var2.getName();
+                                                    code.add(toAdd);
+                                                    toAdd = "MOV "+getRegName(currentRegister, size)+", EAX";
+                                                    code.add(toAdd);
+                                                    StackElement element = new StackElement();
+                                                    element.setType("Register");
+                                                    element.setRegNumber(currentRegister);
+                                                    element.setSize(size);
                                                     stack.push(element);
                                                 }
-                                                else
-                                                    System.out.println("NO HAY MAS REGISTROS EN +, FIJATE QUE ONDA");
+                                                if ((boolean)registerOcupation.get(0) == true) {
+                                                    toAdd = "POP EAX";
+                                                    code.add(toAdd);
+                                                }
                                             }
                                         }
                                     }
