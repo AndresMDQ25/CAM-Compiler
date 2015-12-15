@@ -62,7 +62,7 @@ public class SymbolsTableEntry {
     public String getASMName() {
         if (this.ltype == 277) {
             String lexeme = this.lexema;
-            String toReturn = "string"+this.stype+" db \""+this.lexema+"\", 0";
+            String toReturn = "string"+this.stype+" db \""+this.lexema+"\", 10";
             return toReturn;
         }
         else if (this.stype.equals("ULONG")) {

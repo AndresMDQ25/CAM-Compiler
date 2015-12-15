@@ -182,8 +182,8 @@ public class Ensamblator {
             data.add(names.elementAt(e));
         }
         System.out.println(data);
-        data.add("errorNegative db \"ERROR_NEGATIVE\", 0");
-        data.add("errorZero db \"ERROR_ZERO\", 0");
+        data.add("errorNegative db \"ERROR_NEGATIVE\", 10");
+        data.add("errorZero db \"ERROR_ZERO\", 10");
         code.add(".code");
         code.add("start:");
         code.add("jmp BEGIN");
@@ -283,7 +283,7 @@ public class Ensamblator {
                                     }        
                                     i++;
                                     String jump = (String)polaca.get(i);
-                                    String toAdd = "JE L"+jump;
+                                    String toAdd = "JNE L"+jump;
                                     code.add(toAdd);
                                     break;
                                 }

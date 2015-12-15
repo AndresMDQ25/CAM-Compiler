@@ -333,6 +333,10 @@ public class MainView extends javax.swing.JFrame {
             
             String outpath = path.substring(0, path.length()-3);
             outpath = outpath.concat("asm");
+            
+            
+            
+            outpath = "D:\\caca\\program.asm"; //DESPUES ELIMINAR ESTA LINEA
                 
             /*File selectedFile = new File(outpath);
             FileWriter out;
@@ -343,12 +347,7 @@ public class MainView extends javax.swing.JFrame {
             
             for (Object output1 : output) {
                 String a = (String) output1;
-                //out.write(a);
-                //out.write("\n");
-                
-                System.out.println("ASDASDASDASDASDASD"+a);
                 out.println(a);
-                //out.print("\n");
             }
             out.close();
             
