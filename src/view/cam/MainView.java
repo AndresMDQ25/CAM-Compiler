@@ -7,6 +7,7 @@ package view.cam;
 
 import byacc.*;
 import camcompiler.*;
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
 public class MainView extends javax.swing.JFrame {
@@ -27,8 +29,10 @@ public class MainView extends javax.swing.JFrame {
     /**
      * Creates new form MainView
      */    
-    public MainView() {
+    public MainView() throws IOException {
         initComponents();
+        Image i = ImageIO.read(getClass().getResource("/icono.png"));
+        setIconImage(i);
     }
 
     /**
@@ -360,7 +364,11 @@ public class MainView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainView().setVisible(true);
+                try {
+                    new MainView().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
