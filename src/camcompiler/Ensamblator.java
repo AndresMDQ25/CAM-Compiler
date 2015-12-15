@@ -306,7 +306,7 @@ public class Ensamblator {
                                                     if (var1.getSize() == 16) 
                                                         toAdd = "IMUL "+currentRegisterName1+", "+currentRegisterName2;
                                                     else
-                                                        toAdd = "MUL "+currentRegisterName1+", "+currentRegisterName2;
+                                                        toAdd = "MUL "+currentRegisterName2;
                                                     registerOcupation.set(var2.getRegNumber(), false);
                                                     code.add(toAdd);
                                                     stack.push(var1);
@@ -315,7 +315,7 @@ public class Ensamblator {
                                                     if (var1.getSize() == 16) 
                                                         toAdd = "IMUL "+currentRegisterName2+", "+currentRegisterName1;
                                                     else
-                                                        toAdd = "MUL "+currentRegisterName2+", "+currentRegisterName1;
+                                                        toAdd = "MUL "+currentRegisterName1;
                                                     registerOcupation.set(var1.getRegNumber(), false);
                                                     code.add(toAdd);
                                                     stack.push(var2);
@@ -338,7 +338,7 @@ public class Ensamblator {
                                                     else {
                                                         toAdd = "MOV EAX, "+currentRegisterName2;
                                                         code.add(toAdd);
-                                                        toAdd = "MUL EAX, "+currentRegisterName1;
+                                                        toAdd = "MUL "+currentRegisterName1;
                                                         code.add(toAdd);
                                                         toAdd = "MOV "+currentRegisterName1+", EAX";
                                                         code.add(toAdd);
@@ -365,7 +365,7 @@ public class Ensamblator {
                                                     if (var1.getSize() == 16) 
                                                         toAdd = "IMUL "+currentRegisterName1+", _"+var2.getName();
                                                     else
-                                                        toAdd = "MUL "+currentRegisterName1+", _"+var2.getName();
+                                                        toAdd = "MUL "+var2.getName();
                                                     code.add(toAdd);
                                                     stack.push(var1);
                                                     if ((boolean)registerOcupation.get(3) == true) {
@@ -394,7 +394,7 @@ public class Ensamblator {
                                                     else {
                                                         toAdd = "MOV EAX, _"+var2.getName();
                                                         code.add(toAdd);
-                                                        toAdd = "MUL EAX, "+currentRegisterName1;
+                                                        toAdd = "MUL "+currentRegisterName1;
                                                         code.add(toAdd);
                                                         toAdd = "MOV "+currentRegisterName1+", EAX";
                                                         code.add(toAdd);
@@ -419,7 +419,7 @@ public class Ensamblator {
                                                     if (var1.getSize() == 16) 
                                                         toAdd = "IMUL "+currentRegisterName2+", _"+var1.getName();
                                                     else
-                                                        toAdd = "MUL "+currentRegisterName2+", _"+var1.getName();
+                                                        toAdd = "MUL "+var1.getName();
                                                     code.add(toAdd);
                                                     stack.push(var1);
                                                 }
@@ -444,7 +444,7 @@ public class Ensamblator {
                                                     else {
                                                         toAdd = "MOV EAX, _"+var1.getName();
                                                         code.add(toAdd);
-                                                        toAdd = "MUL EAX, "+currentRegisterName2;
+                                                        toAdd = "MUL "+currentRegisterName2;
                                                         code.add(toAdd);
                                                         toAdd = "MOV "+currentRegisterName2+", EAX";
                                                         code.add(toAdd);
@@ -488,7 +488,7 @@ public class Ensamblator {
                                                 else {
                                                     toAdd = "MOV EAX, _"+var1.getName();
                                                     code.add(toAdd);
-                                                    toAdd = "MUL EAX, "+var2.getName();
+                                                    toAdd = "MUL "+var2.getName();
                                                     code.add(toAdd);
                                                     toAdd = "MOV "+getRegName(currentRegister, size)+", EAX";
                                                     code.add(toAdd);
@@ -543,7 +543,7 @@ public class Ensamblator {
                                         String toAdd;
                                         toAdd = "MOV EAX, "+getRegName(var16.getRegNumber(), 32);
                                         code.add(toAdd);
-                                        toAdd = "MUL EAX, "+getRegName(var32.getRegNumber(), 32);
+                                        toAdd = "MUL "+getRegName(var32.getRegNumber(), 32);
                                         code.add(toAdd);
                                         
                                         if (pullD)  {
@@ -1039,16 +1039,21 @@ public class Ensamblator {
         }        
         code.add("invoke ExitProcess, 0"); 
         code.add("end start");
+        
+        List toReturn = new ArrayList<String>();
         for (String a : preface) {
             System.out.println(a);
+            toReturn.add(a);
         }
         for (String a : data) {
             System.out.println(a);
+            toReturn.add(a);
         }
         for (String a : code) {
             System.out.println(a);
+            toReturn.add(a);
         }                
-        return null;
+        return toReturn;
     }
     
 }

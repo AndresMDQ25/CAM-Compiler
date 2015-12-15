@@ -9,9 +9,13 @@ import byacc.*;
 import camcompiler.*;
 import java.awt.Image;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -25,6 +29,7 @@ public class MainView extends javax.swing.JFrame {
     SymbolsTable st;
     JFileChooser fileChooser;
     Ensamblator ens;
+    String path;
     
     /**
      * Creates new form MainView
@@ -223,7 +228,8 @@ public class MainView extends javax.swing.JFrame {
             try {
                 File selectedFile;
                 FileReader in;
-                in = new FileReader(fileChooser.getSelectedFile().getAbsolutePath());
+                path = fileChooser.getSelectedFile().getAbsolutePath();
+                in = new FileReader(path);
                 st = new SymbolsTable();
              
                 BufferedReader br = new BufferedReader(in);
@@ -300,13 +306,13 @@ public class MainView extends javax.swing.JFrame {
                 aux+=(e.elementAt(i)+"\n");
             textBoxLexic.setText(aux);
             
-            aux = new String();
             aux = st.toString();
             textBoxSymbolsTable.setText(aux);
             
             List polaca = p.getPolich();
             ens = new Ensamblator(st);
-            ens.start(polaca);
+            List output = new ArrayList<String>();
+            output = ens.start(polaca);
             System.out.println(polaca);
             for (int i = 0; i < polaca.size()-1; i++) {
                 Object o = polaca.get(i);
@@ -324,6 +330,29 @@ public class MainView extends javax.swing.JFrame {
                 aux += i + "    " + polaca.get(i) +"\n";
             }
             textBoxPolish.setText(aux);
+            
+            String outpath = path.substring(0, path.length()-3);
+            outpath = outpath.concat("asm");
+                
+            /*File selectedFile = new File(outpath);
+            FileWriter out;
+            out = new FileWriter(selectedFile, true);*/
+            
+            
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outpath, false)));
+            
+            for (Object output1 : output) {
+                String a = (String) output1;
+                //out.write(a);
+                //out.write("\n");
+                
+                System.out.println("ASDASDASDASDASDASD"+a);
+                out.println(a);
+                //out.print("\n");
+            }
+            out.close();
+            
+            
             
         } catch (IOException ex) {
             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);

@@ -66,10 +66,16 @@ public class SymbolsTableEntry {
             return toReturn;
         }
         else if (this.stype.equals("ULONG")) {
-            return "_"+this.lexema+this.scope+" dd 0";
+            if (this.ltype == 258)
+                return "_"+this.lexema+this.scope+" dd "+this.lexema;
+            else
+                return "_"+this.lexema+this.scope+" dd 0";   
         }
         else {
-            return "_"+this.lexema+this.scope+" dw 0";
+            if (this.ltype == 258)
+                return "_"+this.lexema+this.scope+" dw "+this.lexema;
+            else
+                return "_"+this.lexema+this.scope+" dw 0"; 
         }
     }
     public int getCant() {
