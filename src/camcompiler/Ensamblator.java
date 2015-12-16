@@ -75,21 +75,32 @@ public class Ensamblator {
         return -1;
     }
     
-    private boolean freeA(StackElement reg) {
-        if (reg.getRegNumber() == 0) { //reg es EAX
+    private boolean freeA(StackElement reg1, StackElement reg2) {
+        if (reg1.getRegNumber() == 0) { //reg1 es EAX
             int currentRegister = getFreeRegister(); //pido un reg de 32
-            int size = 32;
-            String toAdd = "MOV "+getRegName(currentRegister, 32)+", 0";
-            code.add(toAdd);
+            String toAdd;
             toAdd = "MOV "+getRegName(currentRegister, 32)+", EAX"; //lo paso de A al nuevo
             code.add(toAdd);
             //ya pase el de 32 a otro lado
             toAdd = "MOV EAX, 0";
-            code.add(toAdd); //libero A
-            reg = new StackElement();
-            reg.setType("Register");
-            reg.setRegNumber(currentRegister);
-            reg.setSize(32);
+            code.add(toAdd); 
+            reg1.setType("Register");
+            reg1.setRegNumber(currentRegister);
+            System.out.println("CURRENT REGISTER ES -------------------------------------------------------------------- "+reg1.getRegNumber());
+            reg1.setSize(32);
+            return false;
+        }
+        else if (reg2.getRegNumber() == 0) { //reg2 es EAX
+            int currentRegister = getFreeRegister(); //pido un reg de 32
+            String toAdd;
+            toAdd = "MOV "+getRegName(currentRegister, 32)+", EAX"; //lo paso de A al nuevo
+            code.add(toAdd);
+            //ya pase el de 32 a otro lado
+            toAdd = "MOV EAX, 0";
+            code.add(toAdd); 
+            reg2.setType("Register");
+            reg2.setRegNumber(currentRegister);
+            reg2.setSize(32);
             return false;
         }
         else if ((boolean)registerOcupation.get(0) == true) { //este registro no es A, pero igual hay que liberarlo si esta ocupado
@@ -102,21 +113,33 @@ public class Ensamblator {
         return false;
     }
     
-    private boolean freeD(StackElement reg) {
-        if (reg.getRegNumber() == 3) { //reg es EDX
+    private boolean freeD(StackElement reg1, StackElement reg2) {
+        if (reg1.getRegNumber() == 3) { //reg1 es EDX
             int currentRegister = getFreeRegister(); //pido un reg de 32
-            int size = 32;
-            String toAdd = "MOV "+getRegName(currentRegister, 32)+", 0";
-            code.add(toAdd);
+            String toAdd;
             toAdd = "MOV "+getRegName(currentRegister, 32)+", EDX"; //lo paso de D al nuevo
             code.add(toAdd);
             //ya pase el de 32 a otro lado
             toAdd = "MOV EDX, 0";
-            code.add(toAdd); //libero D
-            reg = new StackElement();
-            reg.setType("Register");
-            reg.setRegNumber(currentRegister);
-            reg.setSize(32);
+            code.add(toAdd); 
+            reg1 = new StackElement();
+            reg1.setType("Register");
+            reg1.setRegNumber(currentRegister);
+            reg1.setSize(32);
+            return false;
+        }
+        else if (reg2.getRegNumber() == 3) { //reg2 es EAX
+            int currentRegister = getFreeRegister(); //pido un reg de 32
+            String toAdd;
+            toAdd = "MOV "+getRegName(currentRegister, 32)+", EDX"; //lo paso de D al nuevo
+            code.add(toAdd);
+            //ya pase el de 32 a otro lado
+            toAdd = "MOV EDX, 0";
+            code.add(toAdd); 
+            reg2 = new StackElement();
+            reg2.setType("Register");
+            reg2.setRegNumber(currentRegister);
+            reg2.setSize(32);
             return false;
         }
         else if ((boolean)registerOcupation.get(3) == true) { //este registro no es D, pero igual hay que liberarlo si esta ocupado
@@ -184,14 +207,18 @@ public class Ensamblator {
         System.out.println(data);
         data.add("errorNegative db \"ERROR_NEGATIVE\", 0");
         data.add("errorZero db \"ERROR_ZERO\", 0");
+        data.add("errorConversionInformationLost db \"Error, perdida de informacion en conversion\", 0");
         code.add(".code");
         code.add("start:");
         code.add("jmp BEGIN");
         code.add("ERRORZERO:");
-        code.add("invoke StdOut, errorZero");
+        code.add("invoke StdOut, addr errorZero");
         code.add("invoke ExitProcess, 0"); 
         code.add("ERRORNEGATIVE:");
-        code.add("invoke StdOut, errorNegative");
+        code.add("invoke StdOut, addr errorNegative");
+        code.add("invoke ExitProcess, 0");
+        code.add("ERROR_CONVERSION:");
+        code.add("invoke StdOut, addr errorConversionInformationLost");
         code.add("invoke ExitProcess, 0"); 
         code.add("BEGIN:");
         for (int i = 0; i < polaca.size(); i++) {
@@ -201,46 +228,62 @@ public class Ensamblator {
                 switch((String)o) {
                     case "=" :  {
                                     StackElement var2 = stack.pop();
-                                    StackElement var1 = stack.pop();                                    
-                                    if (var1.getType().equals("Register")) {
-                                        String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
-                                        if (var2.getType().equals("Register")) {                                            
-                                            String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());                                    
-                                            String toAdd = "MOV "+currentRegisterName1+", "+currentRegisterName2;
-                                            registerOcupation.set(var2.getRegNumber(), false);
-                                            code.add(toAdd);
-                                            stack.push(var1);
-                                        }
-                                        else {
-                                            SymbolsTableEntry entry = st.getEntry(var2.getPointer());
-                                            String toAdd = "MOV "+currentRegisterName1+", _"+entry.getName();
-                                            code.add(toAdd);
-                                            stack.push(var1);
-                                        }
+                                    StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16) && (var2.getSize() == 32)) {
+                                        //error, no se puede convertir (error en tiempo de ejecucion)
+                                        code.add("JMP ERROR_CONVERSION");
                                     }
-                                    else {
-                                        if (var2.getType().equals("Register")) {
-                                            String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());                                    
-                                            SymbolsTableEntry entry = st.getEntry(var1.getPointer());
-                                            String toAdd = "MOV _"+entry.getName()+", "+currentRegisterName2;
-                                            registerOcupation.set(var2.getRegNumber(), false);
-                                            code.add(toAdd);
-                                            stack.push(var1);
+                                    else { //todo el resto
+                                        if (var1.getSize() == 32) {
+                                            if (var2.getSize() == 16) {
+                                            convertTo32(var2);
                                             }
-                                        else {
-                                            int currentRegister = getFreeRegister(); int size = var1.getSize();
-                                            if (currentRegister != -1) {
-                                                String toAdd = "MOV "+getRegName(currentRegister, size)+", _"+var2.getName();
+                                        } //los dos son de 32 o los dos son de 16
+                                        if (var1.getType().equals("Register")) {
+                                            String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
+                                            if (var2.getType().equals("Register")) {                                            
+                                                String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());                                    
+                                                String toAdd = "MOV "+currentRegisterName1+", "+currentRegisterName2;
+                                                System.out.println(toAdd);
+                                                registerOcupation.set(var2.getRegNumber(), false);
                                                 code.add(toAdd);
-                                                toAdd = "MOV _"+var1.getName()+", "+getRegName(currentRegister, size);
-                                                code.add(toAdd);
-                                                registerOcupation.set(currentRegister, false);
                                                 stack.push(var1);
                                             }
-                                            else
-                                                System.out.println("NO HAY MAS REGISTROS EN =, FIJATE QUE ONDA");
+                                            else {
+                                                SymbolsTableEntry entry = st.getEntry(var2.getPointer());
+                                                String toAdd = "MOV "+currentRegisterName1+", _"+entry.getName();
+                                                System.out.println(toAdd);
+                                                code.add(toAdd);
+                                                stack.push(var1);
+                                            }
                                         }
-                                    }                                    
+                                        else {
+                                            if (var2.getType().equals("Register")) {
+                                                String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());                                    
+                                                SymbolsTableEntry entry = st.getEntry(var1.getPointer());
+                                                String toAdd = "MOV _"+entry.getName()+", "+currentRegisterName2;
+                                                System.out.println(toAdd);
+                                                registerOcupation.set(var2.getRegNumber(), false);
+                                                code.add(toAdd);
+                                                stack.push(var1);
+                                            }
+                                            else {
+                                                int currentRegister = getFreeRegister(); int size = var1.getSize();
+                                                if (currentRegister != -1) {
+                                                    String toAdd = "MOV "+getRegName(currentRegister, size)+", _"+var2.getName();
+                                                    System.out.println(toAdd);
+                                                    code.add(toAdd);
+                                                    toAdd = "MOV _"+var1.getName()+", "+getRegName(currentRegister, size);
+                                                    System.out.println(toAdd);
+                                                    code.add(toAdd);
+                                                    registerOcupation.set(currentRegister, false);
+                                                    stack.push(var1);
+                                                }
+                                                else
+                                                    System.out.println("NO HAY MAS REGISTROS EN =, FIJATE QUE ONDA");
+                                            }
+                                        }                        
+                                    }
                                     break;
                                 }
                     case "==": {
@@ -323,6 +366,7 @@ public class Ensamblator {
                                                 else {
                                                     if ((boolean)registerOcupation.get(0) == true) {
                                                         toAdd = "PUSH EAX";
+                                                        System.out.println("ASDASD 9876543");
                                                         code.add(toAdd);
                                                     }
                                                     if (var1.getSize() == 16) {
@@ -376,6 +420,7 @@ public class Ensamblator {
                                                 else { //el primero NO es AX/EAX
                                                     if ((boolean)registerOcupation.get(0) == true) { //si el primero esta ocupado
                                                         toAdd = "PUSH EAX";
+                                                        System.out.println("ASDASD 156");
                                                         code.add(toAdd);
                                                     }
                                                     if ((boolean)registerOcupation.get(3) == true) { //si el cuarto esta ocupado
@@ -426,6 +471,7 @@ public class Ensamblator {
                                                 else { //el segundo NO es AX/EAX
                                                     if ((boolean)registerOcupation.get(0) == true) { //si el primero esta ocupado
                                                         toAdd = "PUSH EAX";
+                                                        System.out.println("ASDASD 147");
                                                         code.add(toAdd);
                                                     }
                                                     if ((boolean)registerOcupation.get(3) == true) { //si el cuarto esta ocupado
@@ -462,20 +508,26 @@ public class Ensamblator {
                                             }
                                             else { //ninguno de los dos es un registro
                                                 String toAdd;
-                                                int currentRegister = getFreeRegister();
-                                                int size = var1.getSize(); //puede ser cualquiera de los dos, son del mismo tamaño
+                                                
                                                 if ((boolean)registerOcupation.get(0) == true) { //si el primero esta ocupado
                                                         toAdd = "PUSH EAX";
+                                                        System.out.println("ASDASD 987");
                                                         code.add(toAdd);
                                                     }
                                                 if ((boolean)registerOcupation.get(3) == true) { //si el cuarto esta ocupado
                                                         toAdd = "PUSH EDX";
                                                         code.add(toAdd);
                                                     }
+                                                registerOcupation.set(0, true);
+                                                registerOcupation.set(3, true);
+                                                int currentRegister = getFreeRegister();
+                                                registerOcupation.set(0, false);
+                                                registerOcupation.set(3, false);
+                                                int size = var1.getSize(); //puede ser cualquiera de los dos, son del mismo tamaño
                                                 if (size == 16) {
                                                     toAdd = "MOV AX, _"+var1.getName();
                                                     code.add(toAdd);
-                                                    toAdd = "IMUL AX, "+var2.getName();
+                                                    toAdd = "IMUL AX, _"+var2.getName();
                                                     code.add(toAdd);
                                                     toAdd = "MOV "+getRegName(currentRegister, size)+", AX";
                                                     code.add(toAdd);
@@ -528,14 +580,15 @@ public class Ensamblator {
                                             registerOcupation.set(3, true);
                                             temp = true;
                                         }
-                                        boolean pullA = freeA(var16) ||freeA(var32);
+                                        boolean pullA = freeA(var16, var32);
+                                        System.out.println("ahora var16 es "+var16.getRegNumber());
                                         if (temp) 
                                             registerOcupation.set(3, false);
                                         if ((boolean)registerOcupation.get(0) == false) { //para que freeD no agarre el registro A, lo bloqueo
                                             registerOcupation.set(0, true);
                                             temp = true;
                                         }                                        
-                                        boolean pullD = freeD(var16) ||freeD(var32);
+                                        boolean pullD = freeD(var16, var32);
                                         if (temp) 
                                             registerOcupation.set(0, false);
                                         //EAX y EDX estan libres, var16 y var32 son registros de 32 bits
@@ -554,6 +607,12 @@ public class Ensamblator {
                                             toAdd = "POP EAX";
                                             code.add(toAdd);
                                         }
+                                        StackElement element = new StackElement();
+                                        element.setType("Register");
+                                        element.setRegNumber(0);
+                                        element.setSize(32);
+                                        stack.push(element);
+                                        
                                     }
                                     break;
                                 }
@@ -1042,15 +1101,12 @@ public class Ensamblator {
         
         List toReturn = new ArrayList<String>();
         for (String a : preface) {
-            System.out.println(a);
             toReturn.add(a);
         }
         for (String a : data) {
-            System.out.println(a);
             toReturn.add(a);
         }
         for (String a : code) {
-            System.out.println(a);
             toReturn.add(a);
         }                
         return toReturn;

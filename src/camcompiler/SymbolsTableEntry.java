@@ -4,7 +4,7 @@ public class SymbolsTableEntry {
     private final int code;
     private String lexema;
     private int cant;
-    private final int ltype;
+    private int ltype;
     private String stype = "          ";
     private final Token t;
     private String scope; 
@@ -62,11 +62,11 @@ public class SymbolsTableEntry {
     public String getASMName() {
         if (this.ltype == 277) {
             String lexeme = this.lexema;
-            String toReturn = "string"+this.stype+" db \""+this.lexema+"\", 0";
+            String toReturn = "string"+this.stype+" db \""+this.lexema+" - \", 0";
             return toReturn;
         }
         else if (this.stype.equals("ULONG")) {
-            if (this.ltype == 258)
+            if (this.ltype == 294)
                 return "_"+this.lexema+this.scope+" dd "+this.lexema;
             else
                 return "_"+this.lexema+this.scope+" dd 0";   
