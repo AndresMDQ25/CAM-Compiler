@@ -521,7 +521,6 @@ public class Ensamblator {
                                                 
                                                 if ((boolean)registerOcupation.get(0) == true) { //si el primero esta ocupado
                                                         toAdd = "PUSH EAX";
-                                                        System.out.println("ASDASD 987");
                                                         code.add(toAdd);
                                                     }
                                                 if ((boolean)registerOcupation.get(3) == true) { //si el cuarto esta ocupado
@@ -609,81 +608,156 @@ public class Ensamblator {
                                         toAdd = "MUL "+getRegName(var32.getRegNumber(), 32);
                                         code.add(toAdd);
                                         
-                                        if (pullD)  {
-                                            toAdd = "POP EDX";
-                                            code.add(toAdd);
-                                        }
-                                        if (pullA)  {
-                                            toAdd = "POP EAX";
-                                            code.add(toAdd);
-                                        }
+                                        
                                         StackElement element = new StackElement();
                                         element.setType("Register");
                                         element.setRegNumber(0);
                                         element.setSize(32);
-                                        stack.push(element);
+                                        registerOcupation.set(3, false);
                                         
+                                        if (pullD)  {
+                                            toAdd = "POP EDX";
+                                            code.add(toAdd);
+                                            registerOcupation.set(3, true);
+                                        }
+                                        if (pullA)  {
+                                            int currentRegister = getFreeRegister();
+                                            toAdd = "MOV "+getRegName(currentRegister, 32)+", EAX";
+                                            code.add(toAdd);
+                                            element.setRegNumber(currentRegister);
+                                            toAdd = "POP EAX";
+                                            code.add(toAdd);
+                                        }
+                                        stack.push(element);
                                     }
                                     break;
                                 }
                     case "/" : {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    divideByZero(var2);
+                                    int size = 0;
                                     if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
                                         checkPositive(var1);
                                         convertTo32(var1);
+                                        toRegister(var2);
                                     }
                                     else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
                                         checkPositive(var2);
                                         convertTo32(var2);
+                                        toRegister(var1);
                                     }
-                                    // los dos son del mismo tamaño
+                                    size = var1.getSize(); //seteo el tamaño para despues
+                                    // los dos son del mismo tamaño y quizas los dos sean registros
+                                    registerOcupation.set(3, true); //para que freeA no agarre el registro D, lo bloqueo
+                                    boolean pullA = freeA(var1, var2);
+                                    registerOcupation.set(0, true); //para que freed no agarre el registro a, lo bloqueo                     
+                                    boolean pullD = freeD(var1, var2);
+
+                                    //EAX y EDX estan libres (con 0 y bloqueados), var1 y var2 son del mismo tamaño
+                                    
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
                                             String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());
-                                            String toAdd = "DIV "+currentRegisterName1+", "+currentRegisterName2;
+                                            String toAdd;
+                                            if (var1.getSize() == 16) {
+                                                toAdd = "MOV AX, "+currentRegisterName1;
+                                                code.add(toAdd);
+                                                toAdd = "IDIV "+currentRegisterName2;
+                                                code.add(toAdd);
+                                                
+                                            }
+                                            else { //los dos son de 32
+                                                toAdd = "MOV EAX, "+currentRegisterName1;
+                                                code.add(toAdd);
+                                                toAdd = "DIV "+currentRegisterName2;
+                                                code.add(toAdd);
+                                            }
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                             registerOcupation.set(var2.getRegNumber(), false);
-                                            code.add(toAdd);
-                                            stack.push(var1);
                                         }
-                                        else {
-                                            String toAdd = "DIV "+currentRegisterName1+", _"+var2.getName();
-                                            code.add(toAdd);
-                                            stack.push(var1);
+                                        else { //var1 reg, var2 num
+                                            String toAdd;
+                                            if (var1.getSize() == 16) {
+                                                toAdd = "MOV AX, "+currentRegisterName1;
+                                                code.add(toAdd);
+                                                toAdd = "IDIV _"+var2.getName();
+                                                code.add(toAdd);
+                                                
+                                            }
+                                            else { //los dos son de 32
+                                                toAdd = "MOV EAX, "+currentRegisterName1;
+                                                code.add(toAdd);
+                                                toAdd = "DIV _"+var2.getName();
+                                                code.add(toAdd);
+                                            }
+                                            registerOcupation.set(var1.getRegNumber(), false);
                                         }
                                     }
-                                    else {
-                                        if (var2.getType().equals("Register")) {
-                                            int currentRegister = getFreeRegister(); int size = var1.getSize();
-                                            if (currentRegister != -1) {
-                                                String toAdd = "MOV "+getRegName(currentRegister, size)+", _"+var1.getName();
+                                    else { //var1 NO es un registro
+                                        if (var2.getType().equals("Register")) { //var1 num, var2 reg
+                                            String currentRegisterName2  = getRegName(var2.getRegNumber(), var2.getSize());
+                                            String toAdd;
+                                            if (var1.getSize() == 16) {
+                                                toAdd = "MOV AX, _"+var1.getName();
                                                 code.add(toAdd);
-                                                toAdd = "DIV "+getRegName(currentRegister, size)+", _"+var2.getName();
+                                                toAdd = "IDIV "+currentRegisterName2;
                                                 code.add(toAdd);
-                                                registerOcupation.set(var2.getRegNumber(), false);
-                                                StackElement element = new StackElement();
-                                                element.setType("Register");
-                                                element.setRegNumber(currentRegister);
-                                                stack.push(element);
+                                                
                                             }
+                                            else { //los dos son de 32
+                                                toAdd = "MOV EAX, _"+var1.getName();
+                                                code.add(toAdd);
+                                                toAdd = "DIV _"+currentRegisterName2;
+                                                code.add(toAdd);
+                                            }
+                                            registerOcupation.set(var2.getRegNumber(), false);
+                                        }
+                                        else { //var1 num, var2 num
+                                            String toAdd;
+                                            if (var1.getSize() == 16) {
+                                                toAdd = "MOV AX, _"+var1.getName();
+                                                code.add(toAdd);
+                                                toAdd = "IDIV _"+var2.getName();
+                                                code.add(toAdd);
+                                                
+                                            }
+                                            else { //los dos son de 32
+                                                toAdd = "MOV EAX, _"+var1.getName();
+                                                code.add(toAdd);
+                                                toAdd = "DIV _"+var2.getName();
+                                                code.add(toAdd);
+                                            }
+                                        }
+                                    }
+                                    StackElement element = new StackElement();
+                                    element.setType("Register");
+                                    element.setSize(size);
+                                    element.setRegNumber(0);
+                                    registerOcupation.set(3, false);
+                                    
+                                    //hacer los POP si es necesario
+                                    String toAdd;
+                                    if (pullD)  {
+                                            toAdd = "POP EDX";
+                                            registerOcupation.set(3, true);
+                                            code.add(toAdd);
+                                        }
+                                    if (pullA)  {
+                                        int currentRegister = getFreeRegister();
+                                        if (size == 16) {
+                                            toAdd = "MOV "+getRegName(currentRegister, 16)+", AX";
                                         }
                                         else {
-                                            int currentRegister = getFreeRegister(); int size = var1.getSize();
-                                            if (currentRegister != -1) {
-                                                String toAdd = "MOV "+getRegName(currentRegister, size)+", _"+var1.getName();
-                                                code.add(toAdd);
-                                                toAdd = "DIV "+getRegName(currentRegister, size)+", _"+var2.getName();
-                                                code.add(toAdd);
-                                                StackElement element = new StackElement();
-                                                element.setType("Register");
-                                                element.setRegNumber(currentRegister);
-                                                stack.push(element);
-                                            }
-                                            else
-                                                System.out.println("NO HAY MAS REGISTROS EN *, FIJATE QUE ONDA");
+                                            toAdd = "MOV "+getRegName(currentRegister, 32)+", EAX";
                                         }
-                                    }                                    
+                                        code.add(toAdd);
+                                        element.setRegNumber(currentRegister);
+                                        toAdd = "POP EAX";
+                                        code.add(toAdd);
+                                    }
+                                    stack.push(element);
                                     break;
                                 }
                     case "+" :  {
