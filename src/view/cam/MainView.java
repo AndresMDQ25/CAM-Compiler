@@ -336,7 +336,7 @@ public class MainView extends javax.swing.JFrame {
             
             
             
-            //outpath = "D:\\caca\\program.asm"; //DESPUES ELIMINAR ESTA LINEA
+            outpath = "D:\\caca\\program.asm"; //DESPUES ELIMINAR ESTA LINEA
                 
             /*File selectedFile = new File(outpath);
             FileWriter out;

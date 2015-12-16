@@ -1000,7 +1000,7 @@ public class Ensamblator {
                                     }
                                     i++;
                                     String jump = (String)polaca.get(i);
-                                    String toAdd = "JL L"+jump;
+                                    String toAdd = "JG L"+jump;
                                     code.add(toAdd);
                                     break;
                                 }
@@ -1053,7 +1053,7 @@ public class Ensamblator {
                                     }     
                                     i++;
                                     String jump = (String)polaca.get(i);
-                                    String toAdd = "JG L"+jump;
+                                    String toAdd = "JL L"+jump;
                                     code.add(toAdd);
                                     break;
                                 }
@@ -1106,7 +1106,7 @@ public class Ensamblator {
                                     }     
                                     i++;
                                     String jump = (String)polaca.get(i);
-                                    String toAdd = "JLE L"+jump;
+                                    String toAdd = "JGE L"+jump;
                                     code.add(toAdd);
                                     break;
                                 }
@@ -1159,7 +1159,7 @@ public class Ensamblator {
                                     }           
                                     i++;
                                     String jump = (String)polaca.get(i);
-                                    String toAdd = "JGE L"+jump;
+                                    String toAdd = "JLE L"+jump;
                                     code.add(toAdd);
                                     break;
                                 }
