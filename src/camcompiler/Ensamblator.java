@@ -1169,11 +1169,25 @@ public class Ensamblator {
                 element.setType("Number");
                 SymbolsTableEntry entry = st.getEntry(var);
                 String type = entry.getSType();
-                if (type.equals("ULONG")) 
+                String lexeme = entry.getName();
+                if (type.equals("ULONG")) {
                     element.setSize(32);
-                else 
+                    if (entry.getLType().equals("CT"))
+                        lexeme = "U"+lexeme;
+                }
+                else {
                     element.setSize(16);
-                element.setName(entry.getName());
+                    if(lexeme.startsWith("-")){
+                        String aux = lexeme.substring(1, lexeme.length());
+                        lexeme = "NI"+aux;
+                    }
+                    else {
+                        if (entry.getLType().equals("CT"))
+                            lexeme = "I"+lexeme;
+                    }
+                }
+                element.setName(lexeme);
+                
                 element.setPointer(var);
                 stack.add(element);
             } 

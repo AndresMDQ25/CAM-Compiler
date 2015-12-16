@@ -66,18 +66,24 @@ public class SymbolsTableEntry {
         }                   
         else if (this.stype.equals("ULONG")) {
             if (this.ltype == 294)
-                return "_"+this.lexema+this.scope+" dd "+this.lexema;
+                return "_U"+this.lexema+this.scope+" dd "+this.lexema;
             else
                 return "_"+this.lexema+this.scope+" dd 0";   
         }
         else {
             String lexeme = this.lexema;
+            boolean listo = false;
             if(lexeme.startsWith("-")){
-                String aux = lexeme.substring(1, lexeme.length()-1);
-                lexeme = "N"+aux;
+                String aux = lexeme.substring(1, lexeme.length());
+                lexeme = "NI"+aux;
+                listo = true;
             } 
-            if (this.ltype == 258)
-                return "_"+lexeme+this.scope+" dw "+this.lexema;
+            if (this.ltype == 258) {
+                if (listo)
+                    return "_"+lexeme+this.scope+" dw "+this.lexema;
+                return "_I"+lexeme+this.scope+" dw "+this.lexema;
+            }
+                
             else
                 return "_"+lexeme+this.scope+" dw 0"; 
         }
