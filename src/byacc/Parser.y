@@ -186,18 +186,20 @@ factor              : identificador
                     ;
 
 constant            : CTEINT {
-                                int pointer = $1.tok.getPointer();
-                                pInv.add(pointer);
+                                int pointer = $1.tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "INTEG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                pInv.add(pointer);
                             }
                     | CTEUL {
-                                int pointer = $1.tok.getPointer();
-                                pInv.add(pointer);
+                                int pointer = $1.tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "ULONG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                pInv.add(pointer);
                             }
                     ;
 

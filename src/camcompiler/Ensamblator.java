@@ -182,8 +182,8 @@ public class Ensamblator {
             data.add(names.elementAt(e));
         }
         System.out.println(data);
-        data.add("errorNegative db \"ERROR_NEGATIVE\", 10");
-        data.add("errorZero db \"ERROR_ZERO\", 10");
+        data.add("errorNegative db \"ERROR_NEGATIVE\", 0");
+        data.add("errorZero db \"ERROR_ZERO\", 0");
         code.add(".code");
         code.add("start:");
         code.add("jmp BEGIN");

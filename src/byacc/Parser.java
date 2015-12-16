@@ -507,7 +507,7 @@ final static String yyrule[] = {
 "listavariablesMY : ID",
 };
 
-//#line 365 "Parser.y"
+//#line 367 "Parser.y"
 private LexicAnalyzer lexicAnalyzer;
 private CAMerror SyntaxError;
 private SymbolsTable symbolsTable;
@@ -937,79 +937,81 @@ break;
 case 50:
 //#line 188 "Parser.y"
 {
-                                int pointer = val_peek(0).tok.getPointer();
-                                pInv.add(pointer);
+                                int pointer = val_peek(0).tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "INTEG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                pInv.add(pointer);
                             }
 break;
 case 51:
-//#line 195 "Parser.y"
+//#line 196 "Parser.y"
 {
-                                int pointer = val_peek(0).tok.getPointer();
-                                pInv.add(pointer);
+                                int pointer = val_peek(0).tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "ULONG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                pInv.add(pointer);
                             }
 break;
 case 52:
-//#line 204 "Parser.y"
+//#line 206 "Parser.y"
 {nro_p = pInv.size()-1; int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 1); nro_p++; nro_p = generar("L"+nro_p);}
 break;
 case 53:
-//#line 205 "Parser.y"
+//#line 207 "Parser.y"
 {SyntaxError.addLog("Invalid use of IF",lexicAnalyzer.getLine());}
 break;
 case 56:
-//#line 212 "Parser.y"
+//#line 214 "Parser.y"
 {nro_p = pInv.size()-1; int nro_p_inc = pila.pop(); completar(nro_p_inc, nro_p + 3); nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BI"); nro_p++; nro_p = generar("L"+nro_p);}
 break;
 case 57:
-//#line 215 "Parser.y"
+//#line 217 "Parser.y"
 {nro_ploop = pInv.size()-1; int nro_p_inc = pilaLOOP.pop(); completar(nro_p_inc, nro_ploop + 3); nro_p_inc = pilaLOOP.pop(); nro_ploop = generar(" "); completar(nro_ploop, nro_p_inc); nro_ploop = generar("BI"); nro_ploop = generar("L"+(nro_ploop+1));}
 break;
 case 58:
-//#line 216 "Parser.y"
+//#line 218 "Parser.y"
 {SyntaxError.addLog("Invalid use of LOOP",lexicAnalyzer.getLine());}
 break;
 case 59:
-//#line 218 "Parser.y"
+//#line 220 "Parser.y"
 {   int index = currentVariable.peek(); int variablePointer = (int) pInv.get(index); pInv.add(variablePointer); pInv.add(variablePointer);
                                             List temporal = pilasSTEP.pop(); System.out.println(temporal);
                                             pInv.addAll(temporal); pInv.add("+");pInv.add("=");nro_ploop += temporal.size()-1; currentVariable.pop();}
 break;
 case 60:
-//#line 223 "Parser.y"
+//#line 225 "Parser.y"
 {nro_ploop = generar("=="); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BF");}
 break;
 case 62:
-//#line 226 "Parser.y"
+//#line 228 "Parser.y"
 {List temp = new ArrayList(); temp.addAll(currentStep); pilasSTEP.push(temp); currentStep.clear();}
 break;
 case 63:
-//#line 229 "Parser.y"
-{String toAdd = val_peek(1).tok.getValue();
-                                                        currentStep.add(toAdd);}
-break;
-case 64:
 //#line 231 "Parser.y"
 {String toAdd = val_peek(1).tok.getValue();
                                                         currentStep.add(toAdd);}
 break;
-case 66:
-//#line 236 "Parser.y"
+case 64:
+//#line 233 "Parser.y"
 {String toAdd = val_peek(1).tok.getValue();
-                                                    currentStep.add(toAdd);}
+                                                        currentStep.add(toAdd);}
 break;
-case 67:
+case 66:
 //#line 238 "Parser.y"
 {String toAdd = val_peek(1).tok.getValue();
                                                     currentStep.add(toAdd);}
 break;
+case 67:
+//#line 240 "Parser.y"
+{String toAdd = val_peek(1).tok.getValue();
+                                                    currentStep.add(toAdd);}
+break;
 case 70:
-//#line 244 "Parser.y"
+//#line 246 "Parser.y"
 {  int pointer = val_peek(0).tok.getPointer();
                                 currentStep.add(pointer);
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -1018,7 +1020,7 @@ case 70:
                             }
 break;
 case 71:
-//#line 250 "Parser.y"
+//#line 252 "Parser.y"
 {
                                 val_peek(0).tok.setValue("-"+val_peek(0).tok.getValue());                                
                                 int pointer = val_peek(0).tok.getPointer();
@@ -1031,7 +1033,7 @@ case 71:
                                 }
 break;
 case 72:
-//#line 262 "Parser.y"
+//#line 264 "Parser.y"
 {  
                             int pointer = val_peek(0).tok.getPointer();
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
@@ -1047,52 +1049,52 @@ case 72:
                             yyval = val_peek(0);}
 break;
 case 73:
-//#line 277 "Parser.y"
+//#line 279 "Parser.y"
 {   int pointer = val_peek(1).tok.getPointer();                                                                    
                                                                         pInv.add(pointer);
                                                                         String toAdd = val_peek(3).tok.getValue();
                                                                         pInv.add(toAdd);}
 break;
 case 74:
-//#line 281 "Parser.y"
+//#line 283 "Parser.y"
 {SyntaxError.addLog("Invalid use of PRINT",lexicAnalyzer.getLine());}
 break;
 case 75:
-//#line 284 "Parser.y"
+//#line 286 "Parser.y"
 {nro_p = generar(" "); pila.push(nro_p); nro_p = generar("BF");}
 break;
 case 76:
-//#line 287 "Parser.y"
-{String toAdd = val_peek(1).tok.getValue();
-                                                    pInv.add(toAdd);}
-break;
-case 77:
 //#line 289 "Parser.y"
 {String toAdd = val_peek(1).tok.getValue();
                                                     pInv.add(toAdd);}
 break;
-case 78:
+case 77:
 //#line 291 "Parser.y"
 {String toAdd = val_peek(1).tok.getValue();
                                                     pInv.add(toAdd);}
 break;
-case 79:
+case 78:
 //#line 293 "Parser.y"
 {String toAdd = val_peek(1).tok.getValue();
                                                     pInv.add(toAdd);}
 break;
-case 80:
+case 79:
 //#line 295 "Parser.y"
 {String toAdd = val_peek(1).tok.getValue();
                                                     pInv.add(toAdd);}
 break;
-case 81:
+case 80:
 //#line 297 "Parser.y"
 {String toAdd = val_peek(1).tok.getValue();
                                                     pInv.add(toAdd);}
 break;
+case 81:
+//#line 299 "Parser.y"
+{String toAdd = val_peek(1).tok.getValue();
+                                                    pInv.add(toAdd);}
+break;
 case 82:
-//#line 301 "Parser.y"
+//#line 303 "Parser.y"
 {         int number = myScope.getScopesContained()+1;
                                 String numb = Integer.toString(number);
                                 Scope currentScope = new Scope(numb, myScope);
@@ -1101,27 +1103,27 @@ case 82:
                                 }
 break;
 case 84:
-//#line 309 "Parser.y"
+//#line 311 "Parser.y"
 {synlog.addLog("Scope ends",lexicAnalyzer.getLine());}
 break;
 case 85:
-//#line 310 "Parser.y"
+//#line 312 "Parser.y"
 {synlog.addLog("Scope ends",lexicAnalyzer.getLine());}
 break;
 case 86:
-//#line 311 "Parser.y"
+//#line 313 "Parser.y"
 {synlog.addLog("Empty scope ends",lexicAnalyzer.getLine());}
 break;
 case 87:
-//#line 314 "Parser.y"
+//#line 316 "Parser.y"
 {myScope = myScope.getFather();}
 break;
 case 89:
-//#line 315 "Parser.y"
+//#line 317 "Parser.y"
 {myScope = myScope.getFather();}
 break;
 case 95:
-//#line 328 "Parser.y"
+//#line 330 "Parser.y"
 {  int pointer = val_peek(0).tok.getPointer(); 
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer); 
                             entry.addScope(myScope.getScopeSuffix());
@@ -1141,7 +1143,7 @@ case 95:
                         }
 break;
 case 96:
-//#line 345 "Parser.y"
+//#line 347 "Parser.y"
 {  int pointer = val_peek(0).tok.getPointer(); 
                             SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                             Token t = entry.getToken();
@@ -1158,7 +1160,7 @@ case 96:
                             }
                         }
 break;
-//#line 1085 "Parser.java"
+//#line 1087 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

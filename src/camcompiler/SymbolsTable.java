@@ -52,6 +52,7 @@ public class SymbolsTable {
             String temp = m.elementAt(i).getASMName();
             names.add(temp);
         }
+        System.out.println("NAMES: "+names);        
         return names;
     }
         
@@ -81,10 +82,25 @@ public class SymbolsTable {
     public void removeEntry(int pointer) {
         for (int i = 0; i < m.size(); i++) {
             if (m.elementAt(i).getCode() == pointer)
-                m.remove(i);
+                m.remove(i);//eliminas por codigo de la entrada
         }
         
         //acomodar los indices                                                                                                  o no
+    }
+    
+    public int getUniquePointer(SymbolsTableEntry entry){
+        //retorna un puntero de una cte, si habia dos iguales borra una 
+        if(entry.getLType().equals("CT"))
+            for(int i = 0 ; i<m.size() ; i++){
+                if(m.elementAt(i).getCode()!=entry.getCode())
+                    if(m.elementAt(i).getSType().equals(entry.getSType()))                    
+                        if(m.elementAt(i).getLexema().equals(entry.getLexema())){
+                            removeEntry(entry.getCode());
+                            return m.elementAt(i).getCode();
+                        }
+                            
+            }           
+        return entry.getCode();
     }
     
 }

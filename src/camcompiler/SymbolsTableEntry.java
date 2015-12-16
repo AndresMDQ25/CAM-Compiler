@@ -62,7 +62,7 @@ public class SymbolsTableEntry {
     public String getASMName() {
         if (this.ltype == 277) {
             String lexeme = this.lexema;
-            String toReturn = "string"+this.stype+" db \""+this.lexema+"\", 10";
+            String toReturn = "string"+this.stype+" db \""+this.lexema+"\", 0";
             return toReturn;
         }
         else if (this.stype.equals("ULONG")) {
@@ -102,4 +102,20 @@ public class SymbolsTableEntry {
     public void setSType(String syntacticType) {
         this.stype = syntacticType;
     } 
+    public String getLType(){
+        String toReturn;
+        switch (this.ltype) {
+            case 277:  toReturn="ST";
+                      break;
+            case 257:  toReturn="ID";
+                      break;
+            case 258: toReturn="CT";
+                      break;
+            case 294: toReturn="CT";
+                      break;
+            default: toReturn="NK";
+                      break;
+        }
+        return toReturn;       
+    }
 }
