@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
-
 /**
  *
  * @author Andres
@@ -208,6 +207,7 @@ public class Ensamblator {
         data.add("errorNegative db \"ERROR_NEGATIVE\", 0");
         data.add("errorZero db \"ERROR_ZERO\", 0");
         data.add("errorConversionInformationLost db \"Error, perdida de informacion en conversion\", 0");
+        data.add("errorOverflow db \"ERROR_OVERFLOW\", 0");
         code.add(".code");
         code.add("start:");
         code.add("jmp BEGIN");
@@ -220,6 +220,9 @@ public class Ensamblator {
         code.add("ERROR_CONVERSION:");
         code.add("invoke StdOut, addr errorConversionInformationLost");
         code.add("invoke ExitProcess, 0"); 
+        code.add("ERROROVERFLOW:");
+        code.add("invoke StdOut, addr errorOverflow");
+        code.add("invoke ExitProcess, 0");
         code.add("BEGIN:");
         for (int i = 0; i < polaca.size(); i++) {
             Object o = polaca.get(i);
@@ -817,6 +820,8 @@ public class Ensamblator {
                                             }
                                         }
                                     }
+                                    String toAdd = "JO ERROROVERFLOW";
+                                    code.add(toAdd);
                                                                         
                                     break;
                                 }
