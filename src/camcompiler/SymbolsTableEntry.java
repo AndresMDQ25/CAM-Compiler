@@ -60,11 +60,10 @@ public class SymbolsTableEntry {
             return this.lexema+this.scope; 
     }
     public String getASMName() {
-        if (this.ltype == 277) {
-            String lexeme = this.lexema;
+        if (this.ltype == 277) {            
             String toReturn = "string"+this.stype+" db \""+this.lexema+" - \", 0";
             return toReturn;
-        }
+        }                   
         else if (this.stype.equals("ULONG")) {
             if (this.ltype == 294)
                 return "_"+this.lexema+this.scope+" dd "+this.lexema;
@@ -72,10 +71,15 @@ public class SymbolsTableEntry {
                 return "_"+this.lexema+this.scope+" dd 0";   
         }
         else {
+            String lexeme = this.lexema;
+            if(lexeme.startsWith("-")){
+                String aux = lexeme.substring(1, lexeme.length()-1);
+                lexeme = "N"+aux;
+            } 
             if (this.ltype == 258)
-                return "_"+this.lexema+this.scope+" dw "+this.lexema;
+                return "_"+lexeme+this.scope+" dw "+this.lexema;
             else
-                return "_"+this.lexema+this.scope+" dw 0"; 
+                return "_"+lexeme+this.scope+" dw 0"; 
         }
     }
     public int getCant() {
