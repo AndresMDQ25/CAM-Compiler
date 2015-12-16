@@ -153,21 +153,23 @@ terminoLOOP         : terminoLOOP MULTIPLY factorLOOP {String toAdd = $2.tok.get
                     ;
 
 factorLOOP          : identificador 
-                    | CTEINT {  int pointer = $1.tok.getPointer();
-                                pInv.add(pointer);
+                    | CTEINT {  int pointer = $1.tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "INTEG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                pInv.add(pointer);
                             }
                     | MINUN CTEINT {
                                 $2.tok.setValue("-"+$2.tok.getValue());                                
-                                int pointer = $2.tok.getPointer();
-                                pInv.add(pointer);
+                                int pointer = $2.tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "-"+entry.getLexema();
                                 entry.setLexema(temp);
                                 temp = "INTEG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                pInv.add(pointer);
                                 }
                     ; 
 
@@ -175,13 +177,14 @@ factor              : identificador
                     | constant 
                     | MINUN CTEINT {                                    
                                 $2.tok.setValue("-"+$2.tok.getValue());
-                                int pointer = $2.tok.getPointer();
-                                pInv.add(pointer);
+                                int pointer = $2.tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "-"+entry.getLexema();
                                 entry.setLexema(temp);
                                 temp = "INTEG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                pInv.add(pointer);
                                 }
                     ;
 
@@ -243,21 +246,23 @@ terminoLOOPstep     : terminoLOOPstep MULTIPLY factorLOOPstep {String toAdd = $2
                     ;
 
 factorLOOPstep      : identificadorstep 
-                    | CTEINT {  int pointer = $1.tok.getPointer();
-                                currentStep.add(pointer);
+                    | CTEINT {  int pointer = $1.tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "INTEG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                currentStep.add(pointer);
                             }
                     | MINUN CTEINT {
                                 $2.tok.setValue("-"+$2.tok.getValue());                                
-                                int pointer = $2.tok.getPointer();
-                                currentStep.add(pointer);
+                                int pointer = $2.tok.getPointer();                                
                                 SymbolsTableEntry entry = symbolsTable.getEntry(pointer);
                                 String temp = "-"+entry.getLexema();
                                 entry.setLexema(temp);
                                 temp = "INTEG";
                                 entry.setSType(temp);
+                                pointer = symbolsTable.getUniquePointer(entry);
+                                currentStep.add(pointer);
                                 }
                     ;
 

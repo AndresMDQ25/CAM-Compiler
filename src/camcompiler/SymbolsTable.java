@@ -96,6 +96,7 @@ public class SymbolsTable {
                     if(m.elementAt(i).getSType().equals(entry.getSType()))                    
                         if(m.elementAt(i).getLexema().equals(entry.getLexema())){
                             removeEntry(entry.getCode());
+                            m.elementAt(i).increaseCant();
                             return m.elementAt(i).getCode();
                         }
                             
