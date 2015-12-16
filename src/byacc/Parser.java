@@ -984,7 +984,7 @@ case 59:
 break;
 case 60:
 //#line 225 "Parser.y"
-{nro_ploop = generar("=="); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BF");}
+{nro_ploop = generar("<>"); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BF");}
 break;
 case 62:
 //#line 228 "Parser.y"

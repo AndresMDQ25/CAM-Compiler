@@ -236,6 +236,7 @@ public class Ensamblator {
                                     else { //todo el resto
                                         if (var1.getSize() == 32) {
                                             if (var2.getSize() == 16) {
+                                            checkPositive(var2);
                                             convertTo32(var2);
                                             }
                                         } //los dos son de 32 o los dos son de 16
@@ -1051,7 +1052,7 @@ public class Ensamblator {
                                     }        
                                     i++;
                                     String jump = (String)polaca.get(i);
-                                    String toAdd = "JNE L"+jump;
+                                    String toAdd = "JE L"+jump;
                                     code.add(toAdd);
                                     break;
                                 }

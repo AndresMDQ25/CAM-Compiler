@@ -222,7 +222,7 @@ cuerpoLOOP          : bloquesentencias  {   int index = currentVariable.peek(); 
                                             pInv.addAll(temporal); pInv.add("+");pInv.add("=");nro_ploop += temporal.size()-1; currentVariable.pop();}
                     ;
 
-condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY stepLOOP {nro_ploop = generar("=="); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BF");}
+condicionLOOP       : FROM asignacionLOOP TO expresionLOOP BY stepLOOP {nro_ploop = generar("<>"); nro_ploop = generar(" "); pilaLOOP.push(nro_ploop); nro_ploop = generar("BF");}
                     | FROM asignacionLOOP TO expresionLOOP BY error
                     ;
 stepLOOP            : expresionLOOPstep {List temp = new ArrayList(); temp.addAll(currentStep); pilasSTEP.push(temp); currentStep.clear();}
