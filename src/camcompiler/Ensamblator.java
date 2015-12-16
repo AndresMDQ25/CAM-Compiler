@@ -290,6 +290,15 @@ public class Ensamblator {
                     case "==": {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
@@ -620,6 +629,15 @@ public class Ensamblator {
                     case "/" : {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
@@ -671,6 +689,15 @@ public class Ensamblator {
                     case "+" :  {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getSize() == var2.getSize()) { //MISMO TAMAÑO INT-INT o ULONG-ULONG
                                         if (var1.getType().equals("Register")) {
                                         String currentRegisterName1 = getRegName(var1.getRegNumber(), var1.getSize());
@@ -796,6 +823,15 @@ public class Ensamblator {
                     case "-" :  {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
@@ -839,6 +875,15 @@ public class Ensamblator {
                     case "<" :  {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
@@ -883,6 +928,15 @@ public class Ensamblator {
                     case ">" : {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
@@ -927,6 +981,15 @@ public class Ensamblator {
                     case "<=": {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
@@ -971,6 +1034,15 @@ public class Ensamblator {
                     case ">=": {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
@@ -1015,6 +1087,15 @@ public class Ensamblator {
                     case "<>": {
                                     StackElement var2 = stack.pop();
                                     StackElement var1 = stack.pop();
+                                    if ((var1.getSize() == 16)&&(var2.getSize() == 32)) {
+                                        checkPositive(var1);
+                                        convertTo32(var1);
+                                    }
+                                    else if ((var1.getSize() == 32)&&(var2.getSize() == 16)) {
+                                        checkPositive(var2);
+                                        convertTo32(var2);
+                                    }
+                                    // los dos son del mismo tamaño
                                     if (var1.getType().equals("Register")) {
                                         String currentRegisterName1  = getRegName(var1.getRegNumber(), var1.getSize());
                                         if (var2.getType().equals("Register")) {
