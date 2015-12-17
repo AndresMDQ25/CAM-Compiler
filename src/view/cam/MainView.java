@@ -188,6 +188,11 @@ public class MainView extends javax.swing.JFrame {
         jMenuBar2.add(run);
 
         aboutMenu.setText("About");
+        aboutMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                aboutMenuMouseClicked(evt);
+            }
+        });
         jMenuBar2.add(aboutMenu);
 
         setJMenuBar(jMenuBar2);
@@ -333,16 +338,7 @@ public class MainView extends javax.swing.JFrame {
             
             String outpath = path.substring(0, path.length()-3);
             outpath = outpath.concat("asm");
-            
-            
-            
-            outpath = "D:\\caca\\program.asm"; //DESPUES ELIMINAR ESTA LINEA
-                
-            /*File selectedFile = new File(outpath);
-            FileWriter out;
-            out = new FileWriter(selectedFile, true);*/
-            
-            
+
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outpath, false)));
             
             for (Object output1 : output) {
@@ -361,6 +357,12 @@ public class MainView extends javax.swing.JFrame {
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
 
     }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void aboutMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutMenuMouseClicked
+        // TODO add your handling code here:
+        About aboutWindow = new About();
+        aboutWindow.show();
+    }//GEN-LAST:event_aboutMenuMouseClicked
 
     /**
      * @param args the command line arguments
